@@ -4,13 +4,25 @@ import { CartCard } from "@/components/cart-card";
 import { Visit } from "@/components/visit";
 import { carts, capabilities, reasons } from "@/content/carts";
 
+/** Higgsfield 480p test render. Swap for the 720p once it lands. */
+const HIGGSFIELD_RENDER_URL =
+  "https://d8j0ntlcm91z4.cloudfront.net/user_3CdVP8uyiMnLQzUlH6RnH8yZa5a/hf_20260728_064018_a06e9d32-8dea-4b0b-b75f-35c663df9e8d.mp4";
+
 /**
- * Drop the rendered film at public/hero/scrub.mp4 (run it through
- * scripts/encode-scrub.sh first — see that script for why) and the hero
- * goes live. Until then the stage holds its shape and the page still works.
+ * Hero film source.
+ *
+ * Production wants the film self-hosted: download the render, run it through
+ * scripts/encode-scrub.sh, drop it at public/hero/scrub.mp4 and set
+ * NEXT_PUBLIC_HERO_FILM=/hero/scrub.mp4. That encode makes every frame a
+ * keyframe, which is what stops the scrub juddering.
+ *
+ * The fallback points straight at the Higgsfield CDN so the effect is live
+ * without a download step. It scrubs less smoothly and leans on a third-party
+ * CDN — fine for review, swap it before launch.
  */
-const HERO_FILM = undefined; // "/hero/scrub.mp4"
-const HERO_POSTER = undefined; // "/hero/scrub-poster.jpg"
+const HERO_FILM =
+  process.env.NEXT_PUBLIC_HERO_FILM || HIGGSFIELD_RENDER_URL;
+const HERO_POSTER = process.env.NEXT_PUBLIC_HERO_POSTER || undefined;
 
 export default function HomePage() {
   return (
