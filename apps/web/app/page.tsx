@@ -5,7 +5,7 @@ import { Visit } from "@/components/visit";
 import { FeatureHotspots } from "@/components/feature-hotspots";
 import { carts, reasons } from "@/content/carts";
 import { featureShots } from "@/content/features";
-import { AssemblyVideo } from "@/components/assembly-video";
+import { ScrollScrub } from "@/components/scroll-scrub";
 import { heroFilm, assemblyFilm } from "@/content/media";
 
 /**
@@ -99,8 +99,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Assembly film */}
-      <section id="build" className="scroll-mt-20 bg-mist py-24 sm:py-28">
+      {/* Assembly film — the visitor's scroll drives the build */}
+      <section id="build" className="scroll-mt-20 bg-white pt-24 sm:pt-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
@@ -109,18 +109,24 @@ export default function HomePage() {
             <h2 className="mt-3 max-w-lg text-3xl font-extrabold tracking-tight sm:text-4xl">
               Every part, in its place.
             </h2>
-          </Reveal>
-
-          <Reveal delay={0.15} y={40}>
-            <div className="mt-12">
-              <AssemblyVideo
-                src={assemblyFilm.src}
-                poster={assemblyFilm.poster}
-                className="aspect-video"
-              />
-            </div>
+            <p className="mt-5 max-w-md text-base leading-relaxed text-ink/65">
+              Keep scrolling to build it.
+            </p>
           </Reveal>
         </div>
+
+        {/* contain, not cover: this is a studio layout where cropping would
+            push parts out of frame. The white stage matches the film's own
+            backdrop, so the letterboxing never shows. */}
+        <ScrollScrub
+          src={assemblyFilm.src}
+          poster={assemblyFilm.poster}
+          scrollLength={260}
+          scrollLengthPortrait={200}
+          fit="contain"
+          stageClassName="bg-white"
+          className="mt-8"
+        />
       </section>
 
       {/* Why Wulf */}

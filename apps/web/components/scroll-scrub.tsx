@@ -38,6 +38,14 @@ export function ScrollScrub({
   scrollLength = 340,
   /** Portrait viewports get less, since it is all thumb-scrolling. */
   scrollLengthPortrait = 260,
+  /**
+   * "cover" fills the stage and crops — right for a scene the visitor is
+   * inside of. "contain" letterboxes and shows the whole frame — right for a
+   * studio product shot, where cropping would cut parts out of the picture.
+   */
+  fit = "cover",
+  /** Stage backdrop. Matters for "contain", which leaves visible margins. */
+  stageClassName = "bg-ink",
   className = "",
   children,
 }: {
@@ -47,6 +55,8 @@ export function ScrollScrub({
   posterPortrait?: string;
   scrollLength?: number;
   scrollLengthPortrait?: number;
+  fit?: "cover" | "contain";
+  stageClassName?: string;
   className?: string;
   /** Render-prop receiving scrub progress 0→1, for overlay copy. */
   children?: (progress: number) => ReactNode;
@@ -153,7 +163,7 @@ export function ScrollScrub({
       className={`relative ${className}`}
       style={reduced ? undefined : { height: `${activeLength}vh` }}
     >
-      <div className="scrub-stage bg-ink">
+      <div className={`scrub-stage ${stageClassName}`}>
         {activeSrc ? (
           <video
             /* Remounting on a source swap resets duration and readiness,
@@ -167,9 +177,9 @@ export function ScrollScrub({
             preload="auto"
             aria-hidden="true"
             onLoadedMetadata={onLoadedMetadata}
-            className={`h-full w-full object-cover transition-opacity duration-700 ${
-              ready ? "opacity-100" : "opacity-0"
-            }`}
+            className={`h-full w-full transition-opacity duration-700 ${
+              fit === "contain" ? "object-contain" : "object-cover"
+            } ${ready ? "opacity-100" : "opacity-0"}`}
           />
         ) : (
           /* No film yet — the stage still holds its shape so the rest of the
