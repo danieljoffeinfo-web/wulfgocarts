@@ -4,30 +4,46 @@ import { CartCard } from "@/components/cart-card";
 import { Visit } from "@/components/visit";
 import { carts, capabilities, reasons } from "@/content/carts";
 
-/** Higgsfield 720p render — the plan ceiling on `starter`. */
-const HIGGSFIELD_RENDER_URL =
+/**
+ * Higgsfield 720p renders — the plan ceiling on `starter`.
+ *
+ * Two cuts of the same camera move. The landscape one crops badly on a phone
+ * under object-cover, so portrait viewports get a natively vertical version
+ * instead; ScrollScrub picks between them by viewport shape.
+ */
+const RENDER_LANDSCAPE =
   "https://d8j0ntlcm91z4.cloudfront.net/user_3CdVP8uyiMnLQzUlH6RnH8yZa5a/hf_20260728_065010_64a29726-b2ae-42f5-ba16-673c37e6f1ba.mp4";
+const RENDER_PORTRAIT =
+  "https://d8j0ntlcm91z4.cloudfront.net/user_3CdVP8uyiMnLQzUlH6RnH8yZa5a/hf_20260728_072503_f9a844bd-9173-400e-b557-ab1d0c12a988.mp4";
 
 /**
  * Hero film source.
  *
- * Production wants the film self-hosted: download the render, run it through
- * scripts/encode-scrub.sh, drop it at public/hero/scrub.mp4 and set
- * NEXT_PUBLIC_HERO_FILM=/hero/scrub.mp4. That encode makes every frame a
- * keyframe, which is what stops the scrub juddering.
+ * Production wants the films self-hosted: download the renders, run each
+ * through scripts/encode-scrub.sh, drop them in public/hero/ and set the env
+ * vars below. That encode makes every frame a keyframe, which is what stops
+ * the scrub juddering.
  *
- * The fallback points straight at the Higgsfield CDN so the effect is live
- * without a download step. It scrubs less smoothly and leans on a third-party
- * CDN — fine for review, swap it before launch.
+ * The fallbacks point straight at the Higgsfield CDN so the effect is live
+ * without a download step. They scrub less smoothly and lean on a third-party
+ * CDN — fine for review, swap them before launch.
  */
-const HERO_FILM =
-  process.env.NEXT_PUBLIC_HERO_FILM || HIGGSFIELD_RENDER_URL;
+const HERO_FILM = process.env.NEXT_PUBLIC_HERO_FILM || RENDER_LANDSCAPE;
+const HERO_FILM_PORTRAIT =
+  process.env.NEXT_PUBLIC_HERO_FILM_PORTRAIT || RENDER_PORTRAIT;
 const HERO_POSTER = process.env.NEXT_PUBLIC_HERO_POSTER || undefined;
+const HERO_POSTER_PORTRAIT =
+  process.env.NEXT_PUBLIC_HERO_POSTER_PORTRAIT || undefined;
 
 export default function HomePage() {
   return (
     <>
-      <Hero src={HERO_FILM} poster={HERO_POSTER} />
+      <Hero
+        src={HERO_FILM}
+        srcPortrait={HERO_FILM_PORTRAIT}
+        poster={HERO_POSTER}
+        posterPortrait={HERO_POSTER_PORTRAIT}
+      />
 
       <section className="relative bg-white">
         <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
