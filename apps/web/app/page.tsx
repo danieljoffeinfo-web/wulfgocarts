@@ -2,7 +2,7 @@ import { Hero } from "@/components/hero";
 import { Reveal, Stagger, StaggerItem } from "@/components/reveal";
 import { CartCard } from "@/components/cart-card";
 import { Visit } from "@/components/visit";
-import { carts, capabilities, reasons } from "@/content/carts";
+import { carts, reasons } from "@/content/carts";
 import { heroFilm } from "@/content/media";
 
 /**
@@ -50,24 +50,6 @@ export default function HomePage() {
               online first, then come through and take one out properly.
             </p>
           </Reveal>
-        </div>
-      </section>
-
-      {/* Capability strip */}
-      <section
-        aria-hidden="true"
-        className="overflow-hidden border-y border-line bg-mist py-4"
-      >
-        <div className="flex w-max animate-marquee gap-10">
-          {[...capabilities, ...capabilities].map((c, i) => (
-            <span
-              key={i}
-              className="flex items-center gap-10 whitespace-nowrap text-sm font-bold text-ink/50"
-            >
-              {c}
-              <span className="text-amber">///</span>
-            </span>
-          ))}
         </div>
       </section>
 

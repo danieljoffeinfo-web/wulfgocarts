@@ -90,16 +90,6 @@ export const carts: Cart[] = [
   },
 ];
 
-/** Short capability lines for the marquee strip under the hero. */
-export const capabilities = [
-  "PLACEHOLDER — Brand new stock",
-  "PLACEHOLDER — Lithium options",
-  "PLACEHOLDER — Full warranty",
-  "PLACEHOLDER — Finance available",
-  "PLACEHOLDER — Parts & service",
-  "PLACEHOLDER — Delivery arranged",
-];
-
 /** The "Why Wulf" reasons. Three or four reads best. */
 export const reasons: { title: string; description: string }[] = [
   {
