@@ -2,15 +2,26 @@
 
 @theme {
   /* ------------------------------------------------------------------
-   * Wulf Go Carts brand tokens.
-   * Ported from the chom. design system. Swap the hex values here and
-   * the whole site follows — no component edits required.
+   * Wulf Go Carts brand tokens — read off the WULF badge and cart body.
+   * Swap the hex values here and the whole site follows.
    * ------------------------------------------------------------------ */
-  --color-navy: #0d3b66;
-  --color-navy-deep: #092a4a;
-  --color-ink: #0a0a0a;
+
+  /* Amber chevrons from the badge — the accent, used for CTAs only */
+  --color-amber: #f0a02a;
+  --color-amber-deep: #d8871a;
+
+  /* Bumper / roof black */
+  --color-ink: #0e0f11;
+  --color-ink-soft: #1a1c1f;
+
+  /* Cart body silver */
+  --color-steel: #c9cdd2;
   --color-mist: #f4f5f7;
   --color-line: #e3e6eb;
+  --color-line-dark: #2a2d31;
+
+  /* Sky the hero film cranes up into — the handoff colour into the site */
+  --color-sky: #a8c8e4;
 
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", sans-serif;
@@ -28,15 +39,15 @@ body {
 }
 
 ::selection {
-  background: var(--color-navy);
-  color: #fff;
+  background: var(--color-amber);
+  color: var(--color-ink);
 }
 
-/* Subtle dotted texture used behind the hero and the CTA band */
+/* Subtle dotted texture */
 .dot-grid {
   background-image: radial-gradient(
     circle at 1px 1px,
-    rgb(13 59 102 / 0.1) 1px,
+    rgb(14 15 17 / 0.08) 1px,
     transparent 0
   );
   background-size: 28px 28px;
@@ -56,11 +67,40 @@ body {
   animation: marquee 36s linear infinite;
 }
 
+/* ------------------------------------------------------------------
+ * Scroll-scrub hero.
+ * The film is pinned while the page scrolls past it; scroll progress
+ * drives the video's currentTime. See components/scroll-scrub.tsx.
+ * ------------------------------------------------------------------ */
+.scrub-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+
+/* The film cranes up into open sky; this bleeds that sky into the section
+   below so the handoff reads as one continuous move rather than a cut. */
+.sky-handoff {
+  background: linear-gradient(
+    to bottom,
+    var(--color-sky) 0%,
+    color-mix(in srgb, var(--color-sky) 45%, #ffffff) 45%,
+    #ffffff 100%
+  );
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee {
     animation: none;
   }
   html {
     scroll-behavior: auto;
+  }
+  /* Scrubbing is motion-driven by definition — the component falls back to
+     a static poster frame, so unpin the stage and let the page flow. */
+  .scrub-stage {
+    position: relative;
+    height: auto;
   }
 }

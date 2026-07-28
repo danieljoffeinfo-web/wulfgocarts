@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
+import { Nav } from "@/components/nav";
+import { Footer } from "@/components/footer";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -37,7 +39,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${manrope.variable} font-sans`}>
+        <Nav />
         <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );
