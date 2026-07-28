@@ -41,7 +41,7 @@ export default function HomePage() {
             </p>
             <h2 className="mt-4 max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-ink sm:text-5xl">
               We sell new carts.{" "}
-              <span className="text-amber-deep">
+              <span className="text-accent">
                 We&apos;d rather you came and saw them.
               </span>
             </h2>
@@ -57,7 +57,7 @@ export default function HomePage() {
       <section id="range" className="scroll-mt-20 bg-white py-24 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-deep">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
               The range
             </p>
             <h2 className="mt-3 max-w-lg text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -79,7 +79,7 @@ export default function HomePage() {
       <section id="why" className="scroll-mt-20 bg-mist py-24 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-deep">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
               Why Wulf
             </p>
             <h2 className="mt-3 max-w-lg text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -91,7 +91,7 @@ export default function HomePage() {
             {reasons.map((reason, i) => (
               <StaggerItem key={reason.title}>
                 <div className="flex h-full flex-col rounded-2xl border border-line bg-white p-7">
-                  <span className="text-xs font-extrabold text-amber">
+                  <span className="text-xs font-extrabold text-accent">
                     0{i + 1}
                   </span>
                   <h3 className="mt-3 text-xl font-extrabold tracking-tight">

@@ -50,7 +50,7 @@ export function Nav() {
           ))}
           <Link
             href="#visit"
-            className="rounded-full bg-amber px-5 py-2.5 text-sm font-extrabold text-ink transition-colors hover:bg-amber-deep"
+            className="rounded-full bg-accent px-5 py-2.5 text-sm font-extrabold text-white transition-colors hover:bg-accent-deep"
           >
             Visit the showroom
           </Link>
@@ -99,7 +99,7 @@ export function Nav() {
               <Link
                 href="#visit"
                 onClick={() => setOpen(false)}
-                className="mt-2 rounded-full bg-amber px-5 py-3 text-center text-base font-extrabold text-ink"
+                className="mt-2 rounded-full bg-accent px-5 py-3 text-center text-base font-extrabold text-white"
               >
                 Visit the showroom
               </Link>

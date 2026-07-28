@@ -26,7 +26,7 @@ export function Footer() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="text-white/70 transition-colors hover:text-amber"
+                      className="text-white/70 transition-colors hover:text-accent-soft"
                     >
                       {item.label}
                     </Link>
@@ -48,7 +48,7 @@ export function Footer() {
                 href={site.showroom.mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 inline-block text-sm font-bold text-amber underline-offset-4 hover:underline"
+                className="mt-3 inline-block text-sm font-bold text-accent-soft underline-offset-4 hover:underline"
               >
                 Get directions →
               </a>
@@ -62,7 +62,7 @@ export function Footer() {
                 <li>
                   <a
                     href={`tel:${site.phoneHref}`}
-                    className="text-white/70 transition-colors hover:text-amber"
+                    className="text-white/70 transition-colors hover:text-accent-soft"
                   >
                     {site.phone}
                   </a>
@@ -70,7 +70,7 @@ export function Footer() {
                 <li>
                   <a
                     href={`mailto:${site.email}`}
-                    className="text-white/70 transition-colors hover:text-amber"
+                    className="text-white/70 transition-colors hover:text-accent-soft"
                   >
                     {site.email}
                   </a>
@@ -81,7 +81,7 @@ export function Footer() {
                       href={s.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-white/70 transition-colors hover:text-amber"
+                      className="text-white/70 transition-colors hover:text-accent-soft"
                     >
                       {s.label}
                     </a>

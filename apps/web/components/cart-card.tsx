@@ -35,7 +35,7 @@ export function CartCard({ cart }: { cart: Cart }) {
           />
         )}
         {cart.badge && (
-          <span className="absolute left-4 top-4 rounded-full bg-amber px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-ink">
+          <span className="absolute left-4 top-4 rounded-full bg-accent px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white">
             {cart.badge}
           </span>
         )}
@@ -60,7 +60,7 @@ export function CartCard({ cart }: { cart: Cart }) {
             >
               <span
                 aria-hidden
-                className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber"
+                className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
               />
               {h}
             </li>
@@ -69,7 +69,7 @@ export function CartCard({ cart }: { cart: Cart }) {
 
         <a
           href="#visit"
-          className="mt-6 text-sm font-bold text-ink underline-offset-4 transition-colors group-hover:text-amber-deep hover:underline"
+          className="mt-6 text-sm font-bold text-ink underline-offset-4 transition-colors group-hover:text-accent hover:underline"
         >
           See it in the showroom →
         </a>

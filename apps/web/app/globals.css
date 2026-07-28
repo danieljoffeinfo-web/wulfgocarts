@@ -6,9 +6,14 @@
    * Swap the hex values here and the whole site follows.
    * ------------------------------------------------------------------ */
 
-  /* Amber chevrons from the badge — the accent, used for CTAs only */
-  --color-amber: #f0a02a;
-  --color-amber-deep: #d8871a;
+  /* Accent — deep red. Named by role, not by hue, so re-colouring the brand
+     is a hex edit here rather than a rename across every component. */
+  --color-accent: #9b1b1e;
+  /* Hover/pressed state for accent fills. */
+  --color-accent-deep: #7a1417;
+  /* For accent text on the dark sections: the deep red only reaches 2.4:1
+     against near-black, which fails WCAG AA. This lifts it to 5.4:1. */
+  --color-accent-soft: #e5595e;
 
   /* Bumper / roof black */
   --color-ink: #0e0f11;
@@ -36,8 +41,8 @@ body {
 }
 
 ::selection {
-  background: var(--color-amber);
-  color: var(--color-ink);
+  background: var(--color-accent);
+  color: #fff;
 }
 
 /* Subtle dotted texture */

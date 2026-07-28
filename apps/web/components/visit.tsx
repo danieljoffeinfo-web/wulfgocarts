@@ -14,7 +14,7 @@ export function Visit() {
         <div className="grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:items-center">
           <Reveal>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
                 Come and see them
               </p>
               <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -62,7 +62,7 @@ export function Visit() {
                   href={site.showroom.mapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full bg-amber px-7 py-3.5 text-sm font-extrabold text-ink transition-all hover:-translate-y-0.5 hover:bg-amber-deep"
+                  className="rounded-full bg-accent px-7 py-3.5 text-sm font-extrabold text-white transition-all hover:-translate-y-0.5 hover:bg-accent-deep"
                 >
                   Get directions
                 </a>
