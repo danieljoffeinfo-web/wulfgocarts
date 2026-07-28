@@ -43,7 +43,26 @@ below.
 Under `prefers-reduced-motion` the stage unpins and falls back to a static
 poster frame.
 
-## The 360° product viewer
+## The 3D product viewer
+
+`components/model-viewer.tsx` renders a real GLB mesh via `@google/model-viewer`,
+so visitors can orbit to any angle rather than only photographed ones. The
+library is ~500 kB and is imported lazily on mount, so it never enters the
+initial bundle.
+
+Meshes are generated from a single product photo with Higgsfield's `sam_3_3d`
+(1 credit each). Set `model` on a cart in `content/carts.ts`.
+
+**CORS caveat:** GLB loading goes through `fetch`, so the host serving the file
+must send `Access-Control-Allow-Origin`. The hero video does not have this
+constraint because `<video src>` is not a CORS request. If the viewer hangs on
+"Loading 3D view", self-host instead: download the GLB to
+`public/carts/<slug>.glb` and point `model` at `/carts/<slug>.glb`.
+
+Camera orbit is clamped between 55° and 95° — single-photo meshes have no
+modelled underside, and letting the camera drop below the floor plane exposes it.
+
+## The 360° photo viewer
 
 `components/spin-viewer.tsx` is a drag-to-rotate viewer in the StockX mould.
 There is no 3D model — it steps through a set of photos taken at even angles

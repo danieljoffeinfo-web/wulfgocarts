@@ -20,8 +20,14 @@ export type Cart = {
   /** Path from /public, e.g. "/carts/two-seater.jpg". Optional. */
   image?: string;
   /**
-   * Ordered frames for the drag-to-rotate 360 viewer. When set, this replaces
-   * the static `image` on the card. Use spinFrames() below to build the list.
+   * GLB mesh for the interactive 3D viewer. Highest-priority visual — when
+   * set it wins over `frames` and `image`, because it lets the visitor orbit
+   * to any angle rather than only photographed ones.
+   */
+  model?: string;
+  /**
+   * Ordered frames for the drag-to-rotate 360 viewer. Used when there is no
+   * `model`. Build the list with spinFrames() below.
    */
   frames?: string[];
   /** Optional corner badge, e.g. "Most popular" or "New arrival". */
@@ -54,6 +60,16 @@ export const carts: Cart[] = [
       "PLACEHOLDER — motor or top speed",
       "PLACEHOLDER — standout feature",
     ],
+    /**
+     * SAM 3 mesh lifted from the front-on hero photo.
+     *
+     * Served from the Higgsfield CDN. Loading a GLB goes through fetch, so
+     * unlike the hero video this needs CORS headers from that host — if the
+     * viewer hangs on "Loading 3D view", download the file to
+     * public/carts/two-seater.glb and point this at "/carts/two-seater.glb".
+     */
+    model:
+      "https://d3u0tzju9qaucj.cloudfront.net/7d051b5a-7bfe-49fe-a484-24e7b3a9458a/17771414-cc86-4b62-9951-92e390119c9c.glb",
     badge: "Most popular",
   },
   {

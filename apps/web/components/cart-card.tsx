@@ -1,16 +1,25 @@
 import { AssetSlot } from "./asset-slot";
 import { SpinViewer } from "./spin-viewer";
+import { ModelViewer } from "./model-viewer";
 import type { Cart } from "@/content/carts";
 
 export function CartCard({ cart }: { cart: Cart }) {
-  const spinnable = (cart.frames?.length ?? 0) > 0;
-
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white transition-all duration-300 hover:-translate-y-1.5 hover:border-ink/20 hover:shadow-xl hover:shadow-ink/5">
+      {/* Best available visual: real 3D mesh, then a photo spin, then a
+          static shot, then a labelled placeholder. */}
       <div className="relative">
-        {spinnable ? (
+        {cart.model ? (
+          <ModelViewer
+            src={cart.model}
+            alt={cart.name}
+            poster={cart.image}
+            aspect="4 / 3"
+            className="rounded-none"
+          />
+        ) : cart.frames?.length ? (
           <SpinViewer
-            frames={cart.frames!}
+            frames={cart.frames}
             alt={cart.name}
             aspect="4 / 3"
             className="rounded-none"
