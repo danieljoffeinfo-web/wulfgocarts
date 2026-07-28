@@ -31,3 +31,19 @@ export const heroFilm = {
 export const cartModels = {
   twoSeater: `${base("raw")}/v1785224356/wulf/carts/two-seater.glb`,
 };
+
+/**
+ * Assembly film — components converging into the finished cart.
+ *
+ * TODO: still on the Higgsfield CDN because the Cloudinary MCP was offline
+ * when this was wired up. Move it across for the same reasons as everything
+ * else here: edge delivery, and not depending on a third party's URL staying
+ * alive. Upload with `file` set to the URL below, then swap in the
+ * res.cloudinary.com path.
+ */
+export const assemblyFilm = {
+  src: "https://d8j0ntlcm91z4.cloudfront.net/user_3CdVP8uyiMnLQzUlH6RnH8yZa5a/hf_20260728_180809_6b1cb96e-a45b-40b0-b1b4-0d7de716c12b.mp4",
+  /* First frame — the exploded layout. Holds the space before playback. */
+  poster:
+    "https://d2ol7oe51mr4n9.cloudfront.net/user_3CdVP8uyiMnLQzUlH6RnH8yZa5a/715afa08-6548-4352-a201-ede10d43fa9e.jpg",
+};

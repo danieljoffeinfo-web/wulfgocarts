@@ -5,7 +5,8 @@ import { Visit } from "@/components/visit";
 import { FeatureHotspots } from "@/components/feature-hotspots";
 import { carts, reasons } from "@/content/carts";
 import { featureShots } from "@/content/features";
-import { heroFilm } from "@/content/media";
+import { AssemblyVideo } from "@/components/assembly-video";
+import { heroFilm, assemblyFilm } from "@/content/media";
 
 /**
  * Hero film source.
@@ -95,6 +96,30 @@ export default function HomePage() {
           <div className="mt-12">
             <FeatureHotspots shots={featureShots} />
           </div>
+        </div>
+      </section>
+
+      {/* Assembly film */}
+      <section id="build" className="scroll-mt-20 bg-mist py-24 sm:py-28">
+        <div className="mx-auto max-w-6xl px-5 sm:px-8">
+          <Reveal>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+              How it comes together
+            </p>
+            <h2 className="mt-3 max-w-lg text-3xl font-extrabold tracking-tight sm:text-4xl">
+              Every part, in its place.
+            </h2>
+          </Reveal>
+
+          <Reveal delay={0.15} y={40}>
+            <div className="mt-12">
+              <AssemblyVideo
+                src={assemblyFilm.src}
+                poster={assemblyFilm.poster}
+                className="aspect-video"
+              />
+            </div>
+          </Reveal>
         </div>
       </section>
 
