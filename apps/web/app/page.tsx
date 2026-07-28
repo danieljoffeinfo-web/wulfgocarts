@@ -4,9 +4,9 @@ import { CartCard } from "@/components/cart-card";
 import { Visit } from "@/components/visit";
 import { carts, capabilities, reasons } from "@/content/carts";
 
-/** Higgsfield 480p test render. Swap for the 720p once it lands. */
+/** Higgsfield 720p render — the plan ceiling on `starter`. */
 const HIGGSFIELD_RENDER_URL =
-  "https://d8j0ntlcm91z4.cloudfront.net/user_3CdVP8uyiMnLQzUlH6RnH8yZa5a/hf_20260728_064018_a06e9d32-8dea-4b0b-b75f-35c663df9e8d.mp4";
+  "https://d8j0ntlcm91z4.cloudfront.net/user_3CdVP8uyiMnLQzUlH6RnH8yZa5a/hf_20260728_065010_64a29726-b2ae-42f5-ba16-673c37e6f1ba.mp4";
 
 /**
  * Hero film source.
