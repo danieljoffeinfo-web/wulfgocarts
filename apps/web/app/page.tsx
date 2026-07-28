@@ -2,7 +2,9 @@ import { Hero } from "@/components/hero";
 import { Reveal, Stagger, StaggerItem } from "@/components/reveal";
 import { CartCard } from "@/components/cart-card";
 import { Visit } from "@/components/visit";
+import { FeatureHotspots } from "@/components/feature-hotspots";
 import { carts, reasons } from "@/content/carts";
+import { featureShots } from "@/content/features";
 import { heroFilm } from "@/content/media";
 
 /**
@@ -72,6 +74,27 @@ export default function HomePage() {
               </StaggerItem>
             ))}
           </Stagger>
+        </div>
+      </section>
+
+      {/* Detail — annotated feature shots */}
+      <section id="detail" className="scroll-mt-20 bg-white pb-24 sm:pb-28">
+        <div className="mx-auto max-w-6xl px-5 sm:px-8">
+          <Reveal>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+              In the detail
+            </p>
+            <h2 className="mt-3 max-w-lg text-3xl font-extrabold tracking-tight sm:text-4xl">
+              The bits you only notice up close.
+            </h2>
+            <p className="mt-5 max-w-lg text-base leading-relaxed text-ink/65">
+              Tap any marker to see it magnified, and what it actually does.
+            </p>
+          </Reveal>
+
+          <div className="mt-12">
+            <FeatureHotspots shots={featureShots} />
+          </div>
         </div>
       </section>
 
