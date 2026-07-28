@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  /* ------------------------------------------------------------------
+   * Wulf Go Carts brand tokens.
+   * Ported from the chom. design system. Swap the hex values here and
+   * the whole site follows — no component edits required.
+   * ------------------------------------------------------------------ */
+  --color-navy: #0d3b66;
+  --color-navy-deep: #092a4a;
+  --color-ink: #0a0a0a;
+  --color-mist: #f4f5f7;
+  --color-line: #e3e6eb;
+
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white text-ink antialiased;
+  font-feature-settings: "ss01" on;
+}
+
+::selection {
+  background: var(--color-navy);
+  color: #fff;
+}
+
+/* Subtle dotted texture used behind the hero and the CTA band */
+.dot-grid {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgb(13 59 102 / 0.1) 1px,
+    transparent 0
+  );
+  background-size: 28px 28px;
+}
+
+/* Slow marquee for the capabilities strip */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 36s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
