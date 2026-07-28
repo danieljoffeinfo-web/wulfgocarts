@@ -3,34 +3,22 @@ import { Reveal, Stagger, StaggerItem } from "@/components/reveal";
 import { CartCard } from "@/components/cart-card";
 import { Visit } from "@/components/visit";
 import { carts, capabilities, reasons } from "@/content/carts";
-
-/**
- * Higgsfield 720p renders — the plan ceiling on `starter`.
- *
- * Two cuts of the same camera move. The landscape one crops badly on a phone
- * under object-cover, so portrait viewports get a natively vertical version
- * instead; ScrollScrub picks between them by viewport shape.
- */
-const RENDER_LANDSCAPE =
-  "https://d8j0ntlcm91z4.cloudfront.net/user_3CdVP8uyiMnLQzUlH6RnH8yZa5a/hf_20260728_065010_64a29726-b2ae-42f5-ba16-673c37e6f1ba.mp4";
-const RENDER_PORTRAIT =
-  "https://d8j0ntlcm91z4.cloudfront.net/user_3CdVP8uyiMnLQzUlH6RnH8yZa5a/hf_20260728_072503_f9a844bd-9173-400e-b557-ab1d0c12a988.mp4";
+import { heroFilm } from "@/content/media";
 
 /**
  * Hero film source.
  *
- * Production wants the films self-hosted: download the renders, run each
- * through scripts/encode-scrub.sh, drop them in public/hero/ and set the env
- * vars below. That encode makes every frame a keyframe, which is what stops
- * the scrub juddering.
+ * Two cuts of the same camera move, both on Cloudinary. The landscape one
+ * crops badly on a phone under object-cover, so portrait viewports get the
+ * natively vertical version; ScrollScrub picks between them by viewport shape.
  *
- * The fallbacks point straight at the Higgsfield CDN so the effect is live
- * without a download step. They scrub less smoothly and lean on a third-party
- * CDN — fine for review, swap them before launch.
+ * The env vars still win when set — that is the escape hatch for serving a
+ * locally encoded copy (scripts/encode-scrub.sh) from /public if the scrub
+ * needs denser keyframes than the source has.
  */
-const HERO_FILM = process.env.NEXT_PUBLIC_HERO_FILM || RENDER_LANDSCAPE;
+const HERO_FILM = process.env.NEXT_PUBLIC_HERO_FILM || heroFilm.landscape;
 const HERO_FILM_PORTRAIT =
-  process.env.NEXT_PUBLIC_HERO_FILM_PORTRAIT || RENDER_PORTRAIT;
+  process.env.NEXT_PUBLIC_HERO_FILM_PORTRAIT || heroFilm.portrait;
 const HERO_POSTER = process.env.NEXT_PUBLIC_HERO_POSTER || undefined;
 const HERO_POSTER_PORTRAIT =
   process.env.NEXT_PUBLIC_HERO_POSTER_PORTRAIT || undefined;

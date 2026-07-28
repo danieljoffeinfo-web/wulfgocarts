@@ -9,6 +9,8 @@
  * All entries below are PLACEHOLDER content awaiting the real range.
  */
 
+import { cartModels } from "./media";
+
 export type Cart = {
   slug: string;
   name: string;
@@ -60,16 +62,8 @@ export const carts: Cart[] = [
       "PLACEHOLDER — motor or top speed",
       "PLACEHOLDER — standout feature",
     ],
-    /**
-     * SAM 3 mesh lifted from the front-on hero photo.
-     *
-     * Served from the Higgsfield CDN. Loading a GLB goes through fetch, so
-     * unlike the hero video this needs CORS headers from that host — if the
-     * viewer hangs on "Loading 3D view", download the file to
-     * public/carts/two-seater.glb and point this at "/carts/two-seater.glb".
-     */
-    model:
-      "https://d3u0tzju9qaucj.cloudfront.net/7d051b5a-7bfe-49fe-a484-24e7b3a9458a/17771414-cc86-4b62-9951-92e390119c9c.glb",
+    /** SAM 3 mesh lifted from the front-on hero photo. */
+    model: cartModels.twoSeater,
     badge: "Most popular",
   },
   {

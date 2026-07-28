@@ -53,11 +53,10 @@ initial bundle.
 Meshes are generated from a single product photo with Higgsfield's `sam_3_3d`
 (1 credit each). Set `model` on a cart in `content/carts.ts`.
 
-**CORS caveat:** GLB loading goes through `fetch`, so the host serving the file
-must send `Access-Control-Allow-Origin`. The hero video does not have this
-constraint because `<video src>` is not a CORS request. If the viewer hangs on
-"Loading 3D view", self-host instead: download the GLB to
-`public/carts/<slug>.glb` and point `model` at `/carts/<slug>.glb`.
+GLB loading goes through `fetch`, so the host must send
+`Access-Control-Allow-Origin` — the hero video has no such constraint because
+`<video src>` is not a CORS request. Serving the mesh from Cloudinary satisfies
+this; a raw Higgsfield CDN URL may not.
 
 Camera orbit is clamped between 55° and 95° — single-photo meshes have no
 modelled underside, and letting the camera drop below the floor plane exposes it.
@@ -82,22 +81,26 @@ frames: spinFrames("two-seater", 36),
 Any cart without `frames` falls back to its static `image`, and without that to
 a labelled placeholder — so the grid stays intact while only some carts are shot.
 
-## Getting the film in
+## Media hosting
 
-The render lives on the Higgsfield CDN. For production, self-host it:
+All delivered media lives on Cloudinary (cloud `dmanxetyl`), centralised in
+`content/media.ts`. Versions are pinned in the URLs, so re-uploading under the
+same `public_id` requires bumping the version in that file.
+
+The hero films are served **untransformed** on purpose. `q_auto` / `f_auto`
+would cut bytes further, but each produces a re-encoded derivative whose
+keyframe layout determines how cleanly the scrub seeks — that could improve or
+degrade the effect, so it wants measuring on a real device before shipping.
+
+If the scrub needs denser keyframes than the source has, encode locally and
+serve from `/public` instead:
 
 ```bash
-# 1. Download the render from Higgsfield
-# 2. Re-encode for scrubbing (requires ffmpeg)
 ./scripts/encode-scrub.sh ~/Downloads/render.mp4 apps/web/public/hero/scrub.mp4
-
-# 3. Point the app at it
 echo 'NEXT_PUBLIC_HERO_FILM=/hero/scrub.mp4' >> apps/web/.env.local
-echo 'NEXT_PUBLIC_HERO_POSTER=/hero/scrub-poster.jpg' >> apps/web/.env.local
 ```
 
-Without those env vars the app falls back to the CDN URL baked into
-`app/page.tsx` — fine for a preview, not for production.
+The env vars always win over `content/media.ts`.
 
 ## Deploying to Vercel
 
