@@ -15,27 +15,38 @@ import {
  * video while the page scrolls past. Scroll progress through the section maps
  * onto the video's currentTime, so the visitor "drives" the camera move.
  *
- * Two details make this feel smooth rather than steppy:
+ * Three details make this feel right:
  *
  *  1. currentTime is never written from the scroll handler directly. Scroll
  *     sets a target; a rAF loop eases the actual playhead toward it. Without
  *     this, fast trackpad scrolling produces visible stutter.
- *  2. The source MP4 must be encoded with every frame a keyframe, otherwise
- *     seeking snaps to the nearest keyframe and the film judders. See
- *     scripts/encode-scrub.sh.
+ *  2. A portrait cut is served to portrait viewports. A 16:9 film under
+ *     object-cover on a phone crops away most of its width and upscales the
+ *     remaining strip — the subject leaves the frame and what is left is soft.
+ *     The switch keys off viewport shape, not device type, so a rotated phone
+ *     and a narrow window both get the right cut.
+ *  3. The source MP4 wants every frame to be a keyframe, otherwise seeking
+ *     snaps to the nearest one and the film judders. See scripts/encode-scrub.sh.
  */
 
 export function ScrollScrub({
   src,
+  srcPortrait,
   poster,
+  posterPortrait,
   /** Scroll distance for the film, in vh. More = slower, more deliberate. */
-  scrollLength = 320,
+  scrollLength = 340,
+  /** Portrait viewports get less, since it is all thumb-scrolling. */
+  scrollLengthPortrait = 260,
   className = "",
   children,
 }: {
   src?: string;
+  srcPortrait?: string;
   poster?: string;
+  posterPortrait?: string;
   scrollLength?: number;
+  scrollLengthPortrait?: number;
   className?: string;
   /** Render-prop receiving scrub progress 0→1, for overlay copy. */
   children?: (progress: number) => ReactNode;
@@ -51,6 +62,7 @@ export function ScrollScrub({
   const [progress, setProgress] = useState(0);
   const [ready, setReady] = useState(false);
   const [reduced, setReduced] = useState(false);
+  const [portrait, setPortrait] = useState(false);
 
   /* Honour prefers-reduced-motion: fall back to a static frame, no pinning. */
   useEffect(() => {
@@ -60,6 +72,19 @@ export function ScrollScrub({
     mq.addEventListener("change", apply);
     return () => mq.removeEventListener("change", apply);
   }, []);
+
+  /* Viewport shape decides which cut to load. */
+  useEffect(() => {
+    const mq = window.matchMedia("(max-aspect-ratio: 1/1)");
+    const apply = () => setPortrait(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  const activeSrc = portrait && srcPortrait ? srcPortrait : src;
+  const activePoster = portrait && posterPortrait ? posterPortrait : poster;
+  const activeLength = portrait ? scrollLengthPortrait : scrollLength;
 
   const readProgress = useCallback(() => {
     const section = sectionRef.current;
@@ -126,14 +151,17 @@ export function ScrollScrub({
     <div
       ref={sectionRef}
       className={`relative ${className}`}
-      style={reduced ? undefined : { height: `${scrollLength}vh` }}
+      style={reduced ? undefined : { height: `${activeLength}vh` }}
     >
       <div className="scrub-stage bg-ink">
-        {src ? (
+        {activeSrc ? (
           <video
+            /* Remounting on a source swap resets duration and readiness,
+               which a bare src change would leave stale. */
+            key={activeSrc}
             ref={videoRef}
-            src={src}
-            poster={poster}
+            src={activeSrc}
+            poster={activePoster}
             muted
             playsInline
             preload="auto"

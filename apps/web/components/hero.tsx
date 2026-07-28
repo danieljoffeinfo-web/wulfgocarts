@@ -15,9 +15,26 @@ const ramp = (p: number, start: number, end: number) =>
  * through the windscreen. Both are gone by the time the camera reaches sky,
  * so the handoff into the page below is clean.
  */
-export function Hero({ src, poster }: { src?: string; poster?: string }) {
+export function Hero({
+  src,
+  srcPortrait,
+  poster,
+  posterPortrait,
+}: {
+  src?: string;
+  srcPortrait?: string;
+  poster?: string;
+  posterPortrait?: string;
+}) {
   return (
-    <ScrollScrub src={src} poster={poster} scrollLength={340}>
+    <ScrollScrub
+      src={src}
+      srcPortrait={srcPortrait}
+      poster={poster}
+      posterPortrait={posterPortrait}
+      scrollLength={340}
+      scrollLengthPortrait={260}
+    >
       {(p) => {
         const beat1 = 1 - ramp(p, 0.08, 0.26);
         const beat2 = ramp(p, 0.4, 0.52) * (1 - ramp(p, 0.66, 0.78));
@@ -41,10 +58,10 @@ export function Hero({ src, poster }: { src?: string; poster?: string }) {
                 transform: `translateY(${(1 - beat1) * -32}px)`,
               }}
             >
-              <h1 className="text-5xl font-extrabold leading-[0.95] tracking-tight text-white drop-shadow-lg sm:text-7xl lg:text-8xl">
+              <h1 className="text-6xl font-extrabold leading-[0.95] tracking-tight text-white drop-shadow-lg sm:text-7xl lg:text-8xl">
                 WULF
               </h1>
-              <p className="mx-auto mt-5 max-w-md text-base font-semibold text-white/80 drop-shadow sm:text-lg">
+              <p className="mx-auto mt-5 max-w-md text-lg font-semibold text-white/85 drop-shadow sm:text-lg">
                 New golf carts, seen in person.
               </p>
             </div>
@@ -57,7 +74,7 @@ export function Hero({ src, poster }: { src?: string; poster?: string }) {
                 transform: `translateY(${(1 - beat2) * 28}px)`,
               }}
             >
-              <p className="mx-auto max-w-2xl text-2xl font-extrabold leading-tight tracking-tight text-white drop-shadow-lg sm:text-4xl">
+              <p className="mx-auto max-w-2xl text-3xl font-extrabold leading-tight tracking-tight text-white drop-shadow-lg sm:text-4xl">
                 Sit in one before you buy one.
               </p>
             </div>

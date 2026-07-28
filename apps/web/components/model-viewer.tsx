@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 /**
  * Interactive 3D product viewer.
@@ -58,6 +58,8 @@ export function ModelViewer({
   aspect?: string;
 }) {
   const [registered, setRegistered] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const elRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     let alive = true;
@@ -71,6 +73,36 @@ export function ModelViewer({
     };
   }, []);
 
+  /* A GLB is fetched, so a missing CORS header on the host fails the load.
+     Fall back to the still photo rather than leaving an empty box. */
+  useEffect(() => {
+    const el = elRef.current;
+    if (!el || !registered) return;
+    const onError = () => setFailed(true);
+    el.addEventListener("error", onError);
+    return () => el.removeEventListener("error", onError);
+  }, [registered]);
+
+  if (failed) {
+    return (
+      <div
+        className={`relative overflow-hidden rounded-2xl bg-mist ${className}`}
+        style={{ aspectRatio: aspect }}
+      >
+        {poster ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={poster} alt={alt} className="h-full w-full object-cover" />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <span className="text-xs font-bold uppercase tracking-[0.15em] text-ink/30">
+              {alt}
+            </span>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div
       className={`relative overflow-hidden rounded-2xl bg-mist ${className}`}
@@ -78,6 +110,7 @@ export function ModelViewer({
     >
       {registered ? (
         <model-viewer
+          ref={elRef}
           src={src}
           alt={alt}
           poster={poster}
@@ -87,6 +120,9 @@ export function ModelViewer({
           rotation-per-second="18deg"
           shadow-intensity="1"
           exposure="1.1"
+          /* Image-based lighting reads far better than the flat default,
+             especially on the cart's gloss panels. */
+          environment-image="neutral"
           /* Keep the camera near eye level — orbiting under the floor plane
              exposes the mesh's unmodelled underside. */
           min-camera-orbit="auto 55deg auto"
