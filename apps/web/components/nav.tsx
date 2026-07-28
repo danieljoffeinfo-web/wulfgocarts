@@ -17,32 +17,40 @@ export function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /* Over the hero film the bar is transparent, so the mark and links invert
+     to white. Once the white bar slides in they go back to ink. */
+  const onFilm = !scrolled && !open;
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled || open
-          ? "border-b border-line bg-white/85 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent"
+        onFilm
+          ? "border-b border-transparent bg-transparent"
+          : "border-b border-line bg-white/85 backdrop-blur-md"
       }`}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:h-18 sm:px-8">
         <Link href="/" aria-label={`${site.name} — home`} className="text-xl">
-          <Logo />
+          <Logo inverted={onFilm} />
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-10 md:flex">
           {site.nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm font-semibold text-ink/60 transition-colors hover:text-navy"
+              className={`text-sm font-semibold transition-colors ${
+                onFilm
+                  ? "text-white/85 hover:text-white"
+                  : "text-ink/60 hover:text-ink"
+              }`}
             >
               {item.label}
             </Link>
           ))}
           <Link
             href="#visit"
-            className="rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-navy-deep"
+            className="rounded-full bg-amber px-5 py-2.5 text-sm font-extrabold text-ink transition-colors hover:bg-amber-deep"
           >
             Visit the showroom
           </Link>
@@ -56,14 +64,14 @@ export function Nav() {
           className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
         >
           <span
-            className={`h-0.5 w-5 bg-ink transition-transform ${
-              open ? "translate-y-1 rotate-45" : ""
-            }`}
+            className={`h-0.5 w-5 transition-transform ${
+              onFilm ? "bg-white" : "bg-ink"
+            } ${open ? "translate-y-1 rotate-45" : ""}`}
           />
           <span
-            className={`h-0.5 w-5 bg-ink transition-transform ${
-              open ? "-translate-y-1 -rotate-45" : ""
-            }`}
+            className={`h-0.5 w-5 transition-transform ${
+              onFilm ? "bg-white" : "bg-ink"
+            } ${open ? "-translate-y-1 -rotate-45" : ""}`}
           />
         </button>
       </div>
@@ -91,7 +99,7 @@ export function Nav() {
               <Link
                 href="#visit"
                 onClick={() => setOpen(false)}
-                className="mt-2 rounded-full bg-navy px-5 py-3 text-center text-base font-semibold text-white"
+                className="mt-2 rounded-full bg-amber px-5 py-3 text-center text-base font-extrabold text-ink"
               >
                 Visit the showroom
               </Link>

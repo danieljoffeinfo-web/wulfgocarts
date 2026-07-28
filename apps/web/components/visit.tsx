@@ -88,7 +88,7 @@ export function Visit() {
 
           <Reveal delay={0.15} y={40}>
             <AssetSlot
-              alt="The Wulf Go Carts showroom"
+              alt="The Wulf Golf Carts showroom"
               label="Showroom photo — wide shot of the floor"
               aspect="4 / 3"
               sizes="(min-width: 1024px) 55vw, 100vw"

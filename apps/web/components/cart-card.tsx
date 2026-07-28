@@ -1,18 +1,30 @@
 import { AssetSlot } from "./asset-slot";
+import { SpinViewer } from "./spin-viewer";
 import type { Cart } from "@/content/carts";
 
 export function CartCard({ cart }: { cart: Cart }) {
+  const spinnable = (cart.frames?.length ?? 0) > 0;
+
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white transition-all duration-300 hover:-translate-y-1.5 hover:border-ink/20 hover:shadow-xl hover:shadow-ink/5">
       <div className="relative">
-        <AssetSlot
-          src={cart.image}
-          alt={cart.name}
-          label={`${cart.seats} photo`}
-          aspect="4 / 3"
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className="rounded-none"
-        />
+        {spinnable ? (
+          <SpinViewer
+            frames={cart.frames!}
+            alt={cart.name}
+            aspect="4 / 3"
+            className="rounded-none"
+          />
+        ) : (
+          <AssetSlot
+            src={cart.image}
+            alt={cart.name}
+            label={`${cart.seats} photo`}
+            aspect="4 / 3"
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            className="rounded-none"
+          />
+        )}
         {cart.badge && (
           <span className="absolute left-4 top-4 rounded-full bg-amber px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-ink">
             {cart.badge}

@@ -7,11 +7,11 @@
  */
 
 export const site = {
-  name: "Wulf Go Carts",
-  domain: "https://wulfgocarts.com", // PLACEHOLDER — update when the domain is live
+  name: "Wulf Golf Carts",
+  domain: "https://wulfgocarts.vercel.app", // PLACEHOLDER — update when the real domain is live
   tagline: "New golf carts, seen in person.",
   description:
-    "Wulf Go Carts sells new golf carts from our showroom. Browse the range online, then come see them in person — no pressure, no hard sell.",
+    "Wulf Golf Carts sells new golf carts from our showroom. Browse the range online, then come see them in person — no pressure, no hard sell.",
 
   /**
    * The showroom is the conversion goal for this site: every CTA points here.
@@ -37,7 +37,6 @@ export const site = {
   email: "PLACEHOLDER@wulfgocarts.com",
 
   nav: [
-    { label: "The range", href: "#range" },
     { label: "Why Wulf", href: "#why" },
     { label: "Visit us", href: "#visit" },
   ],

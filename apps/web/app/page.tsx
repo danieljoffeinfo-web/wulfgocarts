@@ -29,13 +29,11 @@ export default function HomePage() {
     <>
       <Hero src={HERO_FILM} poster={HERO_POSTER} />
 
-      {/* The camera ends on open sky; this section starts in that same sky and
-          resolves to white, so the film reads as continuous with the page. */}
-      <section className="sky-handoff relative">
-        <div className="mx-auto max-w-6xl px-5 pt-28 pb-24 sm:px-8 sm:pt-36 sm:pb-28">
+      <section className="relative bg-white">
+        <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
           <Reveal>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-ink/50">
-              Wulf Go Carts
+              Wulf Golf Carts
             </p>
             <h2 className="mt-4 max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-ink sm:text-5xl">
               We sell new carts.{" "}

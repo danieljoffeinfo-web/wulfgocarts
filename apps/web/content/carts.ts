@@ -19,9 +19,29 @@ export type Cart = {
   highlights: string[];
   /** Path from /public, e.g. "/carts/two-seater.jpg". Optional. */
   image?: string;
+  /**
+   * Ordered frames for the drag-to-rotate 360 viewer. When set, this replaces
+   * the static `image` on the card. Use spinFrames() below to build the list.
+   */
+  frames?: string[];
   /** Optional corner badge, e.g. "Most popular" or "New arrival". */
   badge?: string;
 };
+
+/**
+ * Build the frame list for a cart's 360 view.
+ *
+ * Expects photos at public/carts/<slug>/001.jpg … NNN.jpg, shot at even
+ * angles all the way around the cart, from a fixed height and distance.
+ * 24–36 frames gives a smooth revolution; below ~16 the rotation jumps.
+ *
+ *   frames: spinFrames("two-seater", 36)
+ */
+export const spinFrames = (slug: string, count: number, ext = "jpg") =>
+  Array.from(
+    { length: count },
+    (_, i) => `/carts/${slug}/${String(i + 1).padStart(3, "0")}.${ext}`
+  );
 
 export const carts: Cart[] = [
   {

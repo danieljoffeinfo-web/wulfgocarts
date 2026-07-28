@@ -51,7 +51,7 @@ export function AssetSlot({
       role="img"
       aria-label={`Placeholder: ${label}`}
     >
-      <span className="text-xs font-bold uppercase tracking-[0.15em] text-navy/35">
+      <span className="text-xs font-bold uppercase tracking-[0.15em] text-ink/30">
         {label}
       </span>
     </div>

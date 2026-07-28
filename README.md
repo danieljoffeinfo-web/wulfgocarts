@@ -1,6 +1,6 @@
-# Wulf Go Carts
+# Wulf Golf Carts
 
-Landing page for Wulf Go Carts — a scroll-scrubbed hero film that flies through
+Landing page for Wulf Golf Carts — a scroll-scrubbed hero film that flies through
 the cart's windscreen into open sky, handing off into a showroom-first site.
 
 Built on the stack and design language of [chom.biz](https://chom.biz).
@@ -37,12 +37,31 @@ Two things make it feel smooth:
    single biggest factor in how the effect feels.
 
 `components/hero.tsx` times three copy beats to the camera move, clearing the
-frame before the camera reaches sky. `.sky-handoff` in `globals.css` opens the
-next section in that same sky and resolves to white, so the film reads as
-continuous with the page rather than as a cut.
+frame before the camera reaches sky, handing straight off to the white page
+below.
 
 Under `prefers-reduced-motion` the stage unpins and falls back to a static
 poster frame.
+
+## The 360° product viewer
+
+`components/spin-viewer.tsx` is a drag-to-rotate viewer in the StockX mould.
+There is no 3D model — it steps through a set of photos taken at even angles
+around the cart, which reads as rotation.
+
+**The frames are what make or break it.** Shoot 24–36 photos all the way
+around each cart, from a fixed height and a fixed distance, at even angles.
+Below about 16 frames the rotation visibly jumps rather than spins. A handful
+of assorted marketing photos will not work — the spacing has to be regular.
+
+Drop them at `public/carts/<slug>/001.jpg` … `036.jpg`, then in `content/carts.ts`:
+
+```ts
+frames: spinFrames("two-seater", 36),
+```
+
+Any cart without `frames` falls back to its static `image`, and without that to
+a labelled placeholder — so the grid stays intact while only some carts are shot.
 
 ## Getting the film in
 

@@ -2,7 +2,7 @@
 
 @theme {
   /* ------------------------------------------------------------------
-   * Wulf Go Carts brand tokens — read off the WULF badge and cart body.
+   * Wulf Golf Carts brand tokens — read off the WULF badge and cart body.
    * Swap the hex values here and the whole site follows.
    * ------------------------------------------------------------------ */
 
@@ -19,9 +19,6 @@
   --color-mist: #f4f5f7;
   --color-line: #e3e6eb;
   --color-line-dark: #2a2d31;
-
-  /* Sky the hero film cranes up into — the handoff colour into the site */
-  --color-sky: #a8c8e4;
 
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", sans-serif;
@@ -77,17 +74,6 @@ body {
   top: 0;
   height: 100svh;
   overflow: hidden;
-}
-
-/* The film cranes up into open sky; this bleeds that sky into the section
-   below so the handoff reads as one continuous move rather than a cut. */
-.sky-handoff {
-  background: linear-gradient(
-    to bottom,
-    var(--color-sky) 0%,
-    color-mix(in srgb, var(--color-sky) 45%, #ffffff) 45%,
-    #ffffff 100%
-  );
 }
 
 @media (prefers-reduced-motion: reduce) {
