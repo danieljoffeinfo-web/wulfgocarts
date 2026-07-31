@@ -29,8 +29,15 @@ export function Nav() {
           : "border-b border-line bg-white/85 backdrop-blur-md"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:h-18 sm:px-8">
-        <Link href="/" aria-label={`${site.name} — home`} className="text-xl">
+      {/* Wider than the page's max-w-6xl on purpose: it pushes the mark to
+          the far left and the links to the far right, rather than tucking
+          both into the content column. */}
+      <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-5 sm:h-20 sm:px-10">
+        <Link
+          href="/"
+          aria-label={`${site.name} — home`}
+          className="text-2xl sm:text-3xl"
+        >
           <Logo inverted={onFilm} />
         </Link>
 

@@ -1,11 +1,13 @@
 import { Hero } from "@/components/hero";
 import { Reveal, Stagger, StaggerItem } from "@/components/reveal";
 import { CartCard } from "@/components/cart-card";
-import { Visit } from "@/components/visit";
 import { FeatureHotspots } from "@/components/feature-hotspots";
+import { ScrollScrub } from "@/components/scroll-scrub";
+import { SpecSheet } from "@/components/spec-sheet";
+import { Visit } from "@/components/visit";
 import { carts, reasons } from "@/content/carts";
 import { featureShots } from "@/content/features";
-import { ScrollScrub } from "@/components/scroll-scrub";
+import { productCopy } from "@/content/specs";
 import { heroFilm, assemblyFilm } from "@/content/media";
 
 /**
@@ -40,7 +42,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
           <Reveal>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-ink/50">
-              Wulf Golf Carts
+              {productCopy.heading}
             </p>
             <h2 className="mt-4 max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-ink sm:text-5xl">
               We sell new carts.{" "}
@@ -49,37 +51,55 @@ export default function HomePage() {
               </span>
             </h2>
             <p className="mt-6 max-w-lg text-base leading-relaxed text-ink/65 sm:text-lg">
-              The whole range is on the floor at our showroom. Have a look
+              The cart is on the floor at our Blackheath showroom. Have a look
               online first, then come through and take one out properly.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* The range */}
-      <section id="range" className="scroll-mt-20 bg-white py-24 sm:py-28">
+      {/* The cart — card alongside the long-form copy */}
+      <section id="range" className="scroll-mt-20 bg-mist py-24 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
               The range
             </p>
-            <h2 className="mt-3 max-w-lg text-3xl font-extrabold tracking-tight sm:text-4xl">
+            <h2 className="mt-3 max-w-xl text-3xl font-extrabold tracking-tight sm:text-4xl">
               Built for the course, the estate and everything between.
             </h2>
           </Reveal>
 
-          <Stagger className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {carts.map((cart) => (
-              <StaggerItem key={cart.slug} className="h-full">
-                <CartCard cart={cart} />
-              </StaggerItem>
-            ))}
-          </Stagger>
+          <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start">
+            <Stagger>
+              {carts.map((cart) => (
+                <StaggerItem key={cart.slug}>
+                  <CartCard cart={cart} />
+                </StaggerItem>
+              ))}
+            </Stagger>
+
+            <Reveal delay={0.12}>
+              <div className="lg:pt-2">
+                {productCopy.paragraphs.map((para) => (
+                  <p
+                    key={para.slice(0, 32)}
+                    className="mb-5 text-base leading-relaxed text-ink/70 last:mb-0"
+                  >
+                    {para}
+                  </p>
+                ))}
+                <p className="mt-8 text-xl font-extrabold tracking-tight text-accent sm:text-2xl">
+                  {productCopy.closer}
+                </p>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
       {/* Detail — annotated feature shots */}
-      <section id="detail" className="scroll-mt-20 bg-white pb-24 sm:pb-28">
+      <section id="detail" className="scroll-mt-20 bg-white py-24 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
@@ -127,6 +147,22 @@ export default function HomePage() {
           stageClassName="bg-white"
           className="mt-8"
         />
+
+        {/* The sheet lands straight out of the assembly, while the visitor is
+            still looking at what the parts add up to. */}
+        <div className="mx-auto max-w-6xl px-5 pb-24 sm:px-8 sm:pb-28">
+          <Reveal>
+            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+              Specification
+            </h3>
+            <p className="mt-3 max-w-lg text-2xl font-extrabold tracking-tight sm:text-3xl">
+              What it adds up to.
+            </p>
+          </Reveal>
+          <div className="mt-10">
+            <SpecSheet />
+          </div>
+        </div>
       </section>
 
       {/* Why Wulf */}

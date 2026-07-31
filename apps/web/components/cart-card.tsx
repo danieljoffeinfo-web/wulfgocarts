@@ -1,23 +1,12 @@
 import { AssetSlot } from "./asset-slot";
 import { SpinViewer } from "./spin-viewer";
-import { ModelViewer } from "./model-viewer";
 import type { Cart } from "@/content/carts";
 
 export function CartCard({ cart }: { cart: Cart }) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white transition-all duration-300 hover:-translate-y-1.5 hover:border-ink/20 hover:shadow-xl hover:shadow-ink/5">
-      {/* Best available visual: real 3D mesh, then a photo spin, then a
-          static shot, then a labelled placeholder. */}
       <div className="relative">
-        {cart.model ? (
-          <ModelViewer
-            src={cart.model}
-            alt={cart.name}
-            poster={cart.image}
-            aspect="4 / 3"
-            className="rounded-none"
-          />
-        ) : cart.frames?.length ? (
+        {cart.frames?.length ? (
           <SpinViewer
             frames={cart.frames}
             alt={cart.name}
@@ -42,9 +31,16 @@ export function CartCard({ cart }: { cart: Cart }) {
       </div>
 
       <div className="flex flex-1 flex-col p-7">
-        <p className="text-xs font-bold uppercase tracking-[0.15em] text-ink/40">
-          {cart.seats}
-        </p>
+        <div className="flex items-baseline justify-between gap-4">
+          <p className="text-xs font-bold uppercase tracking-[0.15em] text-ink/40">
+            {cart.seats}
+          </p>
+          {cart.price && (
+            <p className="text-lg font-extrabold tracking-tight text-accent">
+              {cart.price}
+            </p>
+          )}
+        </div>
         <h3 className="mt-2 text-xl font-extrabold tracking-tight">
           {cart.name}
         </h3>

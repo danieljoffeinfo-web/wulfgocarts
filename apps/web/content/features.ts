@@ -58,9 +58,9 @@ export const featureShots: FeatureShot[] = [
         id: "stitching",
         x: 55,
         y: 30,
-        title: "Diamond-quilted upholstery",
+        title: "Diamond-stitched leather",
         description:
-          "Diamond quilting with contrast stitching and matching piping throughout. PLACEHOLDER: confirm the material and which colour combinations are available.",
+          "Luxury leather seating in a diamond quilt, with contrast stitching and matching piping running through the bench and headrests.",
         closeup: closeups.stitching,
       },
     ],
@@ -76,9 +76,9 @@ export const featureShots: FeatureShot[] = [
         id: "wheel",
         x: 46,
         y: 27,
-        title: "Carbon-fibre steering wheel",
+        title: "Carbon fibre and ambient light",
         description:
-          "Carbon-fibre trim across the spokes and centre hub, with a moulded grip rim. PLACEHOLDER: confirm whether this is standard trim or an upgrade.",
+          "Carbon-fibre trim across the wheel spokes and centre hub, matching the carbon fibre and wood accents through the dashboard. Ambient lighting runs behind it, and the 10\" touchscreen carries CarPlay, Android Auto and the reverse camera.",
         closeup: closeups.steering,
       },
     ],

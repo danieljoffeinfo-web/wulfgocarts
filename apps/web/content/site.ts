@@ -2,39 +2,35 @@
  * Global site configuration.
  * Everything a non-developer might want to change lives here or in the other
  * files in this folder — no component edits required.
- *
- * Values marked PLACEHOLDER still need real content.
  */
 
 export const site = {
   name: "Wulf Golf Carts",
-  domain: "https://wulfgocarts.vercel.app", // PLACEHOLDER — update when the real domain is live
-  tagline: "New golf carts, seen in person.",
+  domain: "https://wulfgolfcarts.co.za",
+  tagline: "Golf-ready. Lifestyle-perfect.",
   description:
-    "Wulf Golf Carts sells new golf carts from our showroom. Browse the range online, then come see them in person — no pressure, no hard sell.",
+    "Wulf Golf Carts sells the WULF 2-Seater Electric Golf Cart from our showroom in Blackheath, Cape Town. Browse the range online, then come see it in person.",
 
   /**
    * The showroom is the conversion goal for this site: every CTA points here.
    */
   showroom: {
-    // PLACEHOLDER — real street address, one line per array entry
-    address: ["PLACEHOLDER street address", "PLACEHOLDER suburb", "PLACEHOLDER city, postal code"],
-    // PLACEHOLDER — Google Maps link used by the "Get directions" buttons
-    mapsUrl: "https://maps.google.com/?q=PLACEHOLDER",
-    // PLACEHOLDER — opening hours, shown in the Visit section and the footer
+    address: ["Saxenburg Park", "Blackheath", "Cape Town, 7530"],
+    mapsUrl:
+      "https://maps.google.com/?q=Saxenburg+Park,+Blackheath,+Cape+Town,+7530",
+    // PLACEHOLDER — opening hours were not supplied.
     hours: [
       { days: "Monday – Friday", time: "PLACEHOLDER" },
       { days: "Saturday", time: "PLACEHOLDER" },
-      { days: "Sunday & public holidays", time: "Closed" },
+      { days: "Sunday & public holidays", time: "PLACEHOLDER" },
     ],
-    // Optional note under the hours, e.g. "After-hours viewings by appointment."
-    note: "PLACEHOLDER — optional line about appointments or after-hours viewings.",
+    note: "",
   },
 
-  phone: "PLACEHOLDER", // display format, e.g. "021 123 4567"
-  phoneHref: "PLACEHOLDER", // dial format, e.g. "+27211234567"
+  phone: "082 803 3674",
+  phoneHref: "+27828033674",
   whatsapp: "", // optional — full wa.me link, leave empty to hide the button
-  email: "PLACEHOLDER@wulfgocarts.com",
+  email: "contact@wulfgolfcarts.co.za",
 
   nav: [
     { label: "Why Wulf", href: "#why" },
@@ -42,8 +38,6 @@ export const site = {
   ],
 
   social: [
-    // PLACEHOLDER — add real profiles, e.g.
-    // { label: "Facebook", href: "https://facebook.com/wulfgocarts" },
-    // { label: "Instagram", href: "https://instagram.com/wulfgocarts" },
+    // PLACEHOLDER — add real profiles when available.
   ] as { label: string; href: string }[],
 };

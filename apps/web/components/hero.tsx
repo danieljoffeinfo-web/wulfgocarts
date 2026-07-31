@@ -50,31 +50,32 @@ export function Hero({
               style={{ opacity: scrim }}
             />
 
-            {/* Beat 1 — on the cart */}
+            {/* Beat 1 — on the cart. Sits left rather than centred so the
+                cart itself stays unobstructed in the middle of the frame. */}
             <div
-              className="absolute inset-x-0 top-[26%] px-5 text-center sm:px-8"
+              className="absolute left-0 top-[24%] px-5 text-left sm:px-10 lg:px-16"
               style={{
                 opacity: beat1,
                 transform: `translateY(${(1 - beat1) * -32}px)`,
               }}
             >
-              <h1 className="text-6xl font-extrabold leading-[0.95] tracking-tight text-white drop-shadow-lg sm:text-7xl lg:text-8xl">
+              <h1 className="text-6xl font-extrabold leading-[0.95] tracking-tight text-white drop-shadow-lg sm:text-8xl lg:text-9xl">
                 WULF
               </h1>
-              <p className="mx-auto mt-5 max-w-md text-lg font-semibold text-white/85 drop-shadow sm:text-lg">
+              <p className="mt-5 max-w-sm text-lg font-semibold text-white/85 drop-shadow">
                 New golf carts, seen in person.
               </p>
             </div>
 
             {/* Beat 2 — through the windscreen */}
             <div
-              className="absolute inset-x-0 top-[38%] px-5 text-center sm:px-8"
+              className="absolute left-0 top-[38%] px-5 text-left sm:px-10 lg:px-16"
               style={{
                 opacity: beat2,
                 transform: `translateY(${(1 - beat2) * 28}px)`,
               }}
             >
-              <p className="mx-auto max-w-2xl text-3xl font-extrabold leading-tight tracking-tight text-white drop-shadow-lg sm:text-4xl">
+              <p className="max-w-md text-3xl font-extrabold leading-tight tracking-tight text-white drop-shadow-lg sm:text-5xl">
                 Sit in one before you buy one.
               </p>
             </div>

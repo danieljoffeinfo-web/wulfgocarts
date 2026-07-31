@@ -5,11 +5,7 @@
  * `public/carts/`. Set `image` to the path from /public — e.g.
  * `image: "/carts/two-seater.jpg"`. Leave `image` undefined and the card
  * renders a labelled placeholder frame instead, so the layout still holds.
- *
- * All entries below are PLACEHOLDER content awaiting the real range.
  */
-
-import { cartModels } from "./media";
 
 export type Cart = {
   slug: string;
@@ -17,19 +13,14 @@ export type Cart = {
   /** One line under the name — who it suits. */
   tagline: string;
   seats: string;
+  /** Formatted for display, e.g. "R185,000". */
+  price?: string;
   /** 3–4 short spec bullets. Keep them scannable. */
   highlights: string[];
   /** Path from /public, e.g. "/carts/two-seater.jpg". Optional. */
   image?: string;
   /**
-   * GLB mesh for the interactive 3D viewer. Highest-priority visual — when
-   * set it wins over `frames` and `image`, because it lets the visitor orbit
-   * to any angle rather than only photographed ones.
-   */
-  model?: string;
-  /**
-   * Ordered frames for the drag-to-rotate 360 viewer. Used when there is no
-   * `model`. Build the list with spinFrames() below.
+   * Ordered frames for the drag-to-rotate 360 viewer. Build with spinFrames().
    */
   frames?: string[];
   /** Optional corner badge, e.g. "Most popular" or "New arrival". */
@@ -54,62 +45,40 @@ export const spinFrames = (slug: string, count: number, ext = "jpg") =>
 export const carts: Cart[] = [
   {
     slug: "two-seater",
-    name: "PLACEHOLDER — Model name",
-    tagline: "PLACEHOLDER — who this one suits",
+    name: "WULF 2-Seater Electric",
+    tagline: "Golf-ready on the course, lifestyle-perfect on the estate.",
     seats: "2 seater",
+    price: "R185,000",
     highlights: [
-      "PLACEHOLDER — battery / range",
-      "PLACEHOLDER — motor or top speed",
-      "PLACEHOLDER — standout feature",
+      "5 kW AC motor, 51.2 V 150 Ah lithium",
+      "80–100 km range, 4–6 hour charge",
+      'Diamond-stitched leather and a 10" touchscreen',
+      "Rear golf bag stand and cooler box",
     ],
-    /** SAM 3 mesh lifted from the front-on hero photo. */
-    model: cartModels.twoSeater,
     badge: "Most popular",
-  },
-  {
-    slug: "four-seater",
-    name: "PLACEHOLDER — Model name",
-    tagline: "PLACEHOLDER — who this one suits",
-    seats: "4 seater",
-    highlights: [
-      "PLACEHOLDER — battery / range",
-      "PLACEHOLDER — motor or top speed",
-      "PLACEHOLDER — standout feature",
-    ],
-  },
-  {
-    slug: "six-seater",
-    name: "PLACEHOLDER — Model name",
-    tagline: "PLACEHOLDER — who this one suits",
-    seats: "6 seater",
-    highlights: [
-      "PLACEHOLDER — battery / range",
-      "PLACEHOLDER — motor or top speed",
-      "PLACEHOLDER — standout feature",
-    ],
   },
 ];
 
 /** The "Why Wulf" reasons. Three or four reads best. */
 export const reasons: { title: string; description: string }[] = [
   {
-    title: "PLACEHOLDER — Reason one",
+    title: "Two carts in one",
     description:
-      "PLACEHOLDER — a sentence or two on why this matters to someone deciding where to buy.",
+      "Built for the tee box and the estate alike — quiet enough for a Sunday round, capable enough for daily use around a farm, resort or beach house.",
   },
   {
-    title: "PLACEHOLDER — Reason two",
+    title: "Lithium, not lead",
     description:
-      "PLACEHOLDER — a sentence or two on why this matters to someone deciding where to buy.",
+      "A 51.2 V 150 Ah lithium pack means 80–100 km on a charge, four to six hours to fill it, and none of the topping up and terminal cleaning that lead-acid demands.",
   },
   {
-    title: "PLACEHOLDER — Reason three",
+    title: "Properly finished inside",
     description:
-      "PLACEHOLDER — a sentence or two on why this matters to someone deciding where to buy.",
+      "Diamond-stitched leather, carbon fibre and wood accents, ambient lighting, and a 10” touchscreen with CarPlay and Android Auto. It reads like a car, not a buggy.",
   },
   {
-    title: "PLACEHOLDER — Reason four",
+    title: "Seen before it's sold",
     description:
-      "PLACEHOLDER — a sentence or two on why this matters to someone deciding where to buy.",
+      "The cart is on the floor at our Blackheath showroom. Come and sit in it, take it for a run, and decide in person rather than from a photograph.",
   },
 ];

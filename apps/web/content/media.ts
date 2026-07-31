@@ -28,10 +28,6 @@ export const heroFilm = {
   portrait: `${base("video")}/v1785224351/wulf/hero-portrait.mp4`,
 };
 
-export const cartModels = {
-  twoSeater: `${base("raw")}/v1785224356/wulf/carts/two-seater.glb`,
-};
-
 /**
  * Assembly film — components converging into the finished cart.
  *
