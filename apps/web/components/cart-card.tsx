@@ -1,12 +1,19 @@
 import { AssetSlot } from "./asset-slot";
 import { SpinViewer } from "./spin-viewer";
+import { ColourPicker } from "./colour-picker";
 import type { Cart } from "@/content/carts";
 
 export function CartCard({ cart }: { cart: Cart }) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white transition-all duration-300 hover:-translate-y-1.5 hover:border-ink/20 hover:shadow-xl hover:shadow-ink/5">
       <div className="relative">
-        {cart.frames?.length ? (
+        {cart.colours?.length ? (
+          <ColourPicker
+            colours={cart.colours}
+            alt={cart.name}
+            aspect="4 / 3"
+          />
+        ) : cart.frames?.length ? (
           <SpinViewer
             frames={cart.frames}
             alt={cart.name}

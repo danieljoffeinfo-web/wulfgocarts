@@ -7,6 +7,18 @@
  * renders a labelled placeholder frame instead, so the layout still holds.
  */
 
+export type CartColour = {
+  /** Shown beside the swatches and used as the accessible label. */
+  name: string;
+  /** Photograph of the cart in this colour. */
+  image: string;
+  /**
+   * Optional flat chip colour. Omit and the swatch is a circular crop of
+   * `image`, which keeps the chip and the photo in step automatically.
+   */
+  hex?: string;
+};
+
 export type Cart = {
   slug: string;
   name: string;
@@ -19,6 +31,8 @@ export type Cart = {
   highlights: string[];
   /** Path from /public, e.g. "/carts/two-seater.jpg". Optional. */
   image?: string;
+  /** Available paint colours. When set, the card shows a colour selector. */
+  colours?: CartColour[];
   /**
    * Ordered frames for the drag-to-rotate 360 viewer. Build with spinFrames().
    */
@@ -54,6 +68,35 @@ export const carts: Cart[] = [
       "80–100 km range, 4–6 hour charge",
       'Diamond-stitched leather and a 10" touchscreen',
       "Rear golf bag stand and cooler box",
+    ],
+    /**
+     * PLACEHOLDER NAMES — the images are correct and in the order supplied,
+     * but the paint colour of each was not stated and could not be checked
+     * from here. Rename these four and the labels are done; the swatches
+     * themselves are crops of the photos, so they already show the real
+     * colour regardless.
+     */
+    colours: [
+      {
+        name: "Colour one",
+        image:
+          "https://res.cloudinary.com/dmanxetyl/image/upload/v1785709138/Image_1_ww5i4r.jpg",
+      },
+      {
+        name: "Colour two",
+        image:
+          "https://res.cloudinary.com/dmanxetyl/image/upload/v1785709138/Image_2_ktihtp.jpg",
+      },
+      {
+        name: "Colour three",
+        image:
+          "https://res.cloudinary.com/dmanxetyl/image/upload/v1785709138/Image_neyitk.jpg",
+      },
+      {
+        name: "Colour four",
+        image:
+          "https://res.cloudinary.com/dmanxetyl/image/upload/v1785709137/Image_3_jb30qq.jpg",
+      },
     ],
     badge: "Most popular",
   },
