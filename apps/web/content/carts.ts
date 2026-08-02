@@ -70,30 +70,29 @@ export const carts: Cart[] = [
       "Rear golf bag stand and cooler box",
     ],
     /**
-     * PLACEHOLDER NAMES — the images are correct and in the order supplied,
-     * but the paint colour of each was not stated and could not be checked
-     * from here. Rename these four and the labels are done; the swatches
-     * themselves are crops of the photos, so they already show the real
-     * colour regardless.
+     * Names are in the order the images were supplied. The swatches are crops
+     * of the photographs, so they always show the true paint — only these
+     * labels could ever fall out of step. Reorder the names, not the images,
+     * if a label ever reads wrong.
      */
     colours: [
       {
-        name: "Colour one",
+        name: "Black",
         image:
           "https://res.cloudinary.com/dmanxetyl/image/upload/v1785709138/Image_1_ww5i4r.jpg",
       },
       {
-        name: "Colour two",
+        name: "Blue",
         image:
           "https://res.cloudinary.com/dmanxetyl/image/upload/v1785709138/Image_2_ktihtp.jpg",
       },
       {
-        name: "Colour three",
+        name: "Yellow",
         image:
           "https://res.cloudinary.com/dmanxetyl/image/upload/v1785709138/Image_neyitk.jpg",
       },
       {
-        name: "Colour four",
+        name: "Red",
         image:
           "https://res.cloudinary.com/dmanxetyl/image/upload/v1785709137/Image_3_jb30qq.jpg",
       },

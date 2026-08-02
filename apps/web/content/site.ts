@@ -18,13 +18,13 @@ export const site = {
     address: ["Saxenburg Park", "Blackheath", "Cape Town, 7530"],
     mapsUrl:
       "https://maps.google.com/?q=Saxenburg+Park,+Blackheath,+Cape+Town,+7530",
-    // PLACEHOLDER — opening hours were not supplied.
-    hours: [
-      { days: "Monday – Friday", time: "PLACEHOLDER" },
-      { days: "Saturday", time: "PLACEHOLDER" },
-      { days: "Sunday & public holidays", time: "PLACEHOLDER" },
-    ],
-    note: "",
+    /**
+     * Only weekday hours were supplied. Weekend rows are deliberately absent
+     * rather than guessed — wrong opening hours send someone on a wasted
+     * drive to Blackheath, which is worse than not stating them.
+     */
+    hours: [{ days: "Monday – Friday", time: "08:00 – 17:00" }],
+    note: "Call ahead for weekend viewings.",
   },
 
   phone: "082 803 3674",
