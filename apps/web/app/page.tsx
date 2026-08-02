@@ -44,15 +44,20 @@ export default function HomePage() {
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-ink/50">
               {productCopy.heading}
             </p>
-            <h2 className="mt-4 max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-ink sm:text-5xl">
-              We sell new carts.{" "}
+            {/* The page's real h1: what is sold, and where. It carries the
+                phrase people actually search while still reading as copy. */}
+            <h1 className="mt-4 max-w-3xl text-3xl font-extrabold leading-[1.1] tracking-tight text-ink sm:text-5xl">
+              Electric golf carts for sale in Cape Town.{" "}
               <span className="text-accent">
                 We&apos;d rather you came and saw them.
               </span>
-            </h2>
-            <p className="mt-6 max-w-lg text-base leading-relaxed text-ink/65 sm:text-lg">
-              The cart is on the floor at our Blackheath showroom. Have a look
-              online first, then come through and take one out properly.
+            </h1>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-ink/65 sm:text-lg">
+              Wulf Golf Carts is a golf cart dealer in Blackheath, Cape Town,
+              selling the new WULF 2-Seater electric golf cart — lithium
+              powered, street-ready and built for the course, the estate and
+              everything in between. Have a look online first, then come
+              through to the showroom and take one out properly.
             </p>
           </Reveal>
         </div>

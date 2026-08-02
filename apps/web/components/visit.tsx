@@ -21,8 +21,10 @@ export function Visit() {
                 Photos only get you so far.
               </h2>
               <p className="mt-5 max-w-md text-base leading-relaxed text-white/60">
-                Sit in one. Take it for a run. The whole range is on the floor
-                and there is no pressure to buy anything on the day.
+                Sit in one. Take it for a run. Our golf cart showroom in
+                Saxenburg Park, Blackheath is a short drive from Cape Town,
+                Somerset West and the northern suburbs — and there is no
+                pressure to buy anything on the day.
               </p>
 
               <div className="mt-10 grid gap-8 sm:grid-cols-2">

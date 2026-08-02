@@ -27,6 +27,12 @@ export type Cart = {
   seats: string;
   /** Formatted for display, e.g. "R185,000". */
   price?: string;
+  /**
+   * The same figure as a number, for structured data. Kept separate rather
+   * than parsed out of `price` so the display string stays free to be
+   * formatted however reads best without breaking the schema.
+   */
+  priceZAR?: number;
   /** 3–4 short spec bullets. Keep them scannable. */
   highlights: string[];
   /** Path from /public, e.g. "/carts/two-seater.jpg". Optional. */
@@ -63,6 +69,7 @@ export const carts: Cart[] = [
     tagline: "Golf-ready on the course, lifestyle-perfect on the estate.",
     seats: "2 seater",
     price: "R185,000",
+    priceZAR: 185000,
     highlights: [
       "5 kW AC motor, 51.2 V 150 Ah lithium",
       "80–100 km range, 4–6 hour charge",

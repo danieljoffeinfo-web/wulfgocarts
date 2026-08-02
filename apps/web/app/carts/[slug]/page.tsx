@@ -7,7 +7,7 @@ import { AssetSlot } from "@/components/asset-slot";
 import { SpecSheet } from "@/components/spec-sheet";
 import { Visit } from "@/components/visit";
 import { carts } from "@/content/carts";
-import { productCopy } from "@/content/specs";
+import { productCopy, specGroups } from "@/content/specs";
 import { site } from "@/content/site";
 
 /** Pre-render every cart at build time; the range is small and static. */
@@ -24,9 +24,21 @@ export async function generateMetadata({
   const cart = carts.find((c) => c.slug === slug);
   if (!cart) return {};
 
+  const image = cart.colours?.[0]?.image ?? cart.image;
+
   return {
-    title: cart.name,
-    description: `${cart.tagline} ${cart.price ? `From ${cart.price}.` : ""} See it at the ${site.name} showroom in Blackheath, Cape Town.`,
+    /* Leads with the product and the price, since both are what someone
+       scanning a results page is deciding on. */
+    title: `${cart.name} Golf Cart${cart.price ? ` — ${cart.price}` : ""}`,
+    description: `${cart.name} golf cart for sale in Cape Town. 5 kW AC motor, 51.2 V lithium battery, 80–100 km range. ${cart.price ? `${cart.price}. ` : ""}See it at our Blackheath showroom.`,
+    alternates: { canonical: `/carts/${cart.slug}` },
+    openGraph: {
+      title: `${cart.name} Golf Cart${cart.price ? ` — ${cart.price}` : ""}`,
+      description: `${cart.tagline} Electric golf cart for sale in Cape Town.`,
+      url: `${site.domain}/carts/${cart.slug}`,
+      type: "website",
+      images: image ? [{ url: image, alt: cart.name }] : undefined,
+    },
   };
 }
 
@@ -39,8 +51,46 @@ export default async function CartPage({
   const cart = carts.find((c) => c.slug === slug);
   if (!cart) notFound();
 
+  /**
+   * Product schema with a priced Offer. This is what lets a search result
+   * carry the price and availability directly, which for a R185,000 purchase
+   * filters out clicks from people who were never going to buy — and pulls
+   * in the ones who were.
+   */
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: `${cart.name} Golf Cart`,
+    description: productCopy.paragraphs[0],
+    image: cart.colours?.map((c) => c.image) ?? [],
+    brand: { "@type": "Brand", name: "WULF" },
+    color: cart.colours?.map((c) => c.name).join(", "),
+    offers: cart.priceZAR
+      ? {
+          "@type": "Offer",
+          price: cart.priceZAR,
+          priceCurrency: "ZAR",
+          availability: "https://schema.org/InStock",
+          itemCondition: "https://schema.org/NewCondition",
+          url: `${site.domain}/carts/${cart.slug}`,
+          seller: { "@type": "AutoDealer", name: site.name },
+        }
+      : undefined,
+    additionalProperty: specGroups.flatMap((group) =>
+      group.rows.map((row) => ({
+        "@type": "PropertyValue",
+        name: row.label,
+        value: row.value,
+      }))
+    ),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       {/* pt clears the fixed nav, which sits over the top of the page. */}
       <section className="bg-mist pt-28 sm:pt-32">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
@@ -80,8 +130,10 @@ export default async function CartPage({
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
                   {cart.seats}
                 </p>
+                {/* "Golf Cart" is appended so the h1 states the product
+                    category, not just the model name. */}
                 <h1 className="mt-3 text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
-                  {cart.name}
+                  {cart.name} Golf Cart
                 </h1>
                 <p className="mt-4 max-w-md text-base leading-relaxed text-ink/65 sm:text-lg">
                   {cart.tagline}

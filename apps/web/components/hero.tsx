@@ -59,9 +59,12 @@ export function Hero({
                 transform: `translateY(${(1 - beat1) * -32}px)`,
               }}
             >
-              <h1 className="text-6xl font-extrabold leading-[0.95] tracking-tight text-white drop-shadow-lg sm:text-8xl lg:text-9xl">
+              {/* A wordmark, not a heading. The page's h1 lives in the
+                  section below and describes what is actually being sold —
+                  "WULF" alone tells a search engine nothing. */}
+              <p className="text-6xl font-extrabold leading-[0.95] tracking-tight text-white drop-shadow-lg sm:text-8xl lg:text-9xl">
                 WULF
-              </h1>
+              </p>
               <p className="mt-5 max-w-sm text-lg font-semibold text-white/85 drop-shadow">
                 New golf carts, seen in person.
               </p>
