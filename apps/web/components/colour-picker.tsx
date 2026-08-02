@@ -16,11 +16,21 @@ export function ColourPicker({
   colours,
   alt,
   aspect = "4 / 3",
+  /**
+   * "contain" shows the whole photograph, letterboxing where its proportions
+   * differ from the frame. The default, because these are product shots and
+   * cropping a cart's roof or wheels off defeats the point of showing it.
+   */
+  fit = "contain",
+  /** Padding inside the swatch row, matched to the card's own gutter. */
+  swatchClassName = "px-7 pt-5",
   className = "",
 }: {
   colours: CartColour[];
   alt: string;
   aspect?: string;
+  fit?: "cover" | "contain";
+  swatchClassName?: string;
   className?: string;
 }) {
   const [index, setIndex] = useState(0);
@@ -43,14 +53,18 @@ export function ColourPicker({
             alt={i === index ? `${alt} in ${colour.name}` : ""}
             aria-hidden={i !== index}
             draggable={false}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
-              i === index ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute inset-0 h-full w-full transition-opacity duration-300 ${
+              fit === "contain" ? "object-contain" : "object-cover"
+            } ${i === index ? "opacity-100" : "opacity-0"}`}
           />
         ))}
       </div>
 
-      <div className="flex items-center gap-2.5 px-7 pt-5">
+      {/* z-10 keeps the swatches above the card's stretched link, so tapping
+          a colour selects it instead of navigating to the detail page. */}
+      <div
+        className={`relative z-10 flex items-center gap-2.5 ${swatchClassName}`}
+      >
         {colours.map((colour, i) => {
           const isActive = i === index;
           return (
