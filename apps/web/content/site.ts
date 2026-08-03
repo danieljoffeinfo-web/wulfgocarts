@@ -9,13 +9,13 @@ export const site = {
   domain: "https://wulfgolfcarts.co.za",
   tagline: "Golf-ready. Lifestyle-perfect.",
   description:
-    "Wulf Golf Carts sells the WULF 2-Seater Electric Golf Cart from our showroom in Blackheath, Cape Town. Browse the range online, then come see it in person.",
+    "Wulf Golf Carts sells the WULF 2-Seater Electric Golf Cart from our showroom in Montague Gardens, Cape Town. Browse the range online, then come see it in person.",
 
   /**
    * The showroom is the conversion goal for this site: every CTA points here.
    */
   showroom: {
-    address: ["Saxenburg Park", "Blackheath", "Cape Town, 7530"],
+    address: ["21 Montague Drive", "Montague Gardens", "Cape Town, 7441"],
     /**
      * A pinned Google Maps place link, not a text search.
      *
@@ -28,7 +28,7 @@ export const site = {
     /**
      * Only weekday hours were supplied. Weekend rows are deliberately absent
      * rather than guessed — wrong opening hours send someone on a wasted
-     * drive to Blackheath, which is worse than not stating them.
+     * drive to Montague Gardens, which is worse than not stating them.
      */
     hours: [{ days: "Monday – Friday", time: "08:00 – 17:00" }],
     note: "Call ahead for weekend viewings.",

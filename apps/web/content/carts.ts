@@ -128,6 +128,6 @@ export const reasons: { title: string; description: string }[] = [
   {
     title: "Seen before it's sold",
     description:
-      "The cart is on the floor at our Blackheath showroom. Come and sit in it, take it for a run, and decide in person rather than from a photograph.",
+      "The cart is on the floor at our Montague Gardens showroom. Come and sit in it, take it for a run, and decide in person rather than from a photograph.",
   },
 ];

@@ -53,7 +53,8 @@ export default function HomePage() {
               </span>
             </h1>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-ink/65 sm:text-lg">
-              Wulf Golf Carts is a golf cart dealer in Blackheath, Cape Town,
+              Wulf Golf Carts is a golf cart dealer in Montague Gardens, Cape
+              Town,
               selling the new WULF 2-Seater electric golf cart — lithium
               powered, street-ready and built for the course, the estate and
               everything in between. Have a look online first, then come

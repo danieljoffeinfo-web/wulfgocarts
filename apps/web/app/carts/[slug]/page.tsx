@@ -30,7 +30,7 @@ export async function generateMetadata({
     /* Leads with the product and the price, since both are what someone
        scanning a results page is deciding on. */
     title: `${cart.name} Golf Cart${cart.price ? ` — ${cart.price}` : ""}`,
-    description: `${cart.name} golf cart for sale in Cape Town. 5 kW AC motor, 51.2 V lithium battery, 80–100 km range. ${cart.price ? `${cart.price}. ` : ""}See it at our Blackheath showroom.`,
+    description: `${cart.name} golf cart for sale in Cape Town. 5 kW AC motor, 51.2 V lithium battery, 80–100 km range. ${cart.price ? `${cart.price}. ` : ""}See it at our Montague Gardens showroom in Cape Town.`,
     alternates: { canonical: `/carts/${cart.slug}` },
     openGraph: {
       title: `${cart.name} Golf Cart${cart.price ? ` — ${cart.price}` : ""}`,

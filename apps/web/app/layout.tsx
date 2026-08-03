@@ -78,7 +78,7 @@ export const metadata: Metadata = {
 /**
  * Structured data for the showroom.
  *
- * The whole site exists to get someone to drive to Blackheath, so telling
+ * The whole site exists to get someone to drive to the showroom, so telling
  * search engines the address, phone number and opening hours in a form they
  * can render directly in results is worth more here than on most sites.
  * Built from content/site.ts so it cannot drift from the visible page.
@@ -102,7 +102,7 @@ const localBusinessJsonLd = {
     streetAddress: site.showroom.address[0],
     addressLocality: site.showroom.address[1],
     addressRegion: "Western Cape",
-    postalCode: "7530",
+    postalCode: "7441",
     addressCountry: "ZA",
   },
   openingHoursSpecification: [
