@@ -16,8 +16,15 @@ export const site = {
    */
   showroom: {
     address: ["Saxenburg Park", "Blackheath", "Cape Town, 7530"],
-    mapsUrl:
-      "https://maps.google.com/?q=Saxenburg+Park,+Blackheath,+Cape+Town,+7530",
+    /**
+     * A pinned Google Maps place link, not a text search.
+     *
+     * The previous value was a ?q= query built from the address lines, which
+     * lets Google resolve it to whichever matching place it likes — and there
+     * is more than one match, so some visitors were being routed to the wrong
+     * premises. A place link resolves to exactly one pin.
+     */
+    mapsUrl: "https://maps.app.goo.gl/K8j7uAJgUgKeenHcA",
     /**
      * Only weekday hours were supplied. Weekend rows are deliberately absent
      * rather than guessed — wrong opening hours send someone on a wasted
