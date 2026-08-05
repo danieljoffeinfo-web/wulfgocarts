@@ -6,7 +6,7 @@ import { ColourPicker } from "@/components/colour-picker";
 import { AssetSlot } from "@/components/asset-slot";
 import { SpecSheet } from "@/components/spec-sheet";
 import { Visit } from "@/components/visit";
-import { carts } from "@/content/carts";
+import { carts, visibleAngles } from "@/content/carts";
 import { productCopy, specGroups } from "@/content/specs";
 import { site } from "@/content/site";
 
@@ -62,7 +62,14 @@ export default async function CartPage({
     "@type": "Product",
     name: `${cart.name} Golf Cart`,
     description: productCopy.paragraphs[0],
-    image: cart.colours?.map((c) => c.image) ?? [],
+    /* Every published frame, so the Product carries the full image set. Runs
+       through visibleAngles so structured data and page can never disagree:
+       turn SHOW_GENERATED_ANGLES off and synthesised frames leave both. */
+    image:
+      cart.colours?.flatMap((c) => [
+        c.image,
+        ...visibleAngles(c).map((s) => s.src),
+      ]) ?? [],
     brand: { "@type": "Brand", name: "WULF" },
     color: cart.colours?.map((c) => c.name).join(", "),
     offers: cart.priceZAR

@@ -1,16 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import type { CartColour } from "@/content/carts";
+import { visibleAngles, type CartColour } from "@/content/carts";
 
 /**
- * Colour selector for a cart card.
+ * Colour and angle selector for a cart.
  *
  * The swatches are circular crops of the photographs themselves rather than
  * flat colour chips. That takes the paint colour straight from the asset, so
  * a new colour needs only its image — no hex to look up, and no chip that can
  * drift out of step with the photo it claims to represent. Pass `hex` on a
  * colour to override with a flat chip where a crop reads badly.
+ *
+ * Colour heroes are all stacked and cross-faded, so switching colour is
+ * instant after first paint. Extra angles are not stacked — that would be
+ * twenty-five images on one card — so they load on demand and sit above the
+ * stack while selected.
  */
 export function ColourPicker({
   colours,
@@ -22,7 +27,7 @@ export function ColourPicker({
    * cropping a cart's roof or wheels off defeats the point of showing it.
    */
   fit = "contain",
-  /** Padding inside the swatch row, matched to the card's own gutter. */
+  /** Padding inside the control rows, matched to the card's own gutter. */
   swatchClassName = "px-7 pt-5",
   className = "",
 }: {
@@ -34,34 +39,60 @@ export function ColourPicker({
   className?: string;
 }) {
   const [index, setIndex] = useState(0);
+  /** 0 is the hero photograph; 1+ index into that colour's angles. */
+  const [shotIndex, setShotIndex] = useState(0);
+
   const active = colours[index];
+  const angles = visibleAngles(active);
+  const activeAngle = shotIndex > 0 ? angles[shotIndex - 1] : undefined;
+
+  const objectFit = fit === "contain" ? "object-contain" : "object-cover";
+
+  const selectColour = (i: number) => {
+    setIndex(i);
+    /* Angle indexes do not carry across colours — colour three's rear shot is
+       not colour one's rear shot, and the lists can differ in length. */
+    setShotIndex(0);
+  };
 
   return (
     <div className={className}>
+      {/* White, not mist: the sources are 1:1 and this slot is 4:3, so contain
+          letterboxes them. Against a white-background product shot on a white
+          card, white bars vanish — mist would draw a visible seam around every
+          image. */}
       <div
-        className="relative overflow-hidden bg-mist"
+        className="relative overflow-hidden bg-white"
         style={{ aspectRatio: aspect }}
       >
-        {/* All colours are stacked and cross-faded rather than swapping one
-            src. Swapping would show a blank frame while the new image
-            decodes; stacking means every colour is warm after first paint. */}
         {colours.map((colour, i) => (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             key={colour.image}
             src={colour.image}
-            alt={i === index ? `${alt} in ${colour.name}` : ""}
-            aria-hidden={i !== index}
+            alt={i === index && !activeAngle ? `${alt} in ${colour.name}` : ""}
+            aria-hidden={i !== index || !!activeAngle}
             draggable={false}
-            className={`absolute inset-0 h-full w-full transition-opacity duration-300 ${
-              fit === "contain" ? "object-contain" : "object-cover"
-            } ${i === index ? "opacity-100" : "opacity-0"}`}
+            className={`absolute inset-0 h-full w-full ${objectFit} transition-opacity duration-300 ${
+              i === index && !activeAngle ? "opacity-100" : "opacity-0"
+            }`}
           />
         ))}
+
+        {activeAngle && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={activeAngle.src}
+            src={activeAngle.src}
+            alt={`${alt} in ${active.name}, ${activeAngle.angle.toLowerCase()}`}
+            draggable={false}
+            className={`absolute inset-0 h-full w-full ${objectFit}`}
+          />
+        )}
       </div>
 
-      {/* z-10 keeps the swatches above the card's stretched link, so tapping
-          a colour selects it instead of navigating to the detail page. */}
+      {/* z-10 keeps the controls above the card's stretched link, so tapping
+          one selects it instead of navigating to the detail page. */}
       <div
         className={`relative z-10 flex items-center gap-2.5 ${swatchClassName}`}
       >
@@ -71,7 +102,7 @@ export function ColourPicker({
             <button
               key={colour.image}
               type="button"
-              onClick={() => setIndex(i)}
+              onClick={() => selectColour(i)}
               aria-pressed={isActive}
               aria-label={colour.name}
               title={colour.name}
@@ -83,7 +114,9 @@ export function ColourPicker({
               style={
                 colour.hex
                   ? { backgroundColor: colour.hex }
-                  : { backgroundImage: `url(${colour.image})` }
+                  : {
+                      backgroundImage: `url(${colour.thumb ?? colour.image})`,
+                    }
               }
             />
           );
@@ -92,6 +125,54 @@ export function ColourPicker({
           {active.name}
         </span>
       </div>
+
+      {angles.length > 0 && (
+        <div
+          className={`relative z-10 flex items-center gap-2 pt-3 ${swatchClassName.replace(/pt-\d+/, "")}`}
+        >
+          <AngleThumb
+            src={active.thumb ?? active.image}
+            label={`${active.name}, as photographed`}
+            isActive={shotIndex === 0}
+            onClick={() => setShotIndex(0)}
+          />
+          {angles.map((shot, i) => (
+            <AngleThumb
+              key={shot.src}
+              src={shot.thumb}
+              label={`${active.name}, ${shot.angle.toLowerCase()}`}
+              isActive={shotIndex === i + 1}
+              onClick={() => setShotIndex(i + 1)}
+            />
+          ))}
+        </div>
+      )}
     </div>
+  );
+}
+
+function AngleThumb({
+  src,
+  label,
+  isActive,
+  onClick,
+}: {
+  src: string;
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={isActive}
+      aria-label={label}
+      title={label}
+      className={`h-12 w-14 shrink-0 overflow-hidden rounded-lg border bg-white bg-contain bg-center bg-no-repeat transition-all ${
+        isActive ? "border-accent ring-1 ring-accent/25" : "border-line hover:border-ink/25"
+      }`}
+      style={{ backgroundImage: `url(${src})` }}
+    />
   );
 }

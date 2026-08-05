@@ -7,17 +7,76 @@
  * renders a labelled placeholder frame instead, so the layout still holds.
  */
 
+import { productShots } from "./media";
+
+/**
+ * Where a product image came from.
+ *
+ * "photo" is a photograph of the actual cart. "generated" is a viewpoint
+ * synthesised from that photograph by an image model — the far side, the rear
+ * and the front of these carts were never photographed, so seat pattern,
+ * badging, wheel design and rear details in those frames are the model's
+ * inference rather than the product.
+ *
+ * This is tracked per shot rather than assumed because the detail page carries
+ * schema.org/Product markup with a priced Offer, and a synthetic angle
+ * published under that is a misrepresentation of goods, not a styling choice.
+ */
+export type ShotProvenance = "photo" | "generated";
+
+export type CartShot = {
+  src: string;
+  /** Swatch/thumbnail-sized crop of the same frame. */
+  thumb: string;
+  /** Short label, e.g. "Rear three-quarter". */
+  angle: string;
+  provenance: ShotProvenance;
+};
+
 export type CartColour = {
   /** Shown beside the swatches and used as the accessible label. */
   name: string;
-  /** Photograph of the cart in this colour. */
+  /**
+   * Hero shot, and the swatch crop source. Always a real photograph — a
+   * generated frame must never become the image that represents a colour,
+   * because this is also what feeds the OpenGraph card.
+   */
   image: string;
+  /** Swatch-sized crop of `image`. Falls back to `image` when absent. */
+  thumb?: string;
+  /** Additional angles, in display order. */
+  gallery?: CartShot[];
   /**
    * Optional flat chip colour. Omit and the swatch is a circular crop of
    * `image`, which keeps the chip and the photo in step automatically.
    */
   hex?: string;
 };
+
+/**
+ * Master switch for synthesised viewpoints.
+ *
+ * Set to false and every generated angle disappears from the cards, the
+ * detail page and the Product structured data, leaving only photographs of
+ * the actual carts. One edit, no other changes needed.
+ */
+export const SHOW_GENERATED_ANGLES = true;
+
+/** The angles that should actually render, after the switch above. */
+export const visibleAngles = (colour: CartColour): CartShot[] =>
+  (colour.gallery ?? []).filter(
+    (s) => SHOW_GENERATED_ANGLES || s.provenance === "photo"
+  );
+
+/**
+ * Every angle in a productShots set is synthesised — only the `hero` in each
+ * set is a photograph — so provenance is stamped here rather than repeated
+ * twenty times in the manifest.
+ */
+const generatedAngles = (
+  set: (typeof productShots)[keyof typeof productShots]
+): CartShot[] =>
+  set.angles.map((a) => ({ ...a, provenance: "generated" as const }));
 
 export type Cart = {
   slug: string;
@@ -77,16 +136,29 @@ export const carts: Cart[] = [
       "Rear golf bag stand and cooler box",
     ],
     /**
-     * Names are in the order the images were supplied. The swatches are crops
-     * of the photographs, so they always show the true paint — only these
-     * labels could ever fall out of step. Reorder the names, not the images,
-     * if a label ever reads wrong.
+     * Black and Grey use the new white-background set: a real photograph as
+     * the hero, plus four synthesised angles behind SHOW_GENERATED_ANGLES.
+     *
+     * Blue, Yellow and Red still point at the older untransformed JPEGs. The
+     * new set has three colours whose names were never confirmed — variants A,
+     * B and C — and they may well BE these three. Swapping them on that guess
+     * would put the wrong paint under the wrong label on a priced product
+     * page, so they stay until someone confirms. Once confirmed, replace these
+     * three entries with productShots.variantA/B/C and rename the Cloudinary
+     * public IDs to match.
      */
     colours: [
       {
         name: "Black",
-        image:
-          "https://res.cloudinary.com/dmanxetyl/image/upload/v1785709138/Image_1_ww5i4r.jpg",
+        image: productShots.black.hero,
+        thumb: productShots.black.thumb,
+        gallery: generatedAngles(productShots.black),
+      },
+      {
+        name: "Grey",
+        image: productShots.grey.hero,
+        thumb: productShots.grey.thumb,
+        gallery: generatedAngles(productShots.grey),
       },
       {
         name: "Blue",
