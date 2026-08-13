@@ -106,7 +106,7 @@ export function ColourPicker({
               aria-pressed={isActive}
               aria-label={colour.name}
               title={colour.name}
-              className={`h-8 w-8 shrink-0 overflow-hidden rounded-full border-2 bg-mist bg-cover bg-center transition-all ${
+              className={`h-8 w-8 shrink-0 overflow-hidden rounded-full border-2 bg-surface bg-cover bg-center transition-all ${
                 isActive
                   ? "border-accent ring-2 ring-accent/25"
                   : "border-line hover:border-ink/30"
@@ -121,7 +121,7 @@ export function ColourPicker({
             />
           );
         })}
-        <span className="ml-1 text-xs font-bold uppercase tracking-[0.15em] text-ink/45">
+        <span className="ml-1 text-xs font-bold uppercase tracking-[0.15em] text-body/55">
           {active.name}
         </span>
       </div>

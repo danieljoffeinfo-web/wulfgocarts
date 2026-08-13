@@ -14,19 +14,19 @@ export function SpecSheet() {
       {/* Headline figures */}
       <Stagger className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-line lg:grid-cols-4">
         {headlineStats.map((stat) => (
-          <StaggerItem key={stat.label} className="bg-white">
+          <StaggerItem key={stat.label} className="bg-raised">
             <div className="px-6 py-8 sm:px-8 sm:py-10">
               <p className="flex items-baseline gap-1.5">
-                <span className="text-4xl font-extrabold tracking-tight text-ink sm:text-5xl">
+                <span className="text-4xl font-extrabold tracking-tight text-body sm:text-5xl">
                   {stat.value}
                 </span>
                 {stat.unit && (
-                  <span className="text-lg font-extrabold text-accent sm:text-xl">
+                  <span className="text-lg font-extrabold text-accent-soft sm:text-xl">
                     {stat.unit}
                   </span>
                 )}
               </p>
-              <p className="mt-3 text-xs font-bold uppercase tracking-[0.15em] text-ink/45">
+              <p className="mt-3 text-xs font-bold uppercase tracking-[0.15em] text-body/55">
                 {stat.label}
               </p>
             </div>
@@ -39,7 +39,7 @@ export function SpecSheet() {
         {specGroups.map((group, i) => (
           <Reveal key={group.title} delay={i * 0.06}>
             <section>
-              <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+              <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
                 {group.title}
               </h3>
               <dl className="mt-4">
@@ -48,10 +48,10 @@ export function SpecSheet() {
                     key={row.label}
                     className="flex items-baseline justify-between gap-6 border-b border-line py-3 last:border-b-0"
                   >
-                    <dt className="shrink-0 text-sm text-ink/50">
+                    <dt className="shrink-0 text-sm text-body/50">
                       {row.label}
                     </dt>
-                    <dd className="text-right text-sm font-semibold text-ink">
+                    <dd className="text-right text-sm font-semibold text-body">
                       {row.value}
                     </dd>
                   </div>

@@ -46,7 +46,7 @@ export function Hero({
           <div className="relative h-full w-full">
             <div
               aria-hidden
-              className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/20 to-ink/60"
+              className="absolute inset-0 bg-gradient-to-b from-canvas/70 via-canvas/20 to-canvas/60"
               style={{ opacity: scrim }}
             />
 

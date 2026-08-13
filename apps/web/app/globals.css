@@ -2,28 +2,37 @@
 
 @theme {
   /* ------------------------------------------------------------------
-   * Wulf Golf Carts brand tokens — read off the WULF badge and cart body.
-   * Swap the hex values here and the whole site follows.
+   * Wulf Golf Carts brand tokens.
+   *
+   * Dark theme: near-black surfaces, electric blue accent. Tokens are named
+   * by role, not by hue or lightness, so re-theming is a hex edit here
+   * rather than a rename across every component.
+   *
+   * Contrast figures below are against the surface each colour is used on.
+   * They are not decoration — inverting a palette is exactly where accent
+   * colours quietly stop being legible.
    * ------------------------------------------------------------------ */
 
-  /* Accent — deep red. Named by role, not by hue, so re-colouring the brand
-     is a hex edit here rather than a rename across every component. */
-  --color-accent: #9b1b1e;
+  /* Accent — dark electric blue. Fills only: white on it is 5.2:1, and it
+     clears the 3:1 non-text floor for a control edge against canvas. */
+  --color-accent: #2563eb;
   /* Hover/pressed state for accent fills. */
-  --color-accent-deep: #7a1417;
-  /* For accent text on the dark sections: the deep red only reaches 2.4:1
-     against near-black, which fails WCAG AA. This lifts it to 5.4:1. */
-  --color-accent-soft: #e5595e;
+  --color-accent-deep: #1d4ed8;
+  /* Accent TEXT. The fill blue reaches only 3.9:1 on canvas, which fails AA;
+     this lifts it to 7.8:1. Any accent used as text must use this. */
+  --color-accent-soft: #60a5fa;
 
-  /* Bumper / roof black */
+  /* Surfaces, darkest first. Sections alternate canvas/surface; cards raise. */
+  --color-canvas: #08090b;
+  --color-surface: #101216;
+  --color-raised: #171a1f;
+  --color-line: #262a31;
+
+  /* Body text on dark surfaces — 18:1 on canvas. */
+  --color-body: #f2f4f7;
+  /* Retained for text that sits on a LIGHT tile: the product photography has
+     white backgrounds, so image frames stay light and need dark text. */
   --color-ink: #0e0f11;
-  --color-ink-soft: #1a1c1f;
-
-  /* Cart body silver */
-  --color-steel: #c9cdd2;
-  --color-mist: #f4f5f7;
-  --color-line: #e3e6eb;
-  --color-line-dark: #2a2d31;
 
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", sans-serif;
@@ -33,10 +42,20 @@
 
 html {
   scroll-behavior: smooth;
+  /* Stops the browser painting white behind the page during overscroll and
+     on the address-bar reveal, which flashes hard against a dark site. */
+  background-color: var(--color-canvas);
+  color-scheme: dark;
 }
 
+/* Written out rather than @apply: `@apply bg-canvas` silently emitted no
+   background-color here, leaving the page ground to whatever html happened to
+   paint. Explicit properties cannot fail that way. */
 body {
-  @apply bg-white text-ink antialiased;
+  background-color: var(--color-canvas);
+  color: var(--color-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "ss01" on;
 }
 
@@ -45,11 +64,12 @@ body {
   color: #fff;
 }
 
-/* Subtle dotted texture */
+/* Subtle dotted texture. Light-on-dark now, so the dots lift rather than
+   darken — the previous near-black dots were invisible on a dark ground. */
 .dot-grid {
   background-image: radial-gradient(
     circle at 1px 1px,
-    rgb(14 15 17 / 0.08) 1px,
+    rgb(242 244 247 / 0.07) 1px,
     transparent 0
   );
   background-size: 28px 28px;

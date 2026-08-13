@@ -26,7 +26,7 @@ export function Nav() {
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         onFilm
           ? "border-b border-transparent bg-transparent"
-          : "border-b border-line bg-white/85 backdrop-blur-md"
+          : "border-b border-line bg-canvas/85 backdrop-blur-md"
       }`}
     >
       {/* Wider than the page's max-w-6xl on purpose: it pushes the mark to
@@ -49,7 +49,7 @@ export function Nav() {
               className={`text-sm font-semibold transition-colors ${
                 onFilm
                   ? "text-white/85 hover:text-white"
-                  : "text-ink/60 hover:text-ink"
+                  : "text-body/60 hover:text-body"
               }`}
             >
               {item.label}
@@ -72,12 +72,12 @@ export function Nav() {
         >
           <span
             className={`h-0.5 w-5 transition-transform ${
-              onFilm ? "bg-white" : "bg-ink"
+              onFilm ? "bg-white" : "bg-body"
             } ${open ? "translate-y-1 rotate-45" : ""}`}
           />
           <span
             className={`h-0.5 w-5 transition-transform ${
-              onFilm ? "bg-white" : "bg-ink"
+              onFilm ? "bg-white" : "bg-body"
             } ${open ? "-translate-y-1 -rotate-45" : ""}`}
           />
         </button>
@@ -90,7 +90,7 @@ export function Nav() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="overflow-hidden border-t border-line bg-white md:hidden"
+            className="overflow-hidden border-t border-line bg-canvas md:hidden"
           >
             <div className="flex flex-col gap-1 px-5 py-4">
               {site.nav.map((item) => (
@@ -98,7 +98,7 @@ export function Nav() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="rounded-lg px-3 py-3 text-base font-semibold text-ink/80 hover:bg-mist"
+                  className="rounded-lg px-3 py-3 text-base font-semibold text-body/80 hover:bg-surface"
                 >
                   {item.label}
                 </Link>

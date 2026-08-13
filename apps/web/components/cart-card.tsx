@@ -15,7 +15,7 @@ export function CartCard({ cart }: { cart: Cart }) {
   const href = `/carts/${cart.slug}`;
 
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white transition-all duration-300 hover:-translate-y-1.5 hover:border-ink/20 hover:shadow-xl hover:shadow-ink/5">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-raised transition-all duration-300 hover:-translate-y-1.5 hover:border-ink/20 hover:shadow-xl hover:shadow-ink/5">
       <div className="relative">
         {cart.colours?.length ? (
           <ColourPicker colours={cart.colours} alt={cart.name} aspect="4 / 3" />
@@ -45,11 +45,11 @@ export function CartCard({ cart }: { cart: Cart }) {
 
       <div className="flex flex-1 flex-col p-7">
         <div className="flex items-baseline justify-between gap-4">
-          <p className="text-xs font-bold uppercase tracking-[0.15em] text-ink/40">
+          <p className="text-xs font-bold uppercase tracking-[0.15em] text-body/55">
             {cart.seats}
           </p>
           {cart.price && (
-            <p className="text-lg font-extrabold tracking-tight text-accent">
+            <p className="text-lg font-extrabold tracking-tight text-accent-soft">
               {cart.price}
             </p>
           )}
@@ -57,13 +57,13 @@ export function CartCard({ cart }: { cart: Cart }) {
         <h3 className="mt-2 text-xl font-extrabold tracking-tight">
           {cart.name}
         </h3>
-        <p className="mt-2 text-sm leading-relaxed text-ink/60">
+        <p className="mt-2 text-sm leading-relaxed text-body/60">
           {cart.tagline}
         </p>
 
         <ul className="mt-5 space-y-2 border-t border-line pt-5">
           {cart.highlights.map((h) => (
-            <li key={h} className="flex items-start gap-2.5 text-sm text-ink/70">
+            <li key={h} className="flex items-start gap-2.5 text-sm text-body/70">
               <span
                 aria-hidden
                 className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
@@ -73,7 +73,7 @@ export function CartCard({ cart }: { cart: Cart }) {
           ))}
         </ul>
 
-        <span className="mt-6 text-sm font-bold text-ink transition-colors group-hover:text-accent">
+        <span className="mt-6 text-sm font-bold text-body transition-colors group-hover:text-accent-soft">
           View details and book a viewing →
         </span>
       </div>

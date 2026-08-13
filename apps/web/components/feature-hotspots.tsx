@@ -75,7 +75,7 @@ function ShotCard({
   return (
     <div className={className}>
       <div
-        className={`relative overflow-hidden rounded-2xl bg-mist ${
+        className={`relative overflow-hidden rounded-2xl bg-surface ${
           editing ? "cursor-crosshair" : ""
         }`}
         style={{ aspectRatio: shot.aspect }}
@@ -124,7 +124,7 @@ function ShotCard({
         })}
 
         {editing && probe && (
-          <p className="absolute bottom-3 left-3 rounded-lg bg-ink/85 px-3 py-2 font-mono text-xs text-white">
+          <p className="absolute bottom-3 left-3 rounded-lg bg-canvas/85 px-3 py-2 font-mono text-xs text-white">
             {probe} <span className="text-white/50">— copied</span>
           </p>
         )}
@@ -140,9 +140,9 @@ function ShotCard({
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="mt-4 rounded-2xl border border-line bg-white p-5">
+            <div className="mt-4 rounded-2xl border border-line bg-raised p-5">
               <div
-                className="overflow-hidden rounded-xl bg-mist"
+                className="overflow-hidden rounded-xl bg-surface"
                 style={{ aspectRatio: shot.aspect }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -163,7 +163,7 @@ function ShotCard({
               <h3 className="mt-5 text-lg font-extrabold tracking-tight">
                 {open.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink/65">
+              <p className="mt-2 text-sm leading-relaxed text-body/65">
                 {open.description}
               </p>
             </div>

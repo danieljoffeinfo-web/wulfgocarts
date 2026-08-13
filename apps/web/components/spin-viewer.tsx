@@ -124,7 +124,7 @@ export function SpinViewer({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl bg-mist select-none ${
+      className={`relative overflow-hidden rounded-2xl bg-surface select-none ${
         dragging ? "cursor-grabbing" : "cursor-grab"
       } ${className}`}
       style={{ aspectRatio: aspect, touchAction: "pan-y" }}
@@ -149,7 +149,7 @@ export function SpinViewer({
 
       {!ready && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-xs font-bold uppercase tracking-[0.15em] text-ink/30">
+          <span className="text-xs font-bold uppercase tracking-[0.15em] text-body/55">
             Loading 360° view {total ? `${Math.round((loaded / total) * 100)}%` : ""}
           </span>
         </div>
@@ -157,11 +157,11 @@ export function SpinViewer({
 
       {ready && (
         <>
-          <span className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-ink/70 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white/90 backdrop-blur-sm">
+          <span className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-canvas/70 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white/90 backdrop-blur-sm">
             Drag to rotate
           </span>
           {/* Position dots — a cheap read on where you are in the revolution. */}
-          <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-ink/60 px-2.5 py-1 text-[10px] font-bold tabular-nums text-white/80 backdrop-blur-sm">
+          <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-canvas/60 px-2.5 py-1 text-[10px] font-bold tabular-nums text-white/80 backdrop-blur-sm">
             {index + 1}/{total}
           </span>
         </>

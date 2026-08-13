@@ -29,7 +29,7 @@ export function AssetSlot({
   if (src) {
     return (
       <div
-        className={`relative overflow-hidden rounded-2xl bg-mist ${className}`}
+        className={`relative overflow-hidden rounded-2xl bg-surface ${className}`}
         style={{ aspectRatio: aspect }}
       >
         <Image
@@ -46,12 +46,12 @@ export function AssetSlot({
 
   return (
     <div
-      className={`flex items-center justify-center rounded-2xl border-2 border-dashed border-line bg-mist px-6 text-center ${className}`}
+      className={`flex items-center justify-center rounded-2xl border-2 border-dashed border-line bg-surface px-6 text-center ${className}`}
       style={{ aspectRatio: aspect }}
       role="img"
       aria-label={`Placeholder: ${label}`}
     >
-      <span className="text-xs font-bold uppercase tracking-[0.15em] text-ink/30">
+      <span className="text-xs font-bold uppercase tracking-[0.15em] text-body/55">
         {label}
       </span>
     </div>

@@ -9,7 +9,7 @@ import { site } from "@/content/site";
  */
 export function Visit() {
   return (
-    <section id="visit" className="scroll-mt-20 bg-ink text-white">
+    <section id="visit" className="scroll-mt-20 bg-canvas text-white">
       <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-28">
         <div className="grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:items-center">
           <Reveal>

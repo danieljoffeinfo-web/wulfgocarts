@@ -16,13 +16,13 @@ export function Logo({
   return (
     <span
       className={`inline-flex items-baseline gap-1.5 font-extrabold leading-none tracking-tight transition-colors duration-300 ${
-        inverted ? "text-white" : "text-ink"
+        inverted ? "text-white" : "text-body"
       } ${className}`}
     >
       <span>WULF</span>
       <span
         className={`text-[0.62em] uppercase tracking-[0.18em] ${
-          inverted ? "text-white/70" : "text-ink/55"
+          inverted ? "text-white/70" : "text-body/55"
         }`}
       >
         Golf Carts

@@ -45,7 +45,7 @@ export function ScrollScrub({
    */
   fit = "cover",
   /** Stage backdrop. Matters for "contain", which leaves visible margins. */
-  stageClassName = "bg-ink",
+  stageClassName = "bg-canvas",
   className = "",
   children,
 }: {
@@ -184,7 +184,7 @@ export function ScrollScrub({
         ) : (
           /* No film yet — the stage still holds its shape so the rest of the
              page can be built and reviewed before the render lands. */
-          <div className="flex h-full w-full items-center justify-center bg-ink">
+          <div className="flex h-full w-full items-center justify-center bg-canvas">
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-white/30">
               Hero film renders here
             </span>

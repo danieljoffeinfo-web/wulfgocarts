@@ -38,21 +38,21 @@ export default function HomePage() {
         posterPortrait={HERO_POSTER_PORTRAIT}
       />
 
-      <section className="relative bg-white">
+      <section className="relative bg-canvas">
         <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
           <Reveal>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-ink/50">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-body/50">
               {productCopy.heading}
             </p>
             {/* The page's real h1: what is sold, and where. It carries the
                 phrase people actually search while still reading as copy. */}
-            <h1 className="mt-4 max-w-3xl text-3xl font-extrabold leading-[1.1] tracking-tight text-ink sm:text-5xl">
+            <h1 className="mt-4 max-w-3xl text-3xl font-extrabold leading-[1.1] tracking-tight text-body sm:text-5xl">
               Electric golf carts for sale in Cape Town.{" "}
-              <span className="text-accent">
+              <span className="text-accent-soft">
                 We&apos;d rather you came and saw them.
               </span>
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-ink/65 sm:text-lg">
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-body/65 sm:text-lg">
               Wulf Golf Carts is a golf cart dealer in Montague Gardens, Cape
               Town,
               selling the new WULF 2-Seater electric golf cart — lithium
@@ -65,10 +65,10 @@ export default function HomePage() {
       </section>
 
       {/* The cart — card alongside the long-form copy */}
-      <section id="range" className="scroll-mt-20 bg-mist py-24 sm:py-28">
+      <section id="range" className="scroll-mt-20 bg-surface py-24 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
               The range
             </p>
             <h2 className="mt-3 max-w-xl text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -90,12 +90,12 @@ export default function HomePage() {
                 {productCopy.paragraphs.map((para) => (
                   <p
                     key={para.slice(0, 32)}
-                    className="mb-5 text-base leading-relaxed text-ink/70 last:mb-0"
+                    className="mb-5 text-base leading-relaxed text-body/70 last:mb-0"
                   >
                     {para}
                   </p>
                 ))}
-                <p className="mt-8 text-xl font-extrabold tracking-tight text-accent sm:text-2xl">
+                <p className="mt-8 text-xl font-extrabold tracking-tight text-accent-soft sm:text-2xl">
                   {productCopy.closer}
                 </p>
               </div>
@@ -105,16 +105,16 @@ export default function HomePage() {
       </section>
 
       {/* Detail — annotated feature shots */}
-      <section id="detail" className="scroll-mt-20 bg-white py-24 sm:py-28">
+      <section id="detail" className="scroll-mt-20 bg-canvas py-24 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
               In the detail
             </p>
             <h2 className="mt-3 max-w-lg text-3xl font-extrabold tracking-tight sm:text-4xl">
               The bits you only notice up close.
             </h2>
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-ink/65">
+            <p className="mt-5 max-w-lg text-base leading-relaxed text-body/65">
               Tap any marker to see it magnified, and what it actually does.
             </p>
           </Reveal>
@@ -126,16 +126,16 @@ export default function HomePage() {
       </section>
 
       {/* Assembly film — the visitor's scroll drives the build */}
-      <section id="build" className="scroll-mt-20 bg-white pt-24 sm:pt-28">
+      <section id="build" className="scroll-mt-20 bg-canvas pt-24 sm:pt-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
               How it comes together
             </p>
             <h2 className="mt-3 max-w-lg text-3xl font-extrabold tracking-tight sm:text-4xl">
               Every part, in its place.
             </h2>
-            <p className="mt-5 max-w-md text-base leading-relaxed text-ink/65">
+            <p className="mt-5 max-w-md text-base leading-relaxed text-body/65">
               Keep scrolling to build it.
             </p>
           </Reveal>
@@ -158,7 +158,7 @@ export default function HomePage() {
             still looking at what the parts add up to. */}
         <div className="mx-auto max-w-6xl px-5 pb-24 sm:px-8 sm:pb-28">
           <Reveal>
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
               Specification
             </h3>
             <p className="mt-3 max-w-lg text-2xl font-extrabold tracking-tight sm:text-3xl">
@@ -172,10 +172,10 @@ export default function HomePage() {
       </section>
 
       {/* Why Wulf */}
-      <section id="why" className="scroll-mt-20 bg-mist py-24 sm:py-28">
+      <section id="why" className="scroll-mt-20 bg-surface py-24 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
               Why Wulf
             </p>
             <h2 className="mt-3 max-w-lg text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -186,14 +186,14 @@ export default function HomePage() {
           <Stagger className="mt-12 grid gap-4 sm:grid-cols-2">
             {reasons.map((reason, i) => (
               <StaggerItem key={reason.title}>
-                <div className="flex h-full flex-col rounded-2xl border border-line bg-white p-7">
-                  <span className="text-xs font-extrabold text-accent">
+                <div className="flex h-full flex-col rounded-2xl border border-line bg-raised p-7">
+                  <span className="text-xs font-extrabold text-accent-soft">
                     0{i + 1}
                   </span>
                   <h3 className="mt-3 text-xl font-extrabold tracking-tight">
                     {reason.title}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-ink/60">
+                  <p className="mt-3 text-sm leading-relaxed text-body/60">
                     {reason.description}
                   </p>
                 </div>
