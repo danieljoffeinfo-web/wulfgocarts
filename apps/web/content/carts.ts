@@ -60,7 +60,7 @@ export type CartColour = {
  * detail page and the Product structured data, leaving only photographs of
  * the actual carts. One edit, no other changes needed.
  */
-export const SHOW_GENERATED_ANGLES = true;
+export const SHOW_GENERATED_ANGLES = false;
 
 /** The angles that should actually render, after the switch above. */
 export const visibleAngles = (colour: CartColour): CartShot[] =>
