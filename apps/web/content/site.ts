@@ -6,7 +6,9 @@
 
 export const site = {
   name: "Wulf Golf Carts",
-  domain: "https://wulfgolfcarts.co.za",
+  // The branded domain still serves the existing WordPress site. Change this
+  // only when DNS is deliberately moved to this Vercel project.
+  domain: "https://wulfgocarts.vercel.app",
   tagline: "Golf-ready. Lifestyle-perfect.",
   description:
     "Wulf Golf Carts sells premium lithium 2-seater and lifted 4-seater electric golf carts from our showroom in Montague Gardens, Cape Town.",
