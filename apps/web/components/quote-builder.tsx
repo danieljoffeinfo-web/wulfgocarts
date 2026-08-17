@@ -232,7 +232,7 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
 
           <div className="mt-8 border-t border-black/10 pt-6 text-[10px] leading-relaxed text-black/45">
             <p>
-              Advertised purchase prices include VAT and apply to the Rugby’s Greatest Rivalry special ending 12 September 2026. Subject to stock availability.
+              Advertised purchase prices include VAT and are subject to stock availability.
             </p>
             <p className="mt-2">
               Rental amounts are indicative only, calculated from capital excluding VAT using the factors supplied with the original quote tool. Final payments, fees and approval are determined by the finance provider.

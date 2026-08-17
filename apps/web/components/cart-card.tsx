@@ -21,7 +21,7 @@ export function CartCard({ cart }: { cart: Cart }) {
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-raised transition-all duration-300 hover:-translate-y-1.5 hover:border-ink/20 hover:shadow-xl hover:shadow-ink/5">
       <div className="relative">
         {cart.colours?.length ? (
-          <ColourPicker colours={cart.colours} alt={cart.name} aspect="4 / 3" />
+          <ColourPicker colours={cart.colours} alt={cart.name} aspect="1 / 1" />
         ) : cart.frames?.length ? (
           <SpinViewer
             frames={cart.frames}
