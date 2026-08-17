@@ -60,7 +60,7 @@ export type CartColour = {
  * detail page and the Product structured data, leaving only photographs of
  * the actual carts. One edit, no other changes needed.
  */
-export const SHOW_GENERATED_ANGLES = true;
+export const SHOW_GENERATED_ANGLES = false;
 
 /** The angles that should actually render, after the switch above. */
 export const visibleAngles = (colour: CartColour): CartShot[] =>
@@ -86,6 +86,8 @@ export type Cart = {
   seats: string;
   /** Formatted for display, e.g. "R185,000". */
   price?: string;
+  /** Short qualification shown beside the price. */
+  priceNote?: string;
   /**
    * The same figure as a number, for structured data. Kept separate rather
    * than parsed out of `price` so the display string stays free to be
@@ -104,6 +106,8 @@ export type Cart = {
   frames?: string[];
   /** Optional corner badge, e.g. "Most popular" or "New arrival". */
   badge?: string;
+  /** False when only campaign-level information is available. */
+  detailsAvailable?: boolean;
 };
 
 /**
@@ -127,8 +131,9 @@ export const carts: Cart[] = [
     name: "WULF 2-Seater Electric",
     tagline: "Golf-ready on the course, lifestyle-perfect on the estate.",
     seats: "2 seater",
-    price: "R185,000",
-    priceZAR: 185000,
+    price: "R175,750",
+    priceZAR: 175750,
+    priceNote: "Incl. VAT · special until 12 September 2026",
     highlights: [
       "5 kW AC motor, 51.2 V 150 Ah lithium",
       "80–100 km range, 4–6 hour charge",
@@ -176,7 +181,26 @@ export const carts: Cart[] = [
           "https://res.cloudinary.com/dmanxetyl/image/upload/v1785709137/Image_3_jb30qq.jpg",
       },
     ],
-    badge: "Most popular",
+    badge: "Rivalry special",
+  },
+  {
+    slug: "four-seater",
+    name: "WULF Lifted 4-Seater Electric",
+    tagline:
+      "A lifted four-seat configuration for estates, resorts and family use.",
+    seats: "4 seater",
+    price: "R207,431",
+    priceZAR: 207431,
+    priceNote: "Incl. VAT · special until 12 September 2026",
+    highlights: [
+      "Lifted four-seat configuration",
+      "Premium lithium electric platform",
+      "Available to test-drive in Cape Town",
+      "Finance available, subject to approval",
+    ],
+    image: "/brand/wulf-rugby-special-2026.png",
+    badge: "Rivalry special",
+    detailsAvailable: false,
   },
 ];
 

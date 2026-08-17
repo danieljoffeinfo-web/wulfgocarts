@@ -12,7 +12,10 @@ import type { Cart } from "@/content/carts";
  * navigate away. The swatch row sits at z-10 to stay above it.
  */
 export function CartCard({ cart }: { cart: Cart }) {
-  const href = `/carts/${cart.slug}`;
+  const href =
+    cart.detailsAvailable === false
+      ? `/quote?model=${cart.slug}`
+      : `/carts/${cart.slug}`;
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-raised transition-all duration-300 hover:-translate-y-1.5 hover:border-ink/20 hover:shadow-xl hover:shadow-ink/5">
@@ -49,9 +52,16 @@ export function CartCard({ cart }: { cart: Cart }) {
             {cart.seats}
           </p>
           {cart.price && (
-            <p className="text-lg font-extrabold tracking-tight text-accent-soft">
-              {cart.price}
-            </p>
+            <div className="text-right">
+              <p className="text-lg font-extrabold tracking-tight text-accent-soft">
+                {cart.price}
+              </p>
+              {cart.priceNote && (
+                <p className="mt-1 max-w-44 text-[10px] font-bold uppercase leading-tight tracking-wide text-body/40">
+                  {cart.priceNote}
+                </p>
+              )}
+            </div>
           )}
         </div>
         <h3 className="mt-2 text-xl font-extrabold tracking-tight">
@@ -74,7 +84,9 @@ export function CartCard({ cart }: { cart: Cart }) {
         </ul>
 
         <span className="mt-6 text-sm font-bold text-body transition-colors group-hover:text-accent-soft">
-          View details and book a viewing →
+          {cart.detailsAvailable === false
+            ? "Build a quote →"
+            : "View details and book a viewing →"}
         </span>
       </div>
 

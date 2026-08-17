@@ -12,7 +12,9 @@ import { site } from "@/content/site";
 
 /** Pre-render every cart at build time; the range is small and static. */
 export function generateStaticParams() {
-  return carts.map((cart) => ({ slug: cart.slug }));
+  return carts
+    .filter((cart) => cart.detailsAvailable !== false)
+    .map((cart) => ({ slug: cart.slug }));
 }
 
 export async function generateMetadata({
@@ -22,7 +24,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const cart = carts.find((c) => c.slug === slug);
-  if (!cart) return {};
+  if (!cart || cart.detailsAvailable === false) return {};
 
   const image = cart.colours?.[0]?.image ?? cart.image;
 
@@ -49,7 +51,7 @@ export default async function CartPage({
 }) {
   const { slug } = await params;
   const cart = carts.find((c) => c.slug === slug);
-  if (!cart) notFound();
+  if (!cart || cart.detailsAvailable === false) notFound();
 
   /**
    * Product schema with a priced Offer. This is what lets a search result
@@ -147,9 +149,16 @@ export default async function CartPage({
                 </p>
 
                 {cart.price && (
-                  <p className="mt-8 text-4xl font-extrabold tracking-tight text-accent-soft sm:text-5xl">
-                    {cart.price}
-                  </p>
+                  <div className="mt-8">
+                    <p className="text-4xl font-extrabold tracking-tight text-accent-soft sm:text-5xl">
+                      {cart.price}
+                    </p>
+                    {cart.priceNote && (
+                      <p className="mt-2 text-xs font-bold uppercase tracking-wide text-body/45">
+                        {cart.priceNote}
+                      </p>
+                    )}
+                  </div>
                 )}
 
                 <ul className="mt-8 space-y-3 border-t border-line pt-8">
@@ -168,9 +177,15 @@ export default async function CartPage({
                 </ul>
 
                 <div className="mt-10 flex flex-wrap items-center gap-4">
+                  <Link
+                    href={`/quote?model=${cart.slug}`}
+                    className="rounded-full bg-accent px-7 py-3.5 text-sm font-extrabold text-white transition-all hover:-translate-y-0.5 hover:bg-accent-deep"
+                  >
+                    Build a quote
+                  </Link>
                   <a
                     href="#visit"
-                    className="rounded-full bg-accent px-7 py-3.5 text-sm font-extrabold text-white transition-all hover:-translate-y-0.5 hover:bg-accent-deep"
+                    className="rounded-full border border-line px-7 py-3.5 text-sm font-extrabold text-body transition-all hover:-translate-y-0.5 hover:border-accent"
                   >
                     Book a viewing
                   </a>

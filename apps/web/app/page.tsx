@@ -55,10 +55,10 @@ export default function HomePage() {
             <p className="mt-6 max-w-xl text-base leading-relaxed text-body/65 sm:text-lg">
               Wulf Golf Carts is a golf cart dealer in Montague Gardens, Cape
               Town,
-              selling the new WULF 2-Seater electric golf cart — lithium
-              powered, street-ready and built for the course, the estate and
-              everything in between. Have a look online first, then come
-              through to the showroom and take one out properly.
+              selling premium lithium 2-seater and lifted 4-seater electric
+              golf carts built for the course, the estate and everything in
+              between. Have a look online first, then come through to the
+              showroom and take one out properly.
             </p>
           </Reveal>
         </div>
@@ -76,17 +76,20 @@ export default function HomePage() {
             </h2>
           </Reveal>
 
-          <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start">
-            <Stagger>
+          <div className="mt-12">
+            <Stagger className="grid gap-6 md:grid-cols-2">
               {carts.map((cart) => (
-                <StaggerItem key={cart.slug}>
+                <StaggerItem key={cart.slug} className="h-full">
                   <CartCard cart={cart} />
                 </StaggerItem>
               ))}
             </Stagger>
 
             <Reveal delay={0.12}>
-              <div className="lg:pt-2">
+              <div className="mt-14 max-w-3xl border-l-2 border-accent pl-6 sm:pl-8">
+                <p className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
+                  Inside the WULF 2-Seater
+                </p>
                 {productCopy.paragraphs.map((para) => (
                   <p
                     key={para.slice(0, 32)}

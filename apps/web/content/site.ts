@@ -9,7 +9,7 @@ export const site = {
   domain: "https://wulfgolfcarts.co.za",
   tagline: "Golf-ready. Lifestyle-perfect.",
   description:
-    "Wulf Golf Carts sells the WULF 2-Seater Electric Golf Cart from our showroom in Montague Gardens, Cape Town. Browse the range online, then come see it in person.",
+    "Wulf Golf Carts sells premium lithium 2-seater and lifted 4-seater electric golf carts from our showroom in Montague Gardens, Cape Town.",
 
   /**
    * The showroom is the conversion goal for this site: every CTA points here.
@@ -40,8 +40,9 @@ export const site = {
   email: "contact@wulfgolfcarts.co.za",
 
   nav: [
-    { label: "Why Wulf", href: "#why" },
-    { label: "Visit us", href: "#visit" },
+    { label: "The range", href: "/#range" },
+    { label: "Why Wulf", href: "/#why" },
+    { label: "Build a quote", href: "/quote" },
   ],
 
   social: [

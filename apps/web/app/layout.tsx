@@ -92,7 +92,7 @@ const localBusinessJsonLd = {
   telephone: site.phoneHref,
   email: site.email,
   image: ogImage,
-  priceRange: "R185,000",
+  priceRange: "R175,750–R207,431",
   areaServed: [
     { "@type": "City", name: "Cape Town" },
     { "@type": "AdministrativeArea", name: "Western Cape" },

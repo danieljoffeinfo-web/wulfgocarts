@@ -98,3 +98,35 @@ body {
     height: auto;
   }
 }
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
+  header:has(nav),
+  body > footer,
+  .quote-controls {
+    display: none !important;
+  }
+
+  html,
+  body,
+  main,
+  .quote-builder {
+    background: #fff !important;
+    color: #0e0f11 !important;
+  }
+
+  .quote-builder {
+    display: block !important;
+  }
+
+  .quote-sheet {
+    width: 100% !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+}
