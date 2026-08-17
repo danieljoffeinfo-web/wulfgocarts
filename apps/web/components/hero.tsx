@@ -32,6 +32,7 @@ export function Hero({
       srcPortrait={srcPortrait}
       poster={poster}
       posterPortrait={posterPortrait}
+      eager
       scrollLength={340}
       scrollLengthPortrait={260}
     >

@@ -47,6 +47,7 @@ export function ScrollScrub({
   /** Stage backdrop. Matters for "contain", which leaves visible margins. */
   stageClassName = "bg-canvas",
   className = "",
+  eager = false,
   children,
 }: {
   src?: string;
@@ -58,6 +59,8 @@ export function ScrollScrub({
   fit?: "cover" | "contain";
   stageClassName?: string;
   className?: string;
+  /** Load immediately for above-the-fold films; defer everything else. */
+  eager?: boolean;
   /** Render-prop receiving scrub progress 0→1, for overlay copy. */
   children?: (progress: number) => ReactNode;
 }) {
@@ -67,12 +70,15 @@ export function ScrollScrub({
   const targetRef = useRef(0);
   const currentRef = useRef(0);
   const rafRef = useRef<number | null>(null);
+  const scrollRafRef = useRef<number | null>(null);
   const durationRef = useRef(0);
 
   const [progress, setProgress] = useState(0);
   const [ready, setReady] = useState(false);
   const [reduced, setReduced] = useState(false);
   const [portrait, setPortrait] = useState(false);
+  const [nearby, setNearby] = useState(eager);
+  const [active, setActive] = useState(eager);
 
   /* Honour prefers-reduced-motion: fall back to a static frame, no pinning. */
   useEffect(() => {
@@ -88,13 +94,53 @@ export function ScrollScrub({
     const mq = window.matchMedia("(max-aspect-ratio: 1/1)");
     const apply = () => setPortrait(mq.matches);
     apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
+    const onChange = () => {
+      setPortrait(mq.matches);
+      const video = videoRef.current;
+      if (video) {
+        setReady(false);
+        durationRef.current = 0;
+        video.load();
+      }
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  const activeSrc = portrait && srcPortrait ? srcPortrait : src;
   const activePoster = portrait && posterPortrait ? posterPortrait : poster;
   const activeLength = portrait ? scrollLengthPortrait : scrollLength;
+
+  /* Keep lower films out of the initial network queue and stop animation work
+     once a scrub section is well outside the viewport. */
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || !("IntersectionObserver" in window)) {
+      setNearby(true);
+      setActive(true);
+      return;
+    }
+
+    const preloadObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setNearby(true);
+          preloadObserver.disconnect();
+        }
+      },
+      { rootMargin: "150% 0px" },
+    );
+    const activityObserver = new IntersectionObserver(
+      ([entry]) => setActive(entry.isIntersecting),
+      { rootMargin: "75% 0px" },
+    );
+
+    preloadObserver.observe(section);
+    activityObserver.observe(section);
+    return () => {
+      preloadObserver.disconnect();
+      activityObserver.disconnect();
+    };
+  }, []);
 
   const readProgress = useCallback(() => {
     const section = sectionRef.current;
@@ -106,12 +152,16 @@ export function ScrollScrub({
   }, []);
 
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || !active) return;
 
     const onScroll = () => {
-      const p = readProgress();
-      targetRef.current = p;
-      setProgress(p);
+      if (scrollRafRef.current !== null) return;
+      scrollRafRef.current = requestAnimationFrame(() => {
+        const p = readProgress();
+        targetRef.current = p;
+        setProgress(p);
+        scrollRafRef.current = null;
+      });
     };
 
     /* Ease the playhead toward the scroll target rather than snapping to it. */
@@ -124,7 +174,7 @@ export function ScrollScrub({
         const delta = target - currentRef.current;
 
         if (Math.abs(delta) > 0.001) {
-          currentRef.current += delta * 0.12;
+          currentRef.current += delta * 0.22;
           /* Seeking while a previous seek is in flight drops frames. */
           if (video.readyState >= 2 && !video.seeking) {
             video.currentTime = currentRef.current;
@@ -144,14 +194,19 @@ export function ScrollScrub({
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+      if (scrollRafRef.current !== null) {
+        cancelAnimationFrame(scrollRafRef.current);
+        scrollRafRef.current = null;
+      }
     };
-  }, [reduced, readProgress]);
+  }, [active, reduced, readProgress]);
 
   const onLoadedMetadata = () => {
     const video = videoRef.current;
     if (!video) return;
     durationRef.current = video.duration || 0;
-    setReady(true);
+    currentRef.current = targetRef.current * durationRef.current;
+    video.currentTime = currentRef.current;
     /* iOS will not decode frames for a video that has never been told to
        play. A muted play/pause unlocks the decoder without showing motion. */
     video.play().then(() => video.pause()).catch(() => {});
@@ -164,22 +219,36 @@ export function ScrollScrub({
       style={reduced ? undefined : { height: `${activeLength}vh` }}
     >
       <div className={`scrub-stage ${stageClassName}`}>
-        {activeSrc ? (
+        {nearby && (src || srcPortrait) ? (
           <video
-            /* Remounting on a source swap resets duration and readiness,
-               which a bare src change would leave stale. */
-            key={activeSrc}
             ref={videoRef}
-            src={activeSrc}
             poster={activePoster}
             muted
             playsInline
-            preload="auto"
+            preload={eager ? "auto" : "metadata"}
             aria-hidden="true"
             onLoadedMetadata={onLoadedMetadata}
-            className={`h-full w-full transition-opacity duration-700 ${
+            onLoadedData={() => setReady(true)}
+            className={`h-full w-full transition-opacity duration-300 ${
               fit === "contain" ? "object-contain" : "object-cover"
             } ${ready ? "opacity-100" : "opacity-0"}`}
+          >
+            {srcPortrait ? (
+              <source
+                src={srcPortrait}
+                media="(max-aspect-ratio: 1/1)"
+                type="video/mp4"
+              />
+            ) : null}
+            {src ? <source src={src} type="video/mp4" /> : null}
+          </video>
+        ) : activePoster ? (
+          <div
+            aria-hidden="true"
+            className={`h-full w-full bg-center bg-no-repeat ${
+              fit === "contain" ? "bg-contain" : "bg-cover"
+            }`}
+            style={{ backgroundImage: `url(${activePoster})` }}
           />
         ) : (
           /* No film yet — the stage still holds its shape so the rest of the
