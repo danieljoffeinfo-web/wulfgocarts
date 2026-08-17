@@ -154,7 +154,7 @@ export const carts: Cart[] = [
       },
       {
         name: "Blue",
-        image: "/carts/two-seater/blue.jpg",
+        image: "/carts/two-seater/blue-v2.jpg",
         provenance: "generated",
         hex: "#2563eb",
       },
@@ -166,7 +166,7 @@ export const carts: Cart[] = [
       },
       {
         name: "Red",
-        image: "/carts/two-seater/red.jpg",
+        image: "/carts/two-seater/red-v2.jpg",
         provenance: "generated",
         hex: "#dc2626",
       },
@@ -204,9 +204,8 @@ export const carts: Cart[] = [
       },
       {
         name: "Blue",
-        image: productShots.blue.hero,
-        thumb: productShots.blue.thumb,
-        provenance: "photo",
+        image: "/carts/four-seater/blue-v2.jpg",
+        provenance: "generated",
         hex: "#2563eb",
       },
       {
@@ -218,9 +217,8 @@ export const carts: Cart[] = [
       },
       {
         name: "Red",
-        image: productShots.red.hero,
-        thumb: productShots.red.thumb,
-        provenance: "photo",
+        image: "/carts/four-seater/red-v2.jpg",
+        provenance: "generated",
         hex: "#dc2626",
       },
     ],
