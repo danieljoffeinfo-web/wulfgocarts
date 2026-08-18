@@ -4,6 +4,10 @@
  * files in this folder — no component edits required.
  */
 
+/** Canonical page URL — the client's link carried Facebook redirect tracking
+ *  params (?_rdc=1&_rdr) and the m./web. host; this is the clean public form. */
+const FACEBOOK_URL = "https://www.facebook.com/wulfgolfcarts";
+
 export const site = {
   name: "Wulf Golf Carts",
   // The branded domain still serves the existing WordPress site. Change this
@@ -40,6 +44,7 @@ export const site = {
   phoneHref: "+27828033674",
   whatsapp: "", // optional — full wa.me link, leave empty to hide the button
   email: "contact@wulfgolfcarts.co.za",
+  facebook: FACEBOOK_URL,
 
   nav: [
     { label: "The range", href: "/#range" },
@@ -48,6 +53,6 @@ export const site = {
   ],
 
   social: [
-    // PLACEHOLDER — add real profiles when available.
+    { label: "Facebook", href: FACEBOOK_URL },
   ] as { label: string; href: string }[],
 };
