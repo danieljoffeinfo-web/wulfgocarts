@@ -199,7 +199,9 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
           </div>
 
           <div className="mt-8">
-            <div className="flex items-end justify-between gap-4 border-b border-black/10 pb-3">
+            {/* Side by side, the heading wrapped to two lines and pinched the
+                qualifier against it. Stacked until there is room for both. */}
+            <div className="flex flex-col items-start gap-1 border-b border-black/10 pb-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
               <h3 className="text-sm font-extrabold uppercase tracking-widest">
                 Indicative operating rental
               </h3>
@@ -207,9 +209,12 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
                 VAT excluded
               </span>
             </div>
-            <div className="mt-4 grid grid-cols-3 gap-3">
+            {/* Three across even on a phone: comparing the terms is the whole
+                point of the block, so stacking them would defeat it. The
+                padding gives way instead. */}
+            <div className="mt-4 grid grid-cols-3 gap-2 sm:gap-3">
               {rentals.map((rental) => (
-                <div key={rental.term} className="rounded-xl bg-[#f2f4f7] p-4 text-center">
+                <div key={rental.term} className="rounded-xl bg-[#f2f4f7] p-2.5 text-center sm:p-4">
                   <p className="text-[10px] font-extrabold uppercase tracking-widest text-black/40">
                     {rental.term} months
                   </p>
@@ -269,9 +274,20 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function QuoteRow({ label, value, strong = false }: { label: string; value: string; strong?: boolean }) {
   return (
-    <div className="flex items-start justify-between gap-6 border-b border-black/10 px-5 py-4 text-sm last:border-b-0">
-      <span className="text-black/45">{label}</span>
-      <span className={`text-right ${strong ? "text-lg font-extrabold text-[#2563eb]" : "font-bold"}`}>
+    // gap-6 fixed on a 390px sheet left the value about 150px to work in, so
+    // "R 175,750.00 incl. VAT" broke mid-figure. The gap only needs to be
+    // generous once there is width to spend.
+    <div className="flex items-start justify-between gap-3 border-b border-black/10 px-4 py-4 text-sm last:border-b-0 sm:gap-6 sm:px-5">
+      <span className="shrink-0 text-black/45">{label}</span>
+      <span
+        className={`text-right ${
+          strong
+            ? /* text-lg alone still broke the total across two lines on a
+                 375px sheet; it steps up once the row has room. */
+              "text-base font-extrabold text-[#2563eb] sm:text-lg"
+            : "font-bold"
+        }`}
+      >
         {value}
       </span>
     </div>

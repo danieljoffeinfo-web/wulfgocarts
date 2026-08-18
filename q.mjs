@@ -1,0 +1,12 @@
+import { chromium } from "playwright-core";
+const b = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome", args: ["--no-sandbox"] });
+const ctx = await b.newContext({ viewport: { width: 375, height: 667 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+const p = await ctx.newPage();
+await p.goto("http://localhost:3444/quote", { waitUntil: "domcontentloaded" });
+await p.waitForTimeout(900);
+const of = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+console.log("overflow at 375px:", of);
+await p.locator(".quote-sheet").scrollIntoViewIfNeeded();
+await p.waitForTimeout(400);
+await p.locator(".quote-sheet").screenshot({ path: "/tmp/claude-0/-home-user/b43a0ecb-9e00-5d17-b3db-c92e0d7dcc4e/scratchpad/q-sheet.png" });
+await b.close();
