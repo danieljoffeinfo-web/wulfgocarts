@@ -17,11 +17,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 1,
     },
-    ...carts.map((cart) => ({
-      url: `${site.domain}/carts/${cart.slug}`,
+    {
+      url: `${site.domain}/quote`,
       lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.8,
-    })),
+    },
+    ...carts
+      .filter((cart) => cart.detailsAvailable !== false)
+      .map((cart) => ({
+        url: `${site.domain}/carts/${cart.slug}`,
+        lastModified,
+        changeFrequency: "monthly" as const,
+        priority: 0.8,
+      })),
   ];
 }

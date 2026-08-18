@@ -73,10 +73,10 @@ export const productShots = {
       { src: shot("grey-05", 1785959247), thumb: shot("grey-05", 1785959247, 160), angle: "Front" },
     ],
   },
-  /* Names unconfirmed — see the note in content/carts.ts. Public IDs should be
-     renamed in Cloudinary once the colours are known, so the asset store and
-     the code agree; that is a metadata rename, not a regeneration. */
-  variantA: {
+  /* The Cloudinary public IDs pre-date the colour confirmation, so the URLs
+     still use variant-a/b/c even though the exported keys now say what the
+     photographs actually show. */
+  red: {
     hero: shot("variant-a-01", 1785959732),
     thumb: shot("variant-a-01", 1785959732, 160),
     angles: [
@@ -86,7 +86,7 @@ export const productShots = {
       { src: shot("variant-a-05", 1785959751), thumb: shot("variant-a-05", 1785959751, 160), angle: "Front" },
     ],
   },
-  variantB: {
+  yellow: {
     hero: shot("variant-b-01", 1785959759),
     thumb: shot("variant-b-01", 1785959759, 160),
     angles: [
@@ -96,7 +96,7 @@ export const productShots = {
       { src: shot("variant-b-05", 1785959778), thumb: shot("variant-b-05", 1785959778, 160), angle: "Front" },
     ],
   },
-  variantC: {
+  blue: {
     hero: shot("variant-c-01", 1785959787),
     thumb: shot("variant-c-01", 1785959787, 160),
     angles: [

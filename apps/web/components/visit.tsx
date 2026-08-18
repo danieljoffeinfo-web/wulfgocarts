@@ -1,5 +1,4 @@
 import { Reveal } from "./reveal";
-import { AssetSlot } from "./asset-slot";
 import { site } from "@/content/site";
 
 /**
@@ -10,8 +9,8 @@ import { site } from "@/content/site";
 export function Visit() {
   return (
     <section id="visit" className="scroll-mt-20 bg-canvas text-white">
-      <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-28">
-        <div className="grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+      <div className="mx-auto max-w-3xl px-5 py-24 sm:px-8 sm:py-28">
+        <div>
           <Reveal>
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
@@ -88,15 +87,6 @@ export function Visit() {
             </div>
           </Reveal>
 
-          <Reveal delay={0.15} y={40}>
-            <AssetSlot
-              alt="The Wulf Golf Carts showroom"
-              label="Showroom photo — wide shot of the floor"
-              aspect="4 / 3"
-              sizes="(min-width: 1024px) 55vw, 100vw"
-              className="border-white/10 bg-white/5"
-            />
-          </Reveal>
         </div>
       </div>
     </section>

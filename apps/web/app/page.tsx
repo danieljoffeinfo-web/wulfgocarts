@@ -8,35 +8,15 @@ import { Visit } from "@/components/visit";
 import { carts, reasons } from "@/content/carts";
 import { featureShots } from "@/content/features";
 import { productCopy } from "@/content/specs";
-import { heroFilm, assemblyFilm } from "@/content/media";
+import { assemblyFilm } from "@/content/media";
 
-/**
- * Hero film source.
- *
- * Two cuts of the same camera move, both on Cloudinary. The landscape one
- * crops badly on a phone under object-cover, so portrait viewports get the
- * natively vertical version; ScrollScrub picks between them by viewport shape.
- *
- * The env vars still win when set — that is the escape hatch for serving a
- * locally encoded copy (scripts/encode-scrub.sh) from /public if the scrub
- * needs denser keyframes than the source has.
- */
-const HERO_FILM = process.env.NEXT_PUBLIC_HERO_FILM || heroFilm.landscape;
-const HERO_FILM_PORTRAIT =
-  process.env.NEXT_PUBLIC_HERO_FILM_PORTRAIT || heroFilm.portrait;
-const HERO_POSTER = process.env.NEXT_PUBLIC_HERO_POSTER || undefined;
-const HERO_POSTER_PORTRAIT =
-  process.env.NEXT_PUBLIC_HERO_POSTER_PORTRAIT || undefined;
+const HERO_FILM = "/brand/wulf-yellow-cart-banner.mp4";
+const HERO_POSTER = "/brand/wulf-yellow-cart-banner.jpg";
 
 export default function HomePage() {
   return (
     <>
-      <Hero
-        src={HERO_FILM}
-        srcPortrait={HERO_FILM_PORTRAIT}
-        poster={HERO_POSTER}
-        posterPortrait={HERO_POSTER_PORTRAIT}
-      />
+      <Hero src={HERO_FILM} poster={HERO_POSTER} />
 
       <section className="relative bg-canvas">
         <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
@@ -55,10 +35,10 @@ export default function HomePage() {
             <p className="mt-6 max-w-xl text-base leading-relaxed text-body/65 sm:text-lg">
               Wulf Golf Carts is a golf cart dealer in Montague Gardens, Cape
               Town,
-              selling the new WULF 2-Seater electric golf cart — lithium
-              powered, street-ready and built for the course, the estate and
-              everything in between. Have a look online first, then come
-              through to the showroom and take one out properly.
+              selling premium lithium 2-seater and lifted 4-seater electric
+              golf carts built for the course, the estate and everything in
+              between. Have a look online first, then come through to the
+              showroom and take one out properly.
             </p>
           </Reveal>
         </div>
@@ -76,17 +56,20 @@ export default function HomePage() {
             </h2>
           </Reveal>
 
-          <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start">
-            <Stagger>
+          <div className="mt-12">
+            <Stagger className="grid gap-6 md:grid-cols-2">
               {carts.map((cart) => (
-                <StaggerItem key={cart.slug}>
+                <StaggerItem key={cart.slug} className="h-full">
                   <CartCard cart={cart} />
                 </StaggerItem>
               ))}
             </Stagger>
 
             <Reveal delay={0.12}>
-              <div className="lg:pt-2">
+              <div className="mt-14 max-w-3xl border-l-2 border-accent pl-6 sm:pl-8">
+                <p className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
+                  Inside the WULF 2-Seater
+                </p>
                 {productCopy.paragraphs.map((para) => (
                   <p
                     key={para.slice(0, 32)}

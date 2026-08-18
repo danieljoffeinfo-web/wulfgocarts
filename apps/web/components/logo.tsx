@@ -1,32 +1,22 @@
-/**
- * Wulf Golf Carts wordmark.
- *
- * PLACEHOLDER: a type-only mark standing in for the real logo. When the
- * asset arrives, drop it in /public and replace this component's contents
- * (keep the `inverted` prop — the nav and footer both rely on it).
- */
+import Image from "next/image";
+
+/** Wulf Golf Carts SA brand lockup, restored from the supplied artwork. */
 
 export function Logo({
   className = "",
-  inverted = false,
+  inverted: _inverted = false,
 }: {
   className?: string;
   inverted?: boolean;
 }) {
   return (
-    <span
-      className={`inline-flex items-baseline gap-1.5 font-extrabold leading-none tracking-tight transition-colors duration-300 ${
-        inverted ? "text-white" : "text-body"
-      } ${className}`}
-    >
-      <span>WULF</span>
-      <span
-        className={`text-[0.62em] uppercase tracking-[0.18em] ${
-          inverted ? "text-white/70" : "text-body/55"
-        }`}
-      >
-        Golf Carts
-      </span>
-    </span>
+    <Image
+      src="/brand/wulf-logo-upscaled.png"
+      alt="Wulf Golf Carts SA"
+      width={2109}
+      height={746}
+      priority
+      className={`h-10 w-auto object-contain sm:h-12 ${className}`}
+    />
   );
 }

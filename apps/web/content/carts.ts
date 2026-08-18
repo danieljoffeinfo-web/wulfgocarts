@@ -42,6 +42,8 @@ export type CartColour = {
    * because this is also what feeds the OpenGraph card.
    */
   image: string;
+  /** Whether the hero is a photograph or a derived configuration render. */
+  provenance?: ShotProvenance;
   /** Swatch-sized crop of `image`. Falls back to `image` when absent. */
   thumb?: string;
   /** Additional angles, in display order. */
@@ -73,11 +75,6 @@ export const visibleAngles = (colour: CartColour): CartShot[] =>
  * set is a photograph — so provenance is stamped here rather than repeated
  * twenty times in the manifest.
  */
-const generatedAngles = (
-  set: (typeof productShots)[keyof typeof productShots]
-): CartShot[] =>
-  set.angles.map((a) => ({ ...a, provenance: "generated" as const }));
-
 export type Cart = {
   slug: string;
   name: string;
@@ -86,6 +83,8 @@ export type Cart = {
   seats: string;
   /** Formatted for display, e.g. "R185,000". */
   price?: string;
+  /** Short qualification shown beside the price. */
+  priceNote?: string;
   /**
    * The same figure as a number, for structured data. Kept separate rather
    * than parsed out of `price` so the display string stays free to be
@@ -104,6 +103,8 @@ export type Cart = {
   frames?: string[];
   /** Optional corner badge, e.g. "Most popular" or "New arrival". */
   badge?: string;
+  /** False when only campaign-level information is available. */
+  detailsAvailable?: boolean;
 };
 
 /**
@@ -127,56 +128,101 @@ export const carts: Cart[] = [
     name: "WULF 2-Seater Electric",
     tagline: "Golf-ready on the course, lifestyle-perfect on the estate.",
     seats: "2 seater",
-    price: "R185,000",
-    priceZAR: 185000,
+    price: "R175,750",
+    priceZAR: 175750,
+    priceNote: "Incl. VAT",
     highlights: [
       "5 kW AC motor, 51.2 V 150 Ah lithium",
       "80–100 km range, 4–6 hour charge",
       'Diamond-stitched leather and a 10" touchscreen',
       "Rear golf bag stand and cooler box",
     ],
-    /**
-     * Black and Grey use the new white-background set: a real photograph as
-     * the hero, plus four synthesised angles behind SHOW_GENERATED_ANGLES.
-     *
-     * Blue, Yellow and Red still point at the older untransformed JPEGs. The
-     * new set has three colours whose names were never confirmed — variants A,
-     * B and C — and they may well BE these three. Swapping them on that guess
-     * would put the wrong paint under the wrong label on a priced product
-     * page, so they stay until someone confirms. Once confirmed, replace these
-     * three entries with productShots.variantA/B/C and rename the Cloudinary
-     * public IDs to match.
-     */
+    /* Matching two-seat configurations derived from the confirmed four-seat
+       photographs by removing only the rear passenger seating assembly. */
+    colours: [
+      {
+        name: "Black",
+        image: "/carts/two-seater/black.jpg",
+        provenance: "generated",
+        hex: "#111317",
+      },
+      {
+        name: "Grey",
+        image: "/carts/two-seater/grey.jpg",
+        provenance: "generated",
+        hex: "#9ca3af",
+      },
+      {
+        name: "Blue",
+        image: "/carts/two-seater/blue-v2.jpg",
+        provenance: "generated",
+        hex: "#2563eb",
+      },
+      {
+        name: "Yellow",
+        image: "/carts/two-seater/yellow.jpg",
+        provenance: "generated",
+        hex: "#facc15",
+      },
+      {
+        name: "Red",
+        image: "/carts/two-seater/red-v2.jpg",
+        provenance: "generated",
+        hex: "#dc2626",
+      },
+    ],
+  },
+  {
+    slug: "four-seater",
+    name: "WULF Lifted 4-Seater Electric",
+    tagline:
+      "A lifted four-seat configuration for estates, resorts and family use.",
+    seats: "4 seater",
+    price: "R207,431",
+    priceZAR: 207431,
+    priceNote: "Incl. VAT",
+    highlights: [
+      "Lifted four-seat configuration",
+      "Premium lithium electric platform",
+      "Available to test-drive in Cape Town",
+      "Finance available, subject to approval",
+    ],
     colours: [
       {
         name: "Black",
         image: productShots.black.hero,
         thumb: productShots.black.thumb,
-        gallery: generatedAngles(productShots.black),
+        provenance: "photo",
+        hex: "#111317",
       },
       {
         name: "Grey",
         image: productShots.grey.hero,
         thumb: productShots.grey.thumb,
-        gallery: generatedAngles(productShots.grey),
+        provenance: "photo",
+        hex: "#9ca3af",
       },
       {
         name: "Blue",
-        image:
-          "https://res.cloudinary.com/dmanxetyl/image/upload/v1785709138/Image_2_ktihtp.jpg",
+        image: "/carts/four-seater/blue-v2.jpg",
+        provenance: "generated",
+        hex: "#2563eb",
       },
       {
         name: "Yellow",
-        image:
-          "https://res.cloudinary.com/dmanxetyl/image/upload/v1785709138/Image_neyitk.jpg",
+        image: productShots.yellow.hero,
+        thumb: productShots.yellow.thumb,
+        provenance: "photo",
+        hex: "#facc15",
       },
       {
         name: "Red",
-        image:
-          "https://res.cloudinary.com/dmanxetyl/image/upload/v1785709137/Image_3_jb30qq.jpg",
+        image: "/carts/four-seater/red-v2.jpg",
+        provenance: "generated",
+        hex: "#dc2626",
       },
     ],
-    badge: "Most popular",
+    detailsAvailable: false,
   },
 ];
 
