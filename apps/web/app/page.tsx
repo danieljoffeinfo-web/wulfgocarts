@@ -10,8 +10,20 @@ import { featureShots } from "@/content/features";
 import { productCopy } from "@/content/specs";
 import { assemblyFilm } from "@/content/media";
 
-const HERO_FILM = "/brand/wulf-yellow-cart-banner.mp4";
-const HERO_POSTER = "/brand/wulf-yellow-cart-banner.jpg";
+/**
+ * Homepage banner.
+ *
+ * The source upload is a .mov. Requested as .mp4 so Cloudinary transcodes it:
+ * QuickTime does not play reliably outside Safari, and serving the .mov
+ * directly would leave the banner blank for most Chrome and Firefox visitors.
+ *
+ * The poster is pulled from the film's own first frame (so_0) rather than a
+ * separate file, so it always matches whatever video is set here. A stale
+ * poster flashes the wrong shot before the video decodes.
+ */
+const CLOUD = "https://res.cloudinary.com/dmanxetyl/video/upload";
+const HERO_FILM = `${CLOUD}/v1787047534/0818_1_lcy0n1.mp4`;
+const HERO_POSTER = `${CLOUD}/so_0/v1787047534/0818_1_lcy0n1.jpg`;
 
 export default function HomePage() {
   return (
