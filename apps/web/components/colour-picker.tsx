@@ -73,6 +73,15 @@ export function ColourPicker({
             alt={i === index && !activeAngle ? `${alt} in ${colour.name}` : ""}
             aria-hidden={i !== index || !!activeAngle}
             draggable={false}
+            /* React 19 emits a high-priority <link rel="preload"> for every
+               server-rendered img that is not marked lazy. Five colours here
+               plus the feature shots meant a dozen below-the-fold images
+               competing with the hero film for the first bytes of bandwidth.
+               These sit well down the page; nothing needs them early. Once
+               the card is scrolled into view they all load together, so
+               switching colour stays instant. */
+            loading="lazy"
+            decoding="async"
             className={`absolute inset-0 h-full w-full ${objectFit} transition-opacity duration-300 ${
               i === index && !activeAngle ? "opacity-100" : "opacity-0"
             }`}
@@ -86,6 +95,8 @@ export function ColourPicker({
             src={activeAngle.src}
             alt={`${alt} in ${active.name}, ${activeAngle.angle.toLowerCase()}`}
             draggable={false}
+            loading="lazy"
+            decoding="async"
             className={`absolute inset-0 h-full w-full ${objectFit}`}
           />
         )}

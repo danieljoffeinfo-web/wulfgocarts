@@ -7,6 +7,21 @@
 export function Hero({ src, poster }: { src: string; poster: string }) {
   return (
     <section className="relative h-[82svh] min-h-[34rem] overflow-hidden bg-black sm:h-[100svh]">
+      {/* React hoists these into <head>, so the browser starts fetching before
+          it has parsed this far down the document.
+
+          The poster is what the visitor actually sees first, so it is fetched
+          at high priority. preconnect opens the TLS handshake to Cloudinary in
+          parallel rather than after the first request resolves — on a mobile
+          connection that alone is a few hundred milliseconds off the wait. */}
+      <link rel="preconnect" href="https://res.cloudinary.com" />
+      <link
+        rel="preload"
+        as="image"
+        href={poster}
+        fetchPriority="high"
+      />
+
       <video
         className="h-full w-full object-contain sm:object-cover"
         src={src}
@@ -15,7 +30,10 @@ export function Hero({ src, poster }: { src: string; poster: string }) {
         muted
         loop
         playsInline
-        preload="metadata"
+        /* "metadata" fetches only the header and then waits, which on an
+           autoplaying above-the-fold film is the opposite of what is wanted —
+           it delays the very thing that is meant to start immediately. */
+        preload="auto"
         aria-label="WULF yellow four-seater electric golf cart showcase"
       />
 

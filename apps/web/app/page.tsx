@@ -22,8 +22,29 @@ import { assemblyFilm } from "@/content/media";
  * poster flashes the wrong shot before the video decodes.
  */
 const CLOUD = "https://res.cloudinary.com/dmanxetyl/video/upload";
-const HERO_FILM = `${CLOUD}/v1787047534/0818_1_lcy0n1.mp4`;
-const HERO_POSTER = `${CLOUD}/so_0/v1787047534/0818_1_lcy0n1.jpg`;
+const BANNER = "v1787048153/0818_2_aqtr9h";
+
+/**
+ * Delivered at 1280 wide with automatic quality rather than at source size.
+ *
+ * The upload is a phone/camera .mov, so the untransformed file carries the
+ * capture resolution and bitrate — far more than a background film sitting
+ * behind a gradient scrim and a headline can show. q_auto picks a per-file
+ * quality and c_limit only ever scales down, so a smaller source is never
+ * upscaled. Bytes are what decide how fast the first frame appears.
+ *
+ * The no-transform rule in content/media.ts covers the scroll-scrubbed films,
+ * where re-encoding shifts keyframes and changes how seeking behaves. This
+ * banner plays straight through, so none of that applies.
+ */
+const HERO_FILM = `${CLOUD}/c_limit,w_1280/f_auto/q_auto/${BANNER}.mp4`;
+
+/**
+ * Poster is the film's own first frame, so it always matches the video, and
+ * is capped and quality-tuned the same way — at source size it was a
+ * full-resolution JPEG standing between the visitor and a painted screen.
+ */
+const HERO_POSTER = `${CLOUD}/so_0/c_limit,w_1280/f_auto/q_auto:eco/${BANNER}.jpg`;
 
 export default function HomePage() {
   return (
