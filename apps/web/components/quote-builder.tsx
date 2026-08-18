@@ -12,6 +12,17 @@ const factors = [
   { min: 100_000, max: Infinity, 36: 0.0356, 48: 0.029, 60: 0.0248 },
 ] as const;
 
+/**
+ * Optional trailer add-on. Quoted excl. VAT by the client; the rest of the
+ * sheet works in VAT-inclusive rands, so it is converted once here. Adding
+ * the inclusive figure to the purchase total keeps the rental maths correct
+ * for free: capital-ex-VAT is derived by dividing the total back by 1.15, and
+ * 30,475 / 1.15 lands back on 26,500.
+ */
+const VAT_RATE = 1.15;
+const TRAILER_EX_VAT = 26_500;
+const TRAILER_INCL_VAT = TRAILER_EX_VAT * VAT_RATE;
+
 const rand = new Intl.NumberFormat("en-ZA", {
   style: "currency",
   currency: "ZAR",
@@ -51,6 +62,7 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
       : fallback
   );
   const [quantity, setQuantity] = useState(1);
+  const [trailer, setTrailer] = useState(false);
   const [customer, setCustomer] = useState("");
   const [business, setBusiness] = useState("");
   const [email, setEmail] = useState("");
@@ -61,8 +73,9 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
   useEffect(() => setQuoteRef(buildQuoteRef()), []);
 
   const selected = available.find((cart) => cart.slug === model) ?? available[0];
-  const totalInclVat = (selected?.priceZAR ?? 0) * quantity;
-  const capitalExVat = totalInclVat / 1.15;
+  const cartsInclVat = (selected?.priceZAR ?? 0) * quantity;
+  const totalInclVat = cartsInclVat + (trailer ? TRAILER_INCL_VAT : 0);
+  const capitalExVat = totalInclVat / VAT_RATE;
   const factor = factors.find(
     (row) => capitalExVat >= row.min && capitalExVat <= row.max
   );
@@ -81,6 +94,7 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
       `Hi Wulf Golf Carts,`,
       "",
       `Please contact me about ${quantity} × ${selected?.name ?? "WULF cart"}.`,
+      trailer ? `Plus a trailer (${rand.format(TRAILER_EX_VAT)} excl. VAT).` : "",
       `Advertised total: ${rand.format(totalInclVat)} including VAT.`,
       customer ? `Name: ${customer}` : "",
       business ? `Business: ${business}` : "",
@@ -92,7 +106,7 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
       .filter(Boolean)
       .join("\n");
     return `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  }, [business, customer, notes, phone, quantity, quoteRef, selected, totalInclVat]);
+  }, [business, customer, notes, phone, quantity, quoteRef, selected, totalInclVat, trailer]);
 
   return (
     <div className="quote-builder grid gap-8 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:items-start">
@@ -129,6 +143,22 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
               }
             />
           </Field>
+          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-canvas p-4 transition-colors hover:border-accent/60">
+            <input
+              type="checkbox"
+              checked={trailer}
+              onChange={(e) => setTrailer(e.target.checked)}
+              className="mt-0.5 h-4 w-4 shrink-0 accent-[#2563eb]"
+            />
+            <span className="leading-tight">
+              <span className="block text-sm font-bold text-body">
+                Add a trailer
+              </span>
+              <span className="mt-0.5 block text-xs font-medium text-body/55">
+                {rand.format(TRAILER_EX_VAT)} excl. VAT
+              </span>
+            </span>
+          </label>
           <div className="grid gap-5 sm:grid-cols-2">
             <Field label="Your name">
               <input value={customer} onChange={(e) => setCustomer(e.target.value)} placeholder="Full name" />
@@ -195,6 +225,9 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
             <QuoteRow label="Model" value={selected?.name ?? "—"} />
             <QuoteRow label="Quantity" value={String(quantity)} />
             <QuoteRow label="Price per cart" value={`${rand.format(selected?.priceZAR ?? 0)} incl. VAT`} />
+            {trailer && (
+              <QuoteRow label="Trailer" value={`${rand.format(TRAILER_INCL_VAT)} incl. VAT`} />
+            )}
             <QuoteRow label="Total purchase price" value={`${rand.format(totalInclVat)} incl. VAT`} strong />
           </div>
 

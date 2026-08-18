@@ -22,7 +22,7 @@ import { assemblyFilm } from "@/content/media";
  * poster flashes the wrong shot before the video decodes.
  */
 const CLOUD = "https://res.cloudinary.com/dmanxetyl/video/upload";
-const BANNER = "v1787048153/0818_2_aqtr9h";
+const BANNER = "v1787072401/0818_eao03z";
 
 /**
  * The source is 2160x3840 — portrait 4K, 84 MB.

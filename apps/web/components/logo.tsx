@@ -21,8 +21,10 @@ export function Logo({
          136px wide. It is `priority`, so that download was competing with the
          hero film for the first bytes on the page. The width/height above
          stay as the source dimensions; they only set the aspect ratio. */
-      sizes="140px"
-      className={`h-10 w-auto object-contain sm:h-12 ${className}`}
+      sizes="180px"
+      /* 30% up from h-10/h-12: 2.5rem→3.25rem and 3rem→3.9rem. Still clears
+         the h-16/h-20 nav bar with room to spare. */
+      className={`h-[3.25rem] w-auto object-contain sm:h-[3.9rem] ${className}`}
     />
   );
 }
