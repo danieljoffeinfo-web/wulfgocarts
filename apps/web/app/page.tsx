@@ -25,31 +25,43 @@ const CLOUD = "https://res.cloudinary.com/dmanxetyl/video/upload";
 const BANNER = "v1787048153/0818_2_aqtr9h";
 
 /**
- * Delivered at 1280 wide with automatic quality rather than at source size.
+ * The source is 2160x3840 — portrait 4K, 84 MB.
  *
- * The upload is a phone/camera .mov, so the untransformed file carries the
- * capture resolution and bitrate — far more than a background film sitting
- * behind a gradient scrim and a headline can show. q_auto picks a per-file
- * quality and c_limit only ever scales down, so a smaller source is never
- * upscaled. Bytes are what decide how fast the first frame appears.
+ * c_limit is doing the heavy lifting: f_auto and q_auto alone re-encode but
+ * never resize, so without a cap this still ships 4K to a phone. Dropping to
+ * 1080 wide is a quarter of the pixels before quality is even considered, and
+ * it is still more than a background film behind a gradient and a headline
+ * can show. c_limit only ever scales down, so a smaller source is never
+ * upscaled.
  *
  * The no-transform rule in content/media.ts covers the scroll-scrubbed films,
  * where re-encoding shifts keyframes and changes how seeking behaves. This
  * banner plays straight through, so none of that applies.
  */
-const HERO_FILM = `${CLOUD}/c_limit,w_1280/f_auto/q_auto/${BANNER}.mp4`;
+const HERO_FILM = `${CLOUD}/c_limit,w_1080/f_auto/q_auto/${BANNER}.mp4`;
+
+/**
+ * Phones get a smaller cut again. The film renders about 390 CSS px wide
+ * there, so 720 is already beyond what the screen resolves, and mobile is
+ * where the connection is worst and the wait hurts most.
+ */
+const HERO_FILM_MOBILE = `${CLOUD}/c_limit,w_720/f_auto/q_auto/${BANNER}.mp4`;
 
 /**
  * Poster is the film's own first frame, so it always matches the video, and
  * is capped and quality-tuned the same way — at source size it was a
  * full-resolution JPEG standing between the visitor and a painted screen.
  */
-const HERO_POSTER = `${CLOUD}/so_0/c_limit,w_1280/f_auto/q_auto:eco/${BANNER}.jpg`;
+const HERO_POSTER = `${CLOUD}/so_0/c_limit,w_1080/f_auto/q_auto:eco/${BANNER}.jpg`;
 
 export default function HomePage() {
   return (
     <>
-      <Hero src={HERO_FILM} poster={HERO_POSTER} />
+      <Hero
+        src={HERO_FILM}
+        srcMobile={HERO_FILM_MOBILE}
+        poster={HERO_POSTER}
+      />
 
       <section className="relative bg-canvas">
         <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24">

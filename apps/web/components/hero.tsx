@@ -4,7 +4,15 @@
  * This plays normally instead of seeking on scroll. That keeps the supplied
  * footage intact and makes the opening responsive even on slower phones.
  */
-export function Hero({ src, poster }: { src: string; poster: string }) {
+export function Hero({
+  src,
+  srcMobile,
+  poster,
+}: {
+  src: string;
+  srcMobile?: string;
+  poster: string;
+}) {
   return (
     <section className="relative h-[82svh] min-h-[34rem] overflow-hidden bg-black sm:h-[100svh]">
       {/* React hoists these into <head>, so the browser starts fetching before
@@ -23,8 +31,12 @@ export function Hero({ src, poster }: { src: string; poster: string }) {
       />
 
       <video
-        className="h-full w-full object-contain sm:object-cover"
-        src={src}
+        /* object-cover on phones too, not contain.
+           The film is 2160x3840 — portrait. On a portrait screen the two
+           proportions are near identical, so cover crops almost nothing while
+           contain leaves black bars down the sides of any handset shorter
+           than about 16:9. Cover fills the frame on every phone. */
+        className="h-full w-full object-cover"
         poster={poster}
         autoPlay
         muted
@@ -35,7 +47,13 @@ export function Hero({ src, poster }: { src: string; poster: string }) {
            it delays the very thing that is meant to start immediately. */
         preload="auto"
         aria-label="WULF yellow four-seater electric golf cart showcase"
-      />
+      >
+        {/* Phones take the narrower cut. No `type` is declared because f_auto
+            lets Cloudinary answer with VP9 or H.264 depending on the browser,
+            so asserting a container here would be a guess. */}
+        {srcMobile && <source media="(max-width: 639px)" src={srcMobile} />}
+        <source src={src} />
+      </video>
 
       <div
         aria-hidden="true"
