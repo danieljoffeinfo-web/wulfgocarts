@@ -85,38 +85,68 @@ export const metadata: Metadata = {
  */
 const localBusinessJsonLd = {
   "@context": "https://schema.org",
-  "@type": "AutoDealer",
-  name: site.name,
-  description: site.description,
-  url: site.domain,
-  telephone: site.phoneHref,
-  email: site.email,
-  image: ogImage,
-  priceRange: "R175,750–R207,431",
-  areaServed: [
-    { "@type": "City", name: "Cape Town" },
-    { "@type": "AdministrativeArea", name: "Western Cape" },
-  ],
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: site.showroom.address[0],
-    addressLocality: site.showroom.address[1],
-    addressRegion: "Western Cape",
-    postalCode: "7441",
-    addressCountry: "ZA",
-  },
-  openingHoursSpecification: [
+  "@graph": [
     {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
+      "@type": "AutoDealer",
+      "@id": `${site.domain}/#montague`,
+      name: `${site.name} — Montague Gardens`,
+      description: site.description,
+      url: site.domain,
+      telephone: site.phoneHref,
+      email: site.email,
+      image: ogImage,
+      priceRange: "R175,750–R207,431",
+      areaServed: [
+        { "@type": "City", name: "Cape Town" },
+        { "@type": "AdministrativeArea", name: "Western Cape" },
       ],
-      opens: "08:00",
-      closes: "17:00",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "21 Montague Drive",
+        addressLocality: "Montague Gardens",
+        addressRegion: "Western Cape",
+        postalCode: "7441",
+        addressCountry: "ZA",
+      },
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+          ],
+          opens: "08:00",
+          closes: "17:00",
+        },
+      ],
+    },
+    {
+      // Second branch. Viewing is by appointment only, so no opening hours are
+      // published — stating hours a walk-in can't rely on would misinform.
+      "@type": "AutoDealer",
+      "@id": `${site.domain}/#blackheath`,
+      name: `${site.name} — Blackheath`,
+      description: site.description,
+      url: site.domain,
+      telephone: "+27615367310",
+      email: site.email,
+      image: ogImage,
+      priceRange: "R175,750–R207,431",
+      areaServed: [
+        { "@type": "City", name: "Kuils River" },
+        { "@type": "AdministrativeArea", name: "Western Cape" },
+      ],
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Saxenburg Park – D2, 1 Chardonnay Rd, Wijnland Park",
+        addressLocality: "Blackheath, Kuils River",
+        addressRegion: "Western Cape",
+        postalCode: "7560",
+        addressCountry: "ZA",
+      },
     },
   ],
 };

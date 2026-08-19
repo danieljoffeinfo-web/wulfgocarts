@@ -195,6 +195,33 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
             Email Wulf
           </a>
         </div>
+
+        {/* Buying guide. Explains cash vs rental vs lease so the rental figures
+            on the quote sheet have context. Opens in a new tab and is also
+            downloadable straight from the viewer. */}
+        <a
+          href={site.financeGuide}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 flex items-center gap-4 rounded-2xl border border-line bg-canvas p-4 transition-colors hover:border-accent/60"
+        >
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent-soft">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-5 w-5">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <path d="M14 2v6h6" />
+              <path d="M12 18v-6" />
+              <path d="m9 15 3 3 3-3" />
+            </svg>
+          </span>
+          <span className="leading-tight">
+            <span className="block text-sm font-extrabold text-body">
+              Cash vs rental vs lease
+            </span>
+            <span className="mt-0.5 block text-xs font-medium text-body/55">
+              A quick guide to your payment options (PDF)
+            </span>
+          </span>
+        </a>
       </section>
 
       <article className="quote-sheet overflow-hidden rounded-3xl bg-white text-ink shadow-2xl shadow-black/30">

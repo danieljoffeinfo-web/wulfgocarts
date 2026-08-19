@@ -39,19 +39,35 @@ export function Footer() {
               <p className="text-xs font-bold uppercase tracking-widest text-white/35">
                 Visit
               </p>
-              <address className="mt-4 space-y-0.5 text-sm not-italic leading-relaxed text-white/70">
-                {site.showroom.address.map((line) => (
-                  <p key={line}>{line}</p>
+              <div className="mt-4 space-y-5">
+                {site.showrooms.map((branch) => (
+                  <div key={branch.name}>
+                    <p className="text-xs font-bold uppercase tracking-wide text-white/50">
+                      {branch.name}
+                    </p>
+                    <address className="mt-1.5 space-y-0.5 text-sm not-italic leading-relaxed text-white/70">
+                      {branch.address.map((line) => (
+                        <p key={line}>{line}</p>
+                      ))}
+                    </address>
+                    {branch.appointmentOnly && (
+                      <p className="mt-1.5 text-xs text-white/40">
+                        By appointment only
+                      </p>
+                    )}
+                    {branch.mapsUrl && (
+                      <a
+                        href={branch.mapsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 inline-block text-sm font-bold text-accent-soft underline-offset-4 hover:underline"
+                      >
+                        Get directions →
+                      </a>
+                    )}
+                  </div>
                 ))}
-              </address>
-              <a
-                href={site.showroom.mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 inline-block text-sm font-bold text-accent-soft underline-offset-4 hover:underline"
-              >
-                Get directions →
-              </a>
+              </div>
             </div>
 
             <div>
