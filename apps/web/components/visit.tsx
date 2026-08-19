@@ -1,5 +1,6 @@
 import { Reveal } from "./reveal";
 import { site } from "@/content/site";
+import { WhatsAppGlyph } from "./icons";
 
 /**
  * The conversion section. Everything on this page points here — the goal is
@@ -91,23 +92,28 @@ export function Visit() {
               ))}
             </div>
 
-            <div className="mt-12 flex flex-wrap items-center gap-4 border-t border-white/10 pt-8">
+            {/* Contact row. WhatsApp leads in its own brand green rather than
+                the site accent: people recognise the colour before they read
+                the label, and it is the channel most buyers here will reach
+                for. Calling stays alongside it as a plain link. */}
+            <div className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-4 border-t border-white/10 pt-8">
+              {site.whatsapp && (
+                <a
+                  href={site.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2.5 rounded-full bg-[#25D366] px-6 py-3.5 text-sm font-extrabold text-[#04301b] shadow-lg shadow-[#25D366]/20 transition-all hover:-translate-y-0.5 hover:bg-[#1ebe5b]"
+                >
+                  <WhatsAppGlyph className="h-[18px] w-[18px]" />
+                  WhatsApp us
+                </a>
+              )}
               <a
                 href={`tel:${site.phoneHref}`}
                 className="text-sm font-bold text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline"
               >
                 {site.phone} →
               </a>
-              {site.whatsapp && (
-                <a
-                  href={site.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-bold text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline"
-                >
-                  WhatsApp →
-                </a>
-              )}
             </div>
           </div>
         </Reveal>

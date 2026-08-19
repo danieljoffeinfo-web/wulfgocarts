@@ -8,6 +8,19 @@
  *  params (?_rdc=1&_rdr) and the m./web. host; this is the clean public form. */
 const FACEBOOK_URL = "https://www.facebook.com/wulfgolfcarts";
 
+/**
+ * WhatsApp.
+ *
+ * wa.me needs the number in international form with no leading zero and no
+ * punctuation, so 082 425 4253 becomes 27824254253. The prefilled text is
+ * only a starting point — WhatsApp drops the sender into the compose box with
+ * it, and they can edit or delete it before sending.
+ */
+const WHATSAPP_DISPLAY = "082 425 4253";
+const WHATSAPP_URL = `https://wa.me/27824254253?text=${encodeURIComponent(
+  "Hi Wulf Golf Carts, I would like to know more about your electric golf carts."
+)}`;
+
 /** One physical location. Add a branch by copying an entry into `showrooms`. */
 export type Showroom = {
   /** Short branch label, e.g. "Montague Gardens". */
@@ -102,7 +115,10 @@ export const site = {
 
   phone: "082 803 3674",
   phoneHref: "+27828033674",
-  whatsapp: "", // optional — full wa.me link, leave empty to hide the button
+  /** Full wa.me link. Leave empty to hide every WhatsApp button on the site. */
+  whatsapp: WHATSAPP_URL,
+  /** The same number, formatted the way someone would read it aloud. */
+  whatsappDisplay: WHATSAPP_DISPLAY,
   email: "contact@wulfgolfcarts.co.za",
   facebook: FACEBOOK_URL,
 
@@ -116,6 +132,7 @@ export const site = {
   ],
 
   social: [
+    { label: "WhatsApp", href: WHATSAPP_URL },
     { label: "Facebook", href: FACEBOOK_URL },
   ] as { label: string; href: string }[],
 };

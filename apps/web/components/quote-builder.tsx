@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { carts } from "@/content/carts";
 import { site } from "@/content/site";
+import { WhatsAppGlyph } from "./icons";
 
 const factors = [
   { min: 10_000, max: 19_999, 36: 0.03841, 48: 0.032, 60: 0.02771 },
@@ -108,6 +109,29 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
     return `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }, [business, customer, notes, phone, quantity, quoteRef, selected, totalInclVat, trailer]);
 
+  /* The same summary as the email, addressed to WhatsApp instead. Built from
+     site.whatsapp so the number stays in one place; the ?text= it already
+     carries is replaced rather than appended, because wa.me only reads the
+     first one. */
+  const whatsappHref = useMemo(() => {
+    if (!site.whatsapp) return "";
+    const message = [
+      `Hi Wulf Golf Carts,`,
+      "",
+      `Please contact me about ${quantity} × ${selected?.name ?? "WULF cart"}.`,
+      trailer ? `Plus a trailer (${rand.format(TRAILER_EX_VAT)} excl. VAT).` : "",
+      `Advertised total: ${rand.format(totalInclVat)} including VAT.`,
+      customer ? `Name: ${customer}` : "",
+      business ? `Business: ${business}` : "",
+      notes ? `Notes: ${notes}` : "",
+      "",
+      `Reference: ${quoteRef}`,
+    ]
+      .filter(Boolean)
+      .join("\n");
+    return `${site.whatsapp.split("?")[0]}?text=${encodeURIComponent(message)}`;
+  }, [business, customer, notes, quantity, quoteRef, selected, totalInclVat, trailer]);
+
   return (
     <div className="quote-builder grid gap-8 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:items-start">
       <section className="quote-controls rounded-3xl border border-line bg-raised p-6 sm:p-8">
@@ -195,6 +219,21 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
             Email Wulf
           </a>
         </div>
+
+        {/* Full width under the pair above: this is the one most people will
+            actually use, and it carries the built quote straight into the
+            chat rather than asking them to retype it. */}
+        {whatsappHref && (
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 flex items-center justify-center gap-2.5 rounded-full bg-[#25D366] px-6 py-3.5 text-sm font-extrabold text-[#04301b] transition-all hover:-translate-y-0.5 hover:bg-[#1ebe5b]"
+          >
+            <WhatsAppGlyph className="h-[18px] w-[18px]" />
+            Send this quote on WhatsApp
+          </a>
+        )}
 
         {/* Buying guide. Explains cash vs rental vs lease so the rental figures
             on the quote sheet have context. Opens in a new tab and is also
