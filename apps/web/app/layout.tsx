@@ -158,6 +158,14 @@ export default function RootLayout({
     // en-ZA rather than en: it tells search engines this business serves
     // South Africa, which matters for a showroom nobody flies to.
     <html lang="en-ZA">
+      <head>
+        {/* Opened in the document head rather than beside the hero, so the DNS
+            lookup and TLS handshake to Cloudinary are already done by the time
+            the banner poster is requested. On a mobile connection that is a
+            few hundred milliseconds off the first paint. */}
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+      </head>
       <body className={`${manrope.variable} font-sans`}>
         <script
           type="application/ld+json"

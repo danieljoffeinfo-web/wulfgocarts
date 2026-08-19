@@ -55,14 +55,17 @@ const HERO_FILM = `${CLOUD}/c_limit,w_1080/ac_none/f_auto/q_auto:eco/${BANNER}.m
 const HERO_FILM_MOBILE = `${CLOUD}/c_limit,w_720/ac_none/f_auto/q_auto:eco/${BANNER}.mp4`;
 
 /**
- * The poster is what actually sells "instant": it is preloaded at high
- * priority in the hero and painted before a single byte of video decodes, so
- * it must be sharp. Served at q_auto:good (up from eco) — a crisp still is
- * cheap as a JPEG and is the frame the visitor reads as "loaded". It is the
- * film's own first frame (so_0), so the video hands straight off it with no
- * flash.
+ * The poster is what actually sells "instant": it is the Largest Contentful
+ * Paint, preloaded at high priority and painted before a single byte of video
+ * decodes, so its weight is literally how long the hero looks unloaded.
+ *
+ * q_auto is the balanced rung — meaningfully lighter than q_auto:good while
+ * still sharp, which matters behind a black gradient that hides fine detail
+ * anyway. f_auto hands modern browsers AVIF or WebP, well under the JPEG. It
+ * is the film's own first frame (so_0), so the video hands straight off it
+ * with no flash.
  */
-const HERO_POSTER = `${CLOUD}/so_0/c_limit,w_1080/f_auto/q_auto:good/${BANNER}.jpg`;
+const HERO_POSTER = `${CLOUD}/so_0/c_limit,w_1080/f_auto/q_auto/${BANNER}.jpg`;
 
 export default function HomePage() {
   return (
