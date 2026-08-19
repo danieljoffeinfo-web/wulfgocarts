@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { carts } from "@/content/carts";
 import { site } from "@/content/site";
 import { WhatsAppGlyph } from "./icons";
+import { buildQuotePdf, quotePdfName } from "@/lib/quote-pdf";
 
 const factors = [
   { min: 10_000, max: 19_999, 36: 0.03841, 48: 0.032, 60: 0.02771 },
@@ -70,6 +71,21 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
   const [quoteRef, setQuoteRef] = useState("WULF-QUOTE");
+  const [busy, setBusy] = useState<"" | "download" | "share">("");
+  /* Whether this browser can share an actual file. Chrome on Android and
+     Safari on iOS can, which is where WhatsApp is; desktop mostly cannot, and
+     those visitors get the download instead. Resolved after mount because
+     navigator.canShare does not exist on the server. */
+  const [canShareFile, setCanShareFile] = useState(false);
+
+  useEffect(() => {
+    try {
+      const probe = new File(["x"], "probe.pdf", { type: "application/pdf" });
+      setCanShareFile(!!navigator.canShare?.({ files: [probe] }));
+    } catch {
+      setCanShareFile(false);
+    }
+  }, []);
 
   useEffect(() => setQuoteRef(buildQuoteRef()), []);
 
@@ -131,6 +147,65 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
       .join("\n");
     return `${site.whatsapp.split("?")[0]}?text=${encodeURIComponent(message)}`;
   }, [business, customer, notes, quantity, quoteRef, selected, totalInclVat, trailer]);
+
+  /* One description of the quote, reused by the download and the share. */
+  const pdfInput = () => ({
+    quoteRef,
+    date: today(),
+    modelName: selected?.name ?? "WULF cart",
+    quantity,
+    pricePerCart: rand.format(selected?.priceZAR ?? 0),
+    trailer: trailer ? rand.format(TRAILER_INCL_VAT) : undefined,
+    total: rand.format(totalInclVat),
+    rentals: rentals.map((r) => ({ term: r.term, amount: rand.format(r.amount) })),
+    customer,
+    business,
+    email,
+    phone,
+    notes,
+    contactLine: `${site.phone} · ${site.email}`,
+    addressLine: site.showroom.address.join(", "),
+  });
+
+  const downloadPdf = async () => {
+    setBusy("download");
+    try {
+      const blob = await buildQuotePdf(pdfInput());
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = quotePdfName(quoteRef);
+      a.click();
+      /* Revoked on the next tick rather than immediately: Safari has not
+         finished reading the blob when click() returns. */
+      setTimeout(() => URL.revokeObjectURL(url), 10_000);
+    } finally {
+      setBusy("");
+    }
+  };
+
+  /* The only route that puts the PDF itself into WhatsApp. wa.me carries text
+     and nothing else, so attaching means handing the file to the OS share
+     sheet and letting the visitor pick WhatsApp from it. Where that is not
+     available the text-only wa.me link still stands, alongside the download. */
+  const sharePdf = async () => {
+    setBusy("share");
+    try {
+      const blob = await buildQuotePdf(pdfInput());
+      const file = new File([blob], quotePdfName(quoteRef), {
+        type: "application/pdf",
+      });
+      await navigator.share({
+        files: [file],
+        title: `${quoteRef} — ${selected?.name ?? "WULF cart"}`,
+        text: `Quote ${quoteRef}: ${quantity} × ${selected?.name ?? "WULF cart"}, ${rand.format(totalInclVat)} incl. VAT.`,
+      });
+    } catch {
+      /* Dismissing the share sheet rejects; that is a choice, not a fault. */
+    } finally {
+      setBusy("");
+    }
+  };
 
   return (
     <div className="quote-builder grid gap-8 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:items-start">
@@ -207,10 +282,11 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
         <div className="mt-8 grid gap-3 sm:grid-cols-2">
           <button
             type="button"
-            onClick={() => window.print()}
-            className="rounded-full bg-accent px-6 py-3.5 text-sm font-extrabold text-white transition-colors hover:bg-accent-deep"
+            onClick={downloadPdf}
+            disabled={busy !== ""}
+            className="rounded-full bg-accent px-6 py-3.5 text-sm font-extrabold text-white transition-colors hover:bg-accent-deep disabled:opacity-60"
           >
-            Print / save PDF
+            {busy === "download" ? "Preparing…" : "Download PDF"}
           </button>
           <a
             href={emailHref}
@@ -223,16 +299,32 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
         {/* Full width under the pair above: this is the one most people will
             actually use, and it carries the built quote straight into the
             chat rather than asking them to retype it. */}
-        {whatsappHref && (
-          <a
-            href={whatsappHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 flex items-center justify-center gap-2.5 rounded-full bg-[#25D366] px-6 py-3.5 text-sm font-extrabold text-[#04301b] transition-all hover:-translate-y-0.5 hover:bg-[#1ebe5b]"
+        {/* On a phone this attaches the PDF itself through the share sheet.
+            Everywhere else it falls back to the wa.me link, which can only
+            carry the quote as text — that is a WhatsApp limitation, so the
+            label says which one the visitor is getting. */}
+        {canShareFile ? (
+          <button
+            type="button"
+            onClick={sharePdf}
+            disabled={busy !== ""}
+            className="mt-3 flex w-full items-center justify-center gap-2.5 rounded-full bg-[#25D366] px-6 py-3.5 text-sm font-extrabold text-[#04301b] transition-all hover:-translate-y-0.5 hover:bg-[#1ebe5b] disabled:opacity-60"
           >
             <WhatsAppGlyph className="h-[18px] w-[18px]" />
-            Send this quote on WhatsApp
-          </a>
+            {busy === "share" ? "Preparing…" : "Send PDF on WhatsApp"}
+          </button>
+        ) : (
+          whatsappHref && (
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 flex items-center justify-center gap-2.5 rounded-full bg-[#25D366] px-6 py-3.5 text-sm font-extrabold text-[#04301b] transition-all hover:-translate-y-0.5 hover:bg-[#1ebe5b]"
+            >
+              <WhatsAppGlyph className="h-[18px] w-[18px]" />
+              Send this quote on WhatsApp
+            </a>
+          )
         )}
 
         {/* Buying guide. Explains cash vs rental vs lease so the rental figures
