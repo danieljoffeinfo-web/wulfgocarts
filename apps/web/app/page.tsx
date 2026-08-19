@@ -25,34 +25,44 @@ const CLOUD = "https://res.cloudinary.com/dmanxetyl/video/upload";
 const BANNER = "v1787080775/0818_1_v01mby";
 
 /**
- * The source is 2160x3840 — portrait 4K, 84 MB.
+ * The source is 2160x3840 — portrait 4K, 84 MB. Getting this to start
+ * *instantly* is two jobs: paint a crisp poster on the first frame, and make
+ * the film itself light enough that the browser can buffer and play it in the
+ * same moment rather than after a multi-megabyte download.
  *
- * c_limit is doing the heavy lifting: f_auto and q_auto alone re-encode but
- * never resize, so without a cap this still ships 4K to a phone. Dropping to
- * 1080 wide is a quarter of the pixels before quality is even considered, and
- * it is still more than a background film behind a gradient and a headline
- * can show. c_limit only ever scales down, so a smaller source is never
- * upscaled.
+ * Shared delivery for both cuts, in the order Cloudinary reads them:
+ * - c_limit,w_… — resize down only. f_auto/q_auto re-encode but never resize,
+ *   so without a cap this ships 4K to a phone. This is the biggest single win.
+ * - ac_none — drop the audio track outright. The banner is muted and looping,
+ *   so the audio is pure dead weight in the download.
+ * - q_auto:eco — behind a black gradient and a headline, eco is visually
+ *   indistinguishable from full quality but a fraction of the bytes, so the
+ *   first frames arrive far sooner.
+ * - f_auto — lets Cloudinary hand Chrome a VP9/WebM and Safari an H.264 MP4,
+ *   whichever is smaller for that browser.
  *
  * The no-transform rule in content/media.ts covers the scroll-scrubbed films,
  * where re-encoding shifts keyframes and changes how seeking behaves. This
  * banner plays straight through, so none of that applies.
  */
-const HERO_FILM = `${CLOUD}/c_limit,w_1080/f_auto/q_auto/${BANNER}.mp4`;
+const HERO_FILM = `${CLOUD}/c_limit,w_1080/ac_none/f_auto/q_auto:eco/${BANNER}.mp4`;
 
 /**
  * Phones get a smaller cut again. The film renders about 390 CSS px wide
  * there, so 720 is already beyond what the screen resolves, and mobile is
  * where the connection is worst and the wait hurts most.
  */
-const HERO_FILM_MOBILE = `${CLOUD}/c_limit,w_720/f_auto/q_auto/${BANNER}.mp4`;
+const HERO_FILM_MOBILE = `${CLOUD}/c_limit,w_720/ac_none/f_auto/q_auto:eco/${BANNER}.mp4`;
 
 /**
- * Poster is the film's own first frame, so it always matches the video, and
- * is capped and quality-tuned the same way — at source size it was a
- * full-resolution JPEG standing between the visitor and a painted screen.
+ * The poster is what actually sells "instant": it is preloaded at high
+ * priority in the hero and painted before a single byte of video decodes, so
+ * it must be sharp. Served at q_auto:good (up from eco) — a crisp still is
+ * cheap as a JPEG and is the frame the visitor reads as "loaded". It is the
+ * film's own first frame (so_0), so the video hands straight off it with no
+ * flash.
  */
-const HERO_POSTER = `${CLOUD}/so_0/c_limit,w_1080/f_auto/q_auto:eco/${BANNER}.jpg`;
+const HERO_POSTER = `${CLOUD}/so_0/c_limit,w_1080/f_auto/q_auto:good/${BANNER}.jpg`;
 
 export default function HomePage() {
   return (

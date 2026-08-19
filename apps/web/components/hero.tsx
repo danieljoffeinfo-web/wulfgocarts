@@ -1,8 +1,18 @@
+"use client";
+
+import { useState } from "react";
+
 /**
  * Above-the-fold showroom film.
  *
  * This plays normally instead of seeking on scroll. That keeps the supplied
  * footage intact and makes the opening responsive even on slower phones.
+ *
+ * "Instant" is a layering trick, the same one Shopify and Squarespace use:
+ * the poster is a plain preloaded <img>, so it is the Largest Contentful Paint
+ * and shows the instant the HTML lands — no waiting on video metadata. The
+ * film sits on top at opacity-0 and crossfades in the moment it can play. The
+ * visitor sees a finished frame immediately and never a black box or a pop.
  */
 export function Hero({
   src,
@@ -13,6 +23,8 @@ export function Hero({
   srcMobile?: string;
   poster: string;
 }) {
+  const [playing, setPlaying] = useState(false);
+
   return (
     <section className="relative h-[82svh] min-h-[34rem] overflow-hidden bg-black sm:h-[100svh]">
       {/* React hoists these into <head>, so the browser starts fetching before
@@ -23,11 +35,19 @@ export function Hero({
           parallel rather than after the first request resolves — on a mobile
           connection that alone is a few hundred milliseconds off the wait. */}
       <link rel="preconnect" href="https://res.cloudinary.com" />
-      <link
-        rel="preload"
-        as="image"
-        href={poster}
+      <link rel="preload" as="image" href={poster} fetchPriority="high" />
+
+      {/* The poster as a real image element, painted immediately as the LCP.
+          It stays mounted underneath the film so the handoff is a crossfade,
+          not a swap. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={poster}
+        alt=""
+        aria-hidden="true"
         fetchPriority="high"
+        decoding="async"
+        className="absolute inset-0 h-full w-full object-cover"
       />
 
       <video
@@ -36,7 +56,9 @@ export function Hero({
            proportions are near identical, so cover crops almost nothing while
            contain leaves black bars down the sides of any handset shorter
            than about 16:9. Cover fills the frame on every phone. */
-        className="h-full w-full object-cover"
+        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out ${
+          playing ? "opacity-100" : "opacity-0"
+        }`}
         poster={poster}
         autoPlay
         muted
@@ -46,6 +68,12 @@ export function Hero({
            autoplaying above-the-fold film is the opposite of what is wanted —
            it delays the very thing that is meant to start immediately. */
         preload="auto"
+        /* Fade in on the first painted frame. onPlaying is the reliable signal
+           that pixels are on screen; the others are belt-and-braces so the
+           film can never get stuck invisible if one event is missed. */
+        onPlaying={() => setPlaying(true)}
+        onCanPlay={() => setPlaying(true)}
+        onLoadedData={() => setPlaying(true)}
         aria-label="WULF yellow four-seater electric golf cart showcase"
       >
         {/* Phones take the narrower cut. No `type` is declared because f_auto
