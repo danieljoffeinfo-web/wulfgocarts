@@ -127,6 +127,7 @@ export const site = {
 
   nav: [
     { label: "The range", href: "/#range" },
+    { label: "Gallery", href: "/gallery" },
     { label: "Why Wulf", href: "/#why" },
     { label: "Build a quote", href: "/quote" },
   ],
