@@ -17,9 +17,13 @@ export type QuotePdfInput = {
   quoteRef: string;
   date: string;
   modelName: string;
+  /** Carts on the quote. Zero is valid — a trailer sells on its own. */
   quantity: number;
   pricePerCart: string;
-  trailer?: string;
+  /** Trailers on the quote. Zero hides the trailer rows entirely. */
+  trailers?: number;
+  /** Price of one trailer, VAT inclusive. */
+  trailerEach?: string;
   total: string;
   rentals: { term: number; amount: string }[];
   customer?: string;
@@ -81,7 +85,11 @@ export async function buildQuotePdf(q: QuotePdfInput): Promise<Blob> {
 
   doc.setTextColor(...BLUE);
   doc.setFontSize(8);
-  doc.text("INDICATIVE CART QUOTATION", M, y);
+  doc.text(
+    q.quantity > 0 ? "INDICATIVE CART QUOTATION" : "INDICATIVE QUOTATION",
+    M,
+    y
+  );
 
   y += 26;
   doc.setTextColor(...INK);
@@ -99,12 +107,18 @@ export async function buildQuotePdf(q: QuotePdfInput): Promise<Blob> {
 
   /* Line-item table. */
   y += 26;
-  const rows: [string, string, boolean][] = [
-    ["Model", q.modelName, false],
-    ["Quantity", String(q.quantity), false],
-    ["Price per cart", `${q.pricePerCart} incl. VAT`, false],
-  ];
-  if (q.trailer) rows.push(["Trailer", `${q.trailer} incl. VAT`, false]);
+  /* A quote can be carts, trailers, or both, so neither block is assumed —
+     printing "Quantity: 0" against a cart nobody ordered reads as an error. */
+  const rows: [string, string, boolean][] = [];
+  if (q.quantity > 0) {
+    rows.push(["Model", q.modelName, false]);
+    rows.push(["Quantity", String(q.quantity), false]);
+    rows.push(["Price per cart", `${q.pricePerCart} incl. VAT`, false]);
+  }
+  if (q.trailers && q.trailerEach) {
+    rows.push(["Trailers", String(q.trailers), false]);
+    rows.push(["Price per trailer", `${q.trailerEach} incl. VAT`, false]);
+  }
   rows.push(["Total purchase price", `${q.total} incl. VAT`, true]);
 
   const rowH = 30;

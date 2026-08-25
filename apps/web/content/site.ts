@@ -28,10 +28,13 @@ export type Showroom = {
   /** Address lines, in display order. */
   address: string[];
   /**
-   * A pinned Google Maps place link where one exists, or undefined to hide the
-   * directions button for this branch. A ?q= text search can resolve to the
-   * wrong premises when more than one place matches, so a link is only set
-   * when it points at exactly one pin.
+   * Where the "Get directions" button goes, or undefined to hide it.
+   *
+   * Either a pinned place link (maps.app.goo.gl/…), which is exact, or a
+   * `dir/?api=1&destination=<street address>` link, which lets Google geocode
+   * the address. What must never be used is a `?q=` search on the business
+   * name: more than one place matches "Wulf Golf Carts" and Google is free to
+   * pick, which sends people to the wrong branch.
    */
   mapsUrl?: string;
   /** Weekday hours. Omit entirely for appointment-only branches. */
@@ -78,10 +81,21 @@ export const showrooms: Showroom[] = [
   },
   {
     /**
-     * Second branch. No pinned place link was supplied, and the business-name
-     * search resolves to the Montague premises, so directions are left off
-     * here rather than risk routing someone to the wrong site — the address
-     * and appointment contact are what matter for this branch.
+     * Second branch.
+     *
+     * No pinned place link exists for this one, and a business-name search
+     * resolves to the Montague premises — which is why directions were
+     * originally left off. This targets the street address instead, through
+     * Maps' documented `dir/?api=1&destination=` form: Google geocodes the
+     * address itself rather than guessing at a matching business, so it lands
+     * on Chardonnay Road and not on the other showroom.
+     *
+     * The postal code is deliberately absent from the destination string. The
+     * client gives it as 7560, but listings for this address give 7530 and
+     * the surrounding area is 7580/7581; feeding a wrong code to the geocoder
+     * can push the pin into the wrong suburb, while street + suburb + city
+     * resolves cleanly on its own. Swap in a pinned maps.app.goo.gl link if
+     * the client shares one from their Business Profile.
      */
     name: "Blackheath, Kuils River",
     address: [
@@ -89,6 +103,9 @@ export const showrooms: Showroom[] = [
       "1 Chardonnay Rd, Wijnland Park",
       "Blackheath, Kuils River, 7560",
     ],
+    mapsUrl:
+      "https://www.google.com/maps/dir/?api=1&destination=" +
+      encodeURIComponent("1 Chardonnay Rd, Saxenburg Park, Blackheath, Cape Town"),
     appointmentOnly: true,
     note: "Viewing by appointment only.",
     contact: { phone: "061 536 7310", href: "+27615367310" },

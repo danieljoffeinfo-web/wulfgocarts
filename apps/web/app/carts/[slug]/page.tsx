@@ -126,7 +126,7 @@ export default async function CartPage({
                   <AssetSlot
                     src={cart.image}
                     alt={cart.name}
-                    label={`${cart.seats} photo`}
+                    label={`${cart.seats ?? cart.category ?? "Product"} photo`}
                     aspect="4 / 3"
                     className="rounded-none"
                   />
@@ -137,7 +137,7 @@ export default async function CartPage({
             <Reveal delay={0.1}>
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
-                  {cart.seats}
+                  {cart.seats ?? cart.category}
                 </p>
                 {/* "Golf Cart" is appended so the h1 states the product
                     category, not just the model name. */}

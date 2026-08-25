@@ -12,10 +12,15 @@ import type { Cart } from "@/content/carts";
  * navigate away. The swatch row sits at z-10 to stay above it.
  */
 export function CartCard({ cart }: { cart: Cart }) {
+  /* An accessory is not a model the builder can select, so it asks for itself
+     by name instead of arriving as ?model=. */
   const href =
-    cart.detailsAvailable === false
-      ? `/quote?model=${cart.slug}`
-      : `/carts/${cart.slug}`;
+    cart.kind === "accessory"
+      ? `/quote?${cart.slug}=1`
+      : cart.detailsAvailable === false
+        ? `/quote?model=${cart.slug}`
+        : `/carts/${cart.slug}`;
+  const eyebrow = cart.seats ?? cart.category ?? "Accessory";
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-raised transition-all duration-300 hover:-translate-y-1.5 hover:border-ink/20 hover:shadow-xl hover:shadow-ink/5">
@@ -33,7 +38,7 @@ export function CartCard({ cart }: { cart: Cart }) {
           <AssetSlot
             src={cart.image}
             alt={cart.name}
-            label={`${cart.seats} photo`}
+            label={`${eyebrow} photo`}
             aspect="4 / 3"
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="rounded-none"
@@ -49,7 +54,7 @@ export function CartCard({ cart }: { cart: Cart }) {
       <div className="flex flex-1 flex-col p-7">
         <div className="flex items-baseline justify-between gap-4">
           <p className="text-xs font-bold uppercase tracking-[0.15em] text-body/55">
-            {cart.seats}
+            {eyebrow}
           </p>
           {cart.price && (
             <div className="text-right">
