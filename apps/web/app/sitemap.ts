@@ -18,6 +18,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: `${site.domain}/gallery`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+    {
       url: `${site.domain}/quote`,
       lastModified,
       changeFrequency: "monthly" as const,
