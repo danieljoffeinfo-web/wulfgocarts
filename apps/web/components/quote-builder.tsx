@@ -15,15 +15,19 @@ const factors = [
 ] as const;
 
 /**
- * Optional trailer add-on. Quoted excl. VAT by the client; the rest of the
- * sheet works in VAT-inclusive rands, so it is converted once here. Adding
- * the inclusive figure to the purchase total keeps the rental maths correct
- * for free: capital-ex-VAT is derived by dividing the total back by 1.15, and
- * 30,475 / 1.15 lands back on 26,500.
+ * The trailer is a product in the range, not a constant in here — it has a
+ * card and a price of its own, and quoting it from a second copy of that
+ * price is how the two drift apart. Everything in the range is priced
+ * VAT-inclusive; the client quotes the trailer excluding VAT, so the ex-VAT
+ * figure is derived rather than stored (30,475 / 1.15 = 26,500).
+ *
+ * Adding the inclusive figure to the purchase total keeps the rental maths
+ * correct for free: capital-ex-VAT is the total divided back by 1.15.
  */
 const VAT_RATE = 1.15;
-const TRAILER_EX_VAT = 26_500;
-const TRAILER_INCL_VAT = TRAILER_EX_VAT * VAT_RATE;
+const trailerProduct = carts.find((cart) => cart.slug === "trailer");
+const TRAILER_INCL_VAT = trailerProduct?.priceZAR ?? 0;
+const TRAILER_EX_VAT = TRAILER_INCL_VAT / VAT_RATE;
 
 const rand = new Intl.NumberFormat("en-ZA", {
   style: "currency",
@@ -55,16 +59,28 @@ function buildQuoteRef() {
   }
 }
 
-export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
-  const available = carts.filter((cart) => cart.priceZAR);
+export function QuoteBuilder({
+  initialModel,
+  initialTrailers = 0,
+}: {
+  initialModel?: string;
+  initialTrailers?: number;
+}) {
+  const available = carts.filter(
+    (cart) => cart.priceZAR && cart.kind !== "accessory"
+  );
   const fallback = available[0]?.slug ?? "two-seater";
   const [model, setModel] = useState(
     available.some((cart) => cart.slug === initialModel)
       ? initialModel!
       : fallback
   );
-  const [quantity, setQuantity] = useState(1);
-  const [trailer, setTrailer] = useState(false);
+  /* Both counts start where the visitor's entry point implies. Arriving from
+     the trailer card means they want a trailer and have not asked for a cart,
+     so carts start at zero — and zero carts is a valid quote, which is the
+     whole point of selling the trailer separately. */
+  const [quantity, setQuantity] = useState(initialTrailers > 0 ? 0 : 1);
+  const [trailers, setTrailers] = useState(initialTrailers);
   const [customer, setCustomer] = useState("");
   const [business, setBusiness] = useState("");
   const [email, setEmail] = useState("");
@@ -91,7 +107,17 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
 
   const selected = available.find((cart) => cart.slug === model) ?? available[0];
   const cartsInclVat = (selected?.priceZAR ?? 0) * quantity;
-  const totalInclVat = cartsInclVat + (trailer ? TRAILER_INCL_VAT : 0);
+  const totalInclVat = cartsInclVat + trailers * TRAILER_INCL_VAT;
+  /* What the quote is actually for, in words, so the email, the WhatsApp
+     message and the sheet heading all say the same thing — including when it
+     is trailers and no cart at all. */
+  const lineItems = [
+    quantity > 0 ? `${quantity} x ${selected?.name ?? "WULF cart"}` : "",
+    trailers > 0
+      ? `${trailers} x ${trailerProduct?.name ?? "WULF Cart Trailer"}`
+      : "",
+  ].filter(Boolean);
+  const summary = lineItems.join(" and ") || "a WULF cart";
   const capitalExVat = totalInclVat / VAT_RATE;
   const factor = factors.find(
     (row) => capitalExVat >= row.min && capitalExVat <= row.max
@@ -106,12 +132,14 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
   );
 
   const emailHref = useMemo(() => {
-    const subject = `Quote enquiry ${quoteRef} — ${selected?.name ?? "WULF cart"}`;
+    const subject = `Quote enquiry ${quoteRef} — ${summary}`;
     const body = [
       `Hi Wulf Golf Carts,`,
       "",
-      `Please contact me about ${quantity} × ${selected?.name ?? "WULF cart"}.`,
-      trailer ? `Plus a trailer (${rand.format(TRAILER_EX_VAT)} excl. VAT).` : "",
+      `Please contact me about ${summary}.`,
+      trailers > 0
+        ? `Trailer: ${rand.format(TRAILER_EX_VAT)} excl. VAT each.`
+        : "",
       `Advertised total: ${rand.format(totalInclVat)} including VAT.`,
       customer ? `Name: ${customer}` : "",
       business ? `Business: ${business}` : "",
@@ -123,7 +151,7 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
       .filter(Boolean)
       .join("\n");
     return `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  }, [business, customer, notes, phone, quantity, quoteRef, selected, totalInclVat, trailer]);
+  }, [business, customer, notes, phone, quoteRef, summary, totalInclVat, trailers]);
 
   /* The same summary as the email, addressed to WhatsApp instead. Built from
      site.whatsapp so the number stays in one place; the ?text= it already
@@ -134,8 +162,10 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
     const message = [
       `Hi Wulf Golf Carts,`,
       "",
-      `Please contact me about ${quantity} × ${selected?.name ?? "WULF cart"}.`,
-      trailer ? `Plus a trailer (${rand.format(TRAILER_EX_VAT)} excl. VAT).` : "",
+      `Please contact me about ${summary}.`,
+      trailers > 0
+        ? `Trailer: ${rand.format(TRAILER_EX_VAT)} excl. VAT each.`
+        : "",
       `Advertised total: ${rand.format(totalInclVat)} including VAT.`,
       customer ? `Name: ${customer}` : "",
       business ? `Business: ${business}` : "",
@@ -146,16 +176,17 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
       .filter(Boolean)
       .join("\n");
     return `${site.whatsapp.split("?")[0]}?text=${encodeURIComponent(message)}`;
-  }, [business, customer, notes, quantity, quoteRef, selected, totalInclVat, trailer]);
+  }, [business, customer, notes, quoteRef, summary, totalInclVat, trailers]);
 
   /* One description of the quote, reused by the download and the share. */
   const pdfInput = () => ({
     quoteRef,
     date: today(),
-    modelName: selected?.name ?? "WULF cart",
+    modelName: quantity > 0 ? (selected?.name ?? "WULF cart") : summary,
     quantity,
     pricePerCart: rand.format(selected?.priceZAR ?? 0),
-    trailer: trailer ? rand.format(TRAILER_INCL_VAT) : undefined,
+    trailers,
+    trailerEach: rand.format(TRAILER_INCL_VAT),
     total: rand.format(totalInclVat),
     rentals: rentals.map((r) => ({ term: r.term, amount: rand.format(r.amount) })),
     customer,
@@ -217,8 +248,8 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
           Choose your WULF.
         </h1>
         <p className="mt-4 text-sm leading-relaxed text-body/60">
-          Select a cart, add your details and save a clean quote as a PDF. Your
-          information stays in this browser.
+          Select a cart, a trailer or both, add your details and save a clean
+          quote as a PDF. Your information stays in this browser.
         </p>
 
         <div className="mt-8 space-y-5">
@@ -231,33 +262,38 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
               ))}
             </select>
           </Field>
-          <Field label="Quantity">
+          <Field label="Carts">
             <input
               type="number"
-              min={1}
+              min={0}
               max={20}
               value={quantity}
               onChange={(event) =>
-                setQuantity(Math.min(20, Math.max(1, Number(event.target.value) || 1)))
+                setQuantity(Math.min(20, Math.max(0, Number(event.target.value) || 0)))
               }
             />
           </Field>
-          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-canvas p-4 transition-colors hover:border-accent/60">
-            <input
-              type="checkbox"
-              checked={trailer}
-              onChange={(e) => setTrailer(e.target.checked)}
-              className="mt-0.5 h-4 w-4 shrink-0 accent-[#2563eb]"
-            />
-            <span className="leading-tight">
-              <span className="block text-sm font-bold text-body">
-                Add a trailer
-              </span>
-              <span className="mt-0.5 block text-xs font-medium text-body/55">
-                {rand.format(TRAILER_EX_VAT)} excl. VAT
-              </span>
-            </span>
-          </label>
+          {/* The hint sits outside Field on purpose: Field's wrapper is a
+              <label>, which uppercases everything inside it and only accepts
+              phrasing content, so a sentence in there would both shout and be
+              invalid nesting. */}
+          <div>
+            <Field label="Trailers">
+              <input
+                type="number"
+                min={0}
+                max={20}
+                value={trailers}
+                onChange={(event) =>
+                  setTrailers(Math.min(20, Math.max(0, Number(event.target.value) || 0)))
+                }
+              />
+            </Field>
+            <p className="mt-2 text-xs font-medium leading-relaxed text-body/55">
+              {rand.format(TRAILER_EX_VAT)} excl. VAT each — buy one on its own
+              by leaving carts at zero.
+            </p>
+          </div>
           <div className="grid gap-5 sm:grid-cols-2">
             <Field label="Your name">
               <input value={customer} onChange={(e) => setCustomer(e.target.value)} placeholder="Full name" />
@@ -369,10 +405,10 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
 
         <div className="px-7 py-8 sm:px-10 sm:py-10">
           <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#2563eb]">
-            Indicative cart quotation
+            {quantity > 0 ? "Indicative cart quotation" : "Indicative quotation"}
           </p>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tight">
-            {selected?.name}
+            {quantity > 0 ? selected?.name : trailerProduct?.name}
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-black/55">
             Prepared for {customer || "Customer"}
@@ -380,11 +416,18 @@ export function QuoteBuilder({ initialModel }: { initialModel?: string }) {
           </p>
 
           <div className="mt-8 overflow-hidden rounded-2xl border border-black/10">
-            <QuoteRow label="Model" value={selected?.name ?? "—"} />
-            <QuoteRow label="Quantity" value={String(quantity)} />
-            <QuoteRow label="Price per cart" value={`${rand.format(selected?.priceZAR ?? 0)} incl. VAT`} />
-            {trailer && (
-              <QuoteRow label="Trailer" value={`${rand.format(TRAILER_INCL_VAT)} incl. VAT`} />
+            {quantity > 0 && (
+              <>
+                <QuoteRow label="Model" value={selected?.name ?? "—"} />
+                <QuoteRow label="Quantity" value={String(quantity)} />
+                <QuoteRow label="Price per cart" value={`${rand.format(selected?.priceZAR ?? 0)} incl. VAT`} />
+              </>
+            )}
+            {trailers > 0 && (
+              <>
+                <QuoteRow label="Trailers" value={String(trailers)} />
+                <QuoteRow label="Price per trailer" value={`${rand.format(TRAILER_INCL_VAT)} incl. VAT`} />
+              </>
             )}
             <QuoteRow label="Total purchase price" value={`${rand.format(totalInclVat)} incl. VAT`} strong />
           </div>

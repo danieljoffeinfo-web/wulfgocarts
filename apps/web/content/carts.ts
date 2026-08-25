@@ -80,7 +80,22 @@ export type Cart = {
   name: string;
   /** One line under the name — who it suits. */
   tagline: string;
-  seats: string;
+  /**
+   * What this is, for the quote builder and the range card.
+   *
+   * "cart" is a vehicle and is selectable as a model on the quote builder.
+   * "accessory" is something bought alongside or on its own — it appears in
+   * the range and can be quoted, but it is never a "model", because the
+   * builder prices a model per unit and then adds accessories to that.
+   */
+  kind?: "cart" | "accessory";
+  /**
+   * Seat count, e.g. "4 seater". Carts have one; accessories do not, so the
+   * card falls back to `category` for its eyebrow.
+   */
+  seats?: string;
+  /** Eyebrow for anything with no seat count, e.g. "Trailer". */
+  category?: string;
   /** Formatted for display, e.g. "R185,000". */
   price?: string;
   /** Short qualification shown beside the price. */
@@ -221,6 +236,32 @@ export const carts: Cart[] = [
         provenance: "generated",
         hex: "#dc2626",
       },
+    ],
+    detailsAvailable: false,
+  },
+  {
+    /**
+     * Sold on its own as well as ticked onto a cart quote, so it lives in the
+     * range beside the carts rather than only inside the quote builder.
+     *
+     * The client quotes it at R26,500 excluding VAT. Everything else in the
+     * range is displayed and priced VAT-inclusive, so it is converted once
+     * here (26,500 x 1.15 = 30,475) and the quote builder divides back out
+     * when it needs the ex-VAT capital figure. One number, one direction of
+     * travel, no chance of the two drifting apart.
+     */
+    slug: "trailer",
+    name: "WULF Cart Trailer",
+    kind: "accessory",
+    category: "Trailer",
+    tagline: "Tow a cart behind you — to the course, the estate or the next job.",
+    price: "R30,475",
+    priceZAR: 30_475,
+    priceNote: "Incl. VAT · R26,500 excl.",
+    highlights: [
+      "Purpose-built for transporting a WULF cart",
+      "Buy on its own or add it to a cart quote",
+      "Available from both Cape Town branches",
     ],
     detailsAvailable: false,
   },
