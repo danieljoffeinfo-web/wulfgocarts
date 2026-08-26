@@ -251,15 +251,19 @@ export const carts: Cart[] = [
      * travel, no chance of the two drifting apart.
      */
     slug: "trailer",
-    name: "WULF Cart Trailer",
+    name: "1 Man Tilt Trailer",
     kind: "accessory",
     category: "Trailer",
     tagline: "Tow a cart behind you — to the course, the estate or the next job.",
     price: "R30,475",
     priceZAR: 30_475,
     priceNote: "Incl. VAT · R26,500 excl.",
+    /* Square crop, to sit with the cart cards, which the colour picker also
+       renders 1:1. Framed on the unit itself: the source frame carried a
+       neighbouring business's advertising screens on the wall above it. */
+    image: "/carts/trailer.jpg",
     highlights: [
-      "Purpose-built for transporting a WULF cart",
+      "Tilt bed and ramps — load a cart on your own",
       "Buy on its own or add it to a cart quote",
       "Available from both Cape Town branches",
     ],

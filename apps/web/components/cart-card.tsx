@@ -39,7 +39,10 @@ export function CartCard({ cart }: { cart: Cart }) {
             src={cart.image}
             alt={cart.name}
             label={`${eyebrow} photo`}
-            aspect="4 / 3"
+            /* 1:1, the same frame ColourPicker gives the carts above it, so a
+               product without colourways does not sit shorter than its
+               neighbours in the range. */
+            aspect="1 / 1"
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="rounded-none"
           />
