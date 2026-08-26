@@ -18,36 +18,48 @@ const EASE = [0.16, 1, 0.3, 1] as const;
  * A darkroom contact sheet, not a card grid.
  *
  * Tiles sit flush against each other and are separated only by a 1px seam —
- * which is the grid container's own background showing through a 1px gap, so
- * the seams never double up where tiles meet. No radius, no shadow, no lift on
- * hover: the only hover state is the image dimming, because anything else
- * turns a contact sheet into a product grid.
+ * the sheet's own background showing through — so the seams never double up
+ * where tiles meet. No radius, no shadow, no lift on hover: the only hover
+ * state is the image dimming, because anything else turns a contact sheet
+ * into a product grid.
  *
- * ── The span system ───────────────────────────────────────────────────────
- * Rows are a fixed 8.333vw — one twelfth of the viewport, the same as a column
- * — so a tile spanning C columns and R rows has an aspect ratio of exactly
- * C/R. That is what keeps mixed portrait/square/landscape frames on one sheet
- * without letterboxing any of them:
+ * ── Why columns and not a grid ────────────────────────────────────────────
+ * This was a 12-column grid, with each tile spanning as many columns and rows
+ * as its aspect ratio implied: landscape 4x3, square 3x3, portrait 3x4. The
+ * ratios were right, but the widths were not co-tileable — 4+4+4 fills a row
+ * of twelve and 3+3+3+3 fills a row of twelve, and any mix of the two leaves
+ * a one- or two-column gutter that no tile is narrow enough to occupy.
+ * `grid-auto-flow: dense` cannot pack what does not fit, so the sheet carried
+ * 48 empty cells, 11% of its own area, plus a ragged tail at the bottom.
  *
- *   landscape 4:3   →  4 × 3        square 1:1  →  3 × 3
- *   portrait  3:4   →  3 × 4
+ * CSS multi-column is masonry: each tile keeps its natural height, the
+ * shortest column takes the next tile, and nothing has to divide into twelve.
+ * Zero holes, and no frame is cropped or letterboxed to make it fit — which
+ * was the point of the span system in the first place.
  *
- * Below `lg` every span doubles (and landscapes go full width) so tiles stay
- * big enough to read on a phone. Spans are written as complete literal class
- * strings because Tailwind scans source text — building them by interpolation
- * would leave the classes ungenerated.
+ * The trade is reading order: columns flow top-to-bottom before
+ * left-to-right. On a sheet of photographs with no narrative sequence that
+ * costs nothing, and the frame numbers still index the full set.
  */
-const SPANS = {
-  landscape: "col-span-12 row-span-9 lg:col-span-4 lg:row-span-3",
-  square: "col-span-6 row-span-6 lg:col-span-3 lg:row-span-3",
-  portrait: "col-span-6 row-span-8 lg:col-span-3 lg:row-span-4",
-} as const;
-
-function spanFor(photo: Photo) {
-  const ratio = photo.w / photo.h;
-  if (ratio > 1.15) return SPANS.landscape;
-  if (ratio < 0.9) return SPANS.portrait;
-  return SPANS.square;
+/**
+ * How many columns the sheet may use, given how many frames are showing.
+ *
+ * CSS balances tiles across whatever columns it is handed, so asking for more
+ * columns than there are photos to fill them leaves whole columns empty — the
+ * five yellow frames across four columns packed as 2/2/1/0, with a
+ * column-wide void down the right-hand side of the sheet. Filtering makes
+ * that the common case, not the edge case.
+ *
+ * Capping at one column per two photos guarantees every column receives at
+ * least two tiles, so none is ever empty and the foot is never more than a
+ * single frame ragged. Classes are written out in full because Tailwind scans
+ * source text and would not generate an interpolated name.
+ */
+function columnsFor(count: number) {
+  const cap = Math.min(4, Math.max(2, Math.floor(count / 2)));
+  if (cap <= 2) return "columns-2 gap-px";
+  if (cap === 3) return "columns-2 gap-px lg:columns-3";
+  return "columns-2 gap-px lg:columns-3 xl:columns-4";
 }
 
 type Filter = ColourwayId | "all";
@@ -113,10 +125,13 @@ export function ContactSheet() {
       {/* ── The sheet ─────────────────────────────────────────────────────
           Full-bleed on purpose: the contained text sections above and below
           give it edges, so the photography reads as the page's main event. */}
-      <div
-        className="grid auto-rows-[8.333vw] grid-cols-12 gap-px bg-line"
-        style={{ gridAutoFlow: "row dense" }}
-      >
+      {/* `canvas`, not `line`. Two jobs: the 1px seams become near-black
+          hairlines, which is what separates frames on a real contact sheet,
+          and the ragged foot that masonry always leaves — columns cannot end
+          at the same height — lands on the same colour as the sections above
+          and below it, so it reads as the sheet ending rather than as a hole
+          in it. */}
+      <div className={`${columnsFor(visible.length)} bg-canvas`}>
         <AnimatePresence mode="popLayout" initial={false}>
           {visible.map((photo, i) => (
             <motion.button
@@ -132,15 +147,19 @@ export function ContactSheet() {
                 ease: EASE,
                 delay: reduce ? 0 : Math.min(i, 12) * 0.025,
               }}
-              className={`group relative overflow-hidden bg-raised focus:outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent ${spanFor(
-                photo
-              )}`}
+              /* `break-inside-avoid` keeps a tile from being split across a
+                 column boundary; the 1px bottom margin is the horizontal seam,
+                 matching the column gap. */
+              className="group relative mb-px block w-full break-inside-avoid overflow-hidden bg-raised focus:outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
+              /* Reserve the frame's exact shape before the image arrives, so
+                 the columns do not reflow as the sheet loads. */
+              style={{ aspectRatio: `${photo.w} / ${photo.h}` }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={tileSrc(photo)}
                 srcSet={tileSrcSet(photo)}
-                sizes="(min-width: 1024px) 25vw, 50vw"
+                sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, 50vw"
                 alt={photo.alt}
                 loading={i < 4 ? "eager" : "lazy"}
                 decoding="async"
