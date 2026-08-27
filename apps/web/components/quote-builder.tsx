@@ -114,7 +114,7 @@ export function QuoteBuilder({
   const lineItems = [
     quantity > 0 ? `${quantity} x ${selected?.name ?? "WULF cart"}` : "",
     trailers > 0
-      ? `${trailers} x ${trailerProduct?.name ?? "WULF Cart Trailer"}`
+      ? `${trailers} x ${trailerProduct?.name ?? "1 Man Tilt Trailer"}`
       : "",
   ].filter(Boolean);
   const summary = lineItems.join(" and ") || "a WULF cart";
