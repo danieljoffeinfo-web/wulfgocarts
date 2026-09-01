@@ -70,7 +70,7 @@ export function ColourPicker({
           <img
             key={colour.image}
             src={colour.image}
-            alt={i === index && !activeAngle ? `${alt} in ${colour.name}` : ""}
+            alt={i === index && !activeAngle ? `${colour.name} ${alt}` : ""}
             aria-hidden={i !== index || !!activeAngle}
             draggable={false}
             /* React 19 emits a high-priority <link rel="preload"> for every
@@ -93,7 +93,7 @@ export function ColourPicker({
           <img
             key={activeAngle.src}
             src={activeAngle.src}
-            alt={`${alt} in ${active.name}, ${activeAngle.angle.toLowerCase()}`}
+            alt={`${active.name} ${alt}, ${activeAngle.angle.toLowerCase()}`}
             draggable={false}
             loading="lazy"
             decoding="async"

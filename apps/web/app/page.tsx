@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Hero } from "@/components/hero";
 import { Reveal, Stagger, StaggerItem } from "@/components/reveal";
 import { CartCard } from "@/components/cart-card";
@@ -85,18 +86,28 @@ export default function HomePage() {
             {/* The page's real h1: what is sold, and where. It carries the
                 phrase people actually search while still reading as copy. */}
             <h1 className="mt-4 max-w-3xl text-3xl font-extrabold leading-[1.1] tracking-tight text-body sm:text-5xl">
-              Electric golf carts for sale in Cape Town.{" "}
+              Golf carts for sale in Cape Town.{" "}
               <span className="text-accent-soft">
                 We&apos;d rather you came and saw them.
               </span>
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-body/65 sm:text-lg">
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-body/65 sm:text-lg">
               Wulf Golf Carts is a golf cart dealer in Montague Gardens, Cape
-              Town,
-              selling premium lithium 2-seater and lifted 4-seater electric
-              golf carts built for the course, the estate and everything in
-              between. Have a look online first, then come through to the
-              showroom and take one out properly.
+              Town, with premium lithium electric golf carts for sale from
+              R175,750 including VAT — a 2-seater and a lifted 4-seater, both
+              built for the course, the estate and everything in between. Have
+              a look online first, then come through to the showroom and take
+              one out properly.
+            </p>
+            {/* The homepage's main outbound link, in the anchor text the
+                catalogue page is trying to rank for. */}
+            <p className="mt-5 text-base font-bold">
+              <Link
+                href="/golf-carts-for-sale"
+                className="text-accent-soft underline-offset-4 hover:underline"
+              >
+                See every golf cart for sale, with prices →
+              </Link>
             </p>
           </Reveal>
         </div>
@@ -107,10 +118,11 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
-              The range
+              Golf carts for sale
             </p>
             <h2 className="mt-3 max-w-xl text-3xl font-extrabold tracking-tight sm:text-4xl">
-              Built for the course, the estate and everything between.
+              Electric golf carts built for the course, the estate and
+              everything between.
             </h2>
           </Reveal>
 
@@ -219,8 +231,8 @@ export default function HomePage() {
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
               Why Wulf
             </p>
-            <h2 className="mt-3 max-w-lg text-3xl font-extrabold tracking-tight sm:text-4xl">
-              Buy from people who know the carts.
+            <h2 className="mt-3 max-w-xl text-3xl font-extrabold tracking-tight sm:text-4xl">
+              Buy your golf cart from people who know the carts.
             </h2>
           </Reveal>
 

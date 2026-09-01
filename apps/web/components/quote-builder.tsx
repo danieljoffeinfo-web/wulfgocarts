@@ -244,12 +244,16 @@ export function QuoteBuilder({
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
           Configure your quote
         </p>
+        {/* The h1 names the product category, not just the brand — this is
+            the only heading on the page and it is what a results listing for
+            "golf cart prices" reads. */}
         <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
-          Choose your WULF.
+          Price your golf cart.
         </h1>
         <p className="mt-4 text-sm leading-relaxed text-body/60">
-          Select a cart, a trailer or both, add your details and save a clean
-          quote as a PDF. Your information stays in this browser.
+          Select one of the electric golf carts we have for sale, a trailer or
+          both, add your details and save a clean quote as a PDF. Your
+          information stays in this browser.
         </p>
 
         <div className="mt-8 space-y-5">

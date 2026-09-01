@@ -21,23 +21,30 @@ export function CartCard({ cart }: { cart: Cart }) {
         ? `/quote?model=${cart.slug}`
         : `/carts/${cart.slug}`;
   const eyebrow = cart.seats ?? cart.category ?? "Accessory";
+  /* Image alt text and the link label. "for sale in Cape Town" is not padding
+     here: image search is a real source of traffic for a product this
+     photogenic, and alt text is the only description a crawler gets of it. */
+  const label =
+    cart.kind === "accessory"
+      ? `${cart.name} for sale in Cape Town`
+      : `${cart.name} golf cart for sale in Cape Town`;
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-raised transition-all duration-300 hover:-translate-y-1.5 hover:border-ink/20 hover:shadow-xl hover:shadow-ink/5">
       <div className="relative">
         {cart.colours?.length ? (
-          <ColourPicker colours={cart.colours} alt={cart.name} aspect="1 / 1" />
+          <ColourPicker colours={cart.colours} alt={label} aspect="1 / 1" />
         ) : cart.frames?.length ? (
           <SpinViewer
             frames={cart.frames}
-            alt={cart.name}
+            alt={label}
             aspect="4 / 3"
             className="rounded-none"
           />
         ) : (
           <AssetSlot
             src={cart.image}
-            alt={cart.name}
+            alt={label}
             label={`${eyebrow} photo`}
             /* 1:1, the same frame ColourPicker gives the carts above it, so a
                product without colourways does not sit shorter than its
@@ -98,8 +105,8 @@ export function CartCard({ cart }: { cart: Cart }) {
         </span>
       </div>
 
-      <Link href={href} className="absolute inset-0" aria-label={cart.name}>
-        <span className="sr-only">{cart.name}</span>
+      <Link href={href} className="absolute inset-0" aria-label={label}>
+        <span className="sr-only">{label}</span>
       </Link>
     </article>
   );

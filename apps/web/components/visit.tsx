@@ -20,10 +20,10 @@ export function Visit() {
               Photos only get you so far.
             </h2>
             <p className="mt-5 max-w-md text-base leading-relaxed text-white/60">
-              Sit in one. Take it for a run. Our golf cart showroom on Montague
-              Drive is a short drive from the Cape Town CBD, Century City,
-              Milnerton and the northern suburbs — and there is no pressure to
-              buy anything on the day.
+              Sit in one. Take it for a run. Every golf cart we have for sale
+              is on the floor at our showroom on Montague Drive, a short drive
+              from the Cape Town CBD, Century City, Milnerton and the northern
+              suburbs — and there is no pressure to buy anything on the day.
             </p>
 
             {/* One block per branch. Two locations sit side by side on wider

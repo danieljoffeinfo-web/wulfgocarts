@@ -2,10 +2,16 @@ import type { Metadata } from "next";
 import { QuoteBuilder } from "@/components/quote-builder";
 
 export const metadata: Metadata = {
-  title: "Build a Golf Cart Quote",
+  title: { absolute: "Golf Cart Prices & Quote Builder | Wulf Cape Town" },
   description:
-    "Build an indicative WULF purchase and operating-rental quote — the 2-seater, the lifted 4-seater, or a trailer on its own.",
+    "Price a golf cart for sale in Cape Town: the lithium 2-seater from R175,750, the lifted 4-seater from R207,431, or a trailer on its own. Purchase and monthly operating-rental figures, saved as a PDF.",
   alternates: { canonical: "/quote" },
+  openGraph: {
+    title: "Golf Cart Prices & Quote Builder — Cape Town",
+    description:
+      "Price a golf cart for sale in Cape Town — purchase and monthly operating-rental figures, saved as a PDF.",
+    type: "website",
+  },
 };
 
 export default async function QuotePage({

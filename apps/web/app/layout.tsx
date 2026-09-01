@@ -3,6 +3,8 @@ import { Manrope } from "next/font/google";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { site } from "@/content/site";
+import { carts } from "@/content/carts";
+import { keywords } from "@/content/seo";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -20,29 +22,28 @@ const ogImage =
 
 /**
  * Titles lead with what someone actually searches for, not the brand — very
- * few people search "Wulf Golf Carts", many search "electric golf carts Cape
- * Town". The brand goes last, where it still builds recognition in results.
+ * few people search "Wulf Golf Carts", many search "golf carts for sale".
+ * The brand goes last, where it still builds recognition in results.
+ *
+ * The default is deliberately 50 characters, comfortably inside the ~60 that
+ * Google renders before it truncates, so the exact-match phrase and the city
+ * both survive into the results page instead of being cut to an ellipsis.
  */
+const TITLE = `Golf Carts for Sale in Cape Town | ${site.name}`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.domain),
   title: {
-    default: `Electric Golf Carts for Sale in Cape Town | ${site.name}`,
+    default: TITLE,
     template: `%s | ${site.name}`,
   },
   description: site.description,
   applicationName: site.name,
-  keywords: [
-    "golf carts for sale Cape Town",
-    "electric golf carts South Africa",
-    "golf cart dealer Cape Town",
-    "lithium golf cart",
-    "buy golf cart Cape Town",
-    "street legal golf cart South Africa",
-    "WULF golf carts",
-  ],
+  keywords,
+  category: "Golf carts for sale",
   alternates: { canonical: "/" },
   openGraph: {
-    title: `Electric Golf Carts for Sale in Cape Town | ${site.name}`,
+    title: TITLE,
     description: site.description,
     url: site.domain,
     siteName: site.name,
@@ -53,13 +54,13 @@ export const metadata: Metadata = {
         url: ogImage,
         width: 1200,
         height: 630,
-        alt: "WULF 2-Seater electric golf cart",
+        alt: "WULF electric golf cart for sale in Cape Town",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `Electric Golf Carts for Sale in Cape Town | ${site.name}`,
+    title: TITLE,
     description: site.description,
     images: [ogImage],
   },
@@ -73,6 +74,54 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+};
+
+/**
+ * What the dealer has for sale, as a schema.org OfferCatalog.
+ *
+ * This is the piece that does the work for "golf carts for sale": it hands a
+ * crawler a machine-readable list of the actual products, each with a price,
+ * a currency and an availability, attached to the business rather than buried
+ * on a detail page. Built from content/carts.ts, so adding a cart to the
+ * range adds it here — the catalogue can never quietly fall behind the floor.
+ */
+const offerCatalog = {
+  "@type": "OfferCatalog",
+  name: "Golf carts for sale",
+  itemListElement: carts
+    .filter((cart) => cart.priceZAR)
+    .map((cart, i) => ({
+      "@type": "Offer",
+      position: i + 1,
+      price: cart.priceZAR,
+      priceCurrency: "ZAR",
+      availability: "https://schema.org/InStock",
+      itemCondition: "https://schema.org/NewCondition",
+      url:
+        cart.detailsAvailable === false
+          ? `${site.domain}/golf-carts-for-sale`
+          : `${site.domain}/carts/${cart.slug}`,
+      itemOffered: {
+        "@type": cart.kind === "accessory" ? "Product" : "Car",
+        name: cart.name,
+        description: cart.tagline,
+        brand: { "@type": "Brand", name: "WULF" },
+        ...(cart.kind === "accessory"
+          ? {}
+          : {
+              vehicleEngine: {
+                "@type": "EngineSpecification",
+                engineType: "5 kW AC electric",
+              },
+              fuelType: "Electric",
+              numberOfDoors: 0,
+              vehicleSeatingCapacity: cart.seats === "4 seater" ? 4 : 2,
+            }),
+        ...(cart.colours?.length
+          ? { color: cart.colours.map((c) => c.name).join(", ") }
+          : {}),
+      },
+    })),
 };
 
 /**
@@ -95,10 +144,32 @@ const localBusinessJsonLd = {
       telephone: site.phoneHref,
       email: site.email,
       image: ogImage,
+      logo: ogImage,
+      slogan: site.tagline,
       priceRange: "R175,750–R207,431",
+      currenciesAccepted: "ZAR",
+      paymentAccepted: "Cash, EFT, Bank finance, Operating rental, Lease",
+      /* The Facebook page, so the brand entity in Google's index resolves to
+         one business rather than to two unlinked profiles. */
+      sameAs: [site.facebook],
+      /* The subject matter this dealer is an authority on. Cheap to state,
+         and it is what an entity-based ranker reads rather than the keywords
+         meta tag it stopped looking at a decade ago. */
+      knowsAbout: [
+        "Electric golf carts",
+        "Lithium golf cart batteries",
+        "Golf cart sales and finance",
+        "Golf cart trailers",
+      ],
+      hasOfferCatalog: offerCatalog,
       areaServed: [
         { "@type": "City", name: "Cape Town" },
+        { "@type": "City", name: "Kuils River" },
+        { "@type": "City", name: "Durbanville" },
+        { "@type": "City", name: "Somerset West" },
+        { "@type": "City", name: "Stellenbosch" },
         { "@type": "AdministrativeArea", name: "Western Cape" },
+        { "@type": "Country", name: "South Africa" },
       ],
       address: {
         "@type": "PostalAddress",
@@ -135,8 +206,14 @@ const localBusinessJsonLd = {
       email: site.email,
       image: ogImage,
       priceRange: "R175,750–R207,431",
+      currenciesAccepted: "ZAR",
+      sameAs: [site.facebook],
+      hasOfferCatalog: offerCatalog,
       areaServed: [
         { "@type": "City", name: "Kuils River" },
+        { "@type": "City", name: "Brackenfell" },
+        { "@type": "City", name: "Somerset West" },
+        { "@type": "City", name: "Stellenbosch" },
         { "@type": "AdministrativeArea", name: "Western Cape" },
       ],
       address: {
@@ -147,6 +224,35 @@ const localBusinessJsonLd = {
         postalCode: "7560",
         addressCountry: "ZA",
       },
+    },
+    {
+      /* The brand itself, linked to both branches. Without this, the two
+         AutoDealer nodes look like two unrelated businesses that happen to
+         share a name; with it, they are two locations of one dealer, which is
+         what a knowledge panel needs to resolve. */
+      "@type": "Organization",
+      "@id": `${site.domain}/#organization`,
+      name: site.name,
+      alternateName: "WULF Golf Carts SA",
+      url: site.domain,
+      logo: ogImage,
+      description: site.description,
+      telephone: site.phoneHref,
+      email: site.email,
+      sameAs: [site.facebook],
+      department: [
+        { "@id": `${site.domain}/#montague` },
+        { "@id": `${site.domain}/#blackheath` },
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${site.domain}/#website`,
+      url: site.domain,
+      name: site.name,
+      description: site.description,
+      inLanguage: "en-ZA",
+      publisher: { "@id": `${site.domain}/#organization` },
     },
   ],
 };

@@ -6,13 +6,19 @@ import { bandSrc, photos } from "@/content/gallery";
 import { site } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: "Gallery",
+  title: "Golf Cart Gallery — Every Colour",
   description:
-    "Every Wulf golf cart, every angle — bodywork, stitching, wheels and the full row at first light. Filter the range by colour.",
+    "Photographs of every electric golf cart we have for sale in Cape Town — five colourways, every angle, bodywork, stitching and wheels. Filter the range by colour.",
+  /* Explicit, because the root layout sets `canonical: "/"` and metadata is
+     inherited: without this line the gallery told search engines it was the
+     homepage, and a page that names another page as canonical does not get
+     indexed on its own. Same reason the quote and cart pages set theirs. */
+  alternates: { canonical: "/gallery" },
   openGraph: {
-    title: `Gallery — ${site.name}`,
+    title: `Golf Cart Gallery — ${site.name}`,
     description:
-      "Every Wulf golf cart, every angle. Filter the range by colour.",
+      "Photographs of every electric golf cart we have for sale in Cape Town. Filter the range by colour.",
+    url: `${site.domain}/gallery`,
     images: [bandSrc("line-low-angle", "v1787610284", 1200)],
   },
 };
@@ -33,7 +39,7 @@ export default function GalleryPage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={HERO}
-          alt="Low-angle view down a row of Wulf golf carts with the sun flaring behind them"
+          alt="Low-angle view down a row of Wulf electric golf carts for sale in Cape Town, sun flaring behind them"
           className="absolute inset-0 h-full w-full object-cover object-[42%_60%]"
           fetchPriority="high"
         />
@@ -46,14 +52,15 @@ export default function GalleryPage() {
           <div className="mx-auto max-w-6xl px-5 pb-14 sm:px-8 sm:pb-20">
             <Reveal y={20}>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
-                Gallery
+                Golf cart gallery
               </p>
               <h1 className="mt-4 max-w-3xl text-balance text-4xl font-extrabold leading-[1.03] tracking-tight text-white sm:text-6xl lg:text-7xl">
-                The whole line.
+                The whole line of golf carts.
               </h1>
-              <p className="mt-5 max-w-md text-base leading-relaxed text-white/70 sm:text-lg">
-                {photos.length} frames of the range — bodywork, stitching,
-                wheels, and the full row at first light.
+              <p className="mt-5 max-w-lg text-base leading-relaxed text-white/70 sm:text-lg">
+                {photos.length} frames of every electric golf cart we have for
+                sale in Cape Town — bodywork, stitching, wheels, and the full
+                row at first light.
               </p>
             </Reveal>
           </div>
@@ -90,7 +97,7 @@ export default function GalleryPage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={bandSrc("line-open-road", "v1787610332")}
-          alt="A row of Wulf golf carts beside an open road at sunset"
+          alt="A row of Wulf electric golf carts for sale beside an open road at sunset"
           loading="lazy"
           decoding="async"
           className="absolute inset-0 h-full w-full object-cover"
@@ -114,10 +121,10 @@ export default function GalleryPage() {
                 Visit the showroom
               </Link>
               <Link
-                href="/#range"
+                href="/golf-carts-for-sale"
                 className="rounded-full border border-white/25 px-6 py-3 text-sm font-bold text-white/90 transition-colors hover:border-white/60 hover:text-white"
               >
-                See the range
+                See the golf carts for sale
               </Link>
             </div>
           </Reveal>

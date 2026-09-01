@@ -18,6 +18,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      /* The exact-match catalogue page. Second only to the homepage, because
+         it is the page every "golf carts for sale" query should land on. */
+      url: `${site.domain}/golf-carts-for-sale`,
+      lastModified,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+    {
       url: `${site.domain}/gallery`,
       lastModified,
       changeFrequency: "monthly" as const,

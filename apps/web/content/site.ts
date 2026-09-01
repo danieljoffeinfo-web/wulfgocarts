@@ -114,12 +114,30 @@ export const showrooms: Showroom[] = [
 
 export const site = {
   name: "Wulf Golf Carts",
-  // The branded domain still serves the existing WordPress site. Change this
-  // only when DNS is deliberately moved to this Vercel project.
-  domain: "https://wulfgocarts.vercel.app",
+  /**
+   * The live public origin, and the single source of every canonical URL,
+   * sitemap entry, OpenGraph URL and schema.org @id on the site.
+   *
+   * It must be the host visitors actually land on. It pointed at the
+   * wulfgocarts.vercel.app deployment URL long after DNS moved to the branded
+   * domain, which meant every page served from wulfgolfcarts.co.za declared
+   * the vercel.app copy as its canonical — telling Google to index the
+   * deployment URL and drop the branded domain.
+   *
+   * The `www` is deliberate: the apex 301-redirects to www, so the canonical
+   * has to name the URL that answers with a 200, not the one that bounces.
+   */
+  domain: "https://www.wulfgolfcarts.co.za",
   tagline: "Golf-ready. Lifestyle-perfect.",
+  /**
+   * The one-line description reused as the meta description, the OpenGraph
+   * blurb, the footer blurb and the AutoDealer schema. It leads with the
+   * phrase people actually type — "golf carts for sale" — because the same
+   * string has to earn the click in a results page as well as read as copy.
+   * Kept under 160 characters so Google renders it whole.
+   */
   description:
-    "Wulf Golf Carts sells premium lithium 2-seater and lifted 4-seater electric golf carts from our showroom in Montague Gardens, Cape Town.",
+    "Golf carts for sale in Cape Town — premium lithium 2-seater and lifted 4-seater electric golf carts, from R175,750. Two showrooms, test-drive before you buy.",
 
   /** Every branch. Render all of them, or index into the primary. */
   showrooms,
@@ -143,7 +161,11 @@ export const site = {
   financeGuide: "/docs/wulf-cash-vs-rental-vs-lease.pdf",
 
   nav: [
-    { label: "The range", href: "/#range" },
+    /* "Carts for sale" rather than "The range": this anchor text repeats on
+       every page of the site, and it is the one internal link pointing at the
+       exact-match /golf-carts-for-sale page. Descriptive anchor text is the
+       cheapest ranking signal there is. */
+    { label: "Carts for sale", href: "/golf-carts-for-sale" },
     { label: "Gallery", href: "/gallery" },
     { label: "Why Wulf", href: "/#why" },
     { label: "Build a quote", href: "/quote" },

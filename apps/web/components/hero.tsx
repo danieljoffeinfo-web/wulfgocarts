@@ -116,7 +116,7 @@ export function Hero({
         onPlaying={() => setPlaying(true)}
         onCanPlay={() => setPlaying(true)}
         onLoadedData={() => setPlaying(true)}
-        aria-label="WULF yellow four-seater electric golf cart showcase"
+        aria-label="WULF yellow four-seater electric golf cart for sale in Cape Town"
       >
         {/* Phones take the narrower cut. No `type` is declared because f_auto
             lets Cloudinary answer with VP9 or H.264 depending on the browser,
@@ -139,8 +139,8 @@ export function Hero({
           Built different. Drive different.
         </p>
         <p className="mt-3 max-w-md text-sm font-semibold text-white/80 drop-shadow sm:text-base">
-          Premium lithium electric golf carts, available to test-drive in Cape
-          Town.
+          Premium lithium electric golf carts for sale in Cape Town — and on
+          the floor to test-drive.
         </p>
       </div>
     </section>
