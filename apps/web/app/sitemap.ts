@@ -37,6 +37,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.8,
     },
+    {
+      /* The enquiry page. "contact <business>" is a navigational query people
+         genuinely type, and it is the only page that accepts a message. */
+      url: `${site.domain}/contact`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    },
     ...carts
       .filter((cart) => cart.detailsAvailable !== false)
       .map((cart) => ({

@@ -169,6 +169,7 @@ export const site = {
     { label: "Gallery", href: "/gallery" },
     { label: "Why Wulf", href: "/#why" },
     { label: "Build a quote", href: "/quote" },
+    { label: "Contact", href: "/contact" },
   ],
 
   social: [

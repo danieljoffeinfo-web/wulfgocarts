@@ -20,11 +20,21 @@ const HIGGSFIELD_POSTER = "https://d2ol7oe51mr4n9.cloudfront.net";
  * to nonces requires middleware, which would make every page dynamic and
  * throw away the static rendering this site's speed depends on.
  *
- * That trade is acceptable here specifically because the attack surface is
- * near zero — no forms, no auth, no cookies, no user input rendered anywhere,
- * and every page is static HTML built at deploy time. The policy's real work
- * is frame-ancestors (clickjacking) and pinning where media may load from.
- * It would NOT be an acceptable trade on a site that accepted input.
+ * The site does now accept input: /contact posts an enquiry to
+ * /api/contact. That narrows the old justification for 'unsafe-inline' but
+ * does not overturn it, because the enquiry is never rendered as markup. It
+ * goes from a controlled React input straight to the API route, which escapes
+ * it before it reaches the email body, and nothing on any page interpolates
+ * visitor text into HTML. There is still no auth and no cookie for injected
+ * script to reach for.
+ *
+ * connect-src 'self' is what the form needs and all it needs — the fetch is
+ * same-origin, and Resend is called from the server where no CSP applies.
+ * The policy's real work remains frame-ancestors (clickjacking), form-action
+ * (which stops an injected form posting the enquiry off-site) and pinning
+ * where media may load from.
+ *
+ * Revisit this the moment a page renders anything a visitor typed.
  */
 const csp = [
   "default-src 'self'",

@@ -20,6 +20,10 @@ export function Nav() {
 
   /* Over the hero film the bar is transparent, so the mark and links invert
      to white. Once the white bar slides in they go back to ink. */
+  /* The link bar switches in at lg, not md. Its contents measure ~593px, and
+     with the mark and the page gutters that needs roughly 1050px before the
+     links start wrapping onto two lines — which is what they were quietly
+     doing on tablets. Below lg the hamburger carries the same links. */
   const onFilm = !scrolled && !open;
 
   return (
@@ -42,7 +46,7 @@ export function Nav() {
           <Logo inverted={onFilm} />
         </Link>
 
-        <nav className="hidden items-center gap-10 md:flex">
+        <nav className="hidden items-center gap-4 lg:flex xl:gap-8">
           {site.nav.map((item) => (
             <Link
               key={item.href}
@@ -97,7 +101,7 @@ export function Nav() {
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-label="Toggle menu"
-          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
+          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 lg:hidden"
         >
           <span
             className={`h-0.5 w-5 transition-transform ${
@@ -119,7 +123,7 @@ export function Nav() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="overflow-hidden border-t border-line bg-canvas md:hidden"
+            className="overflow-hidden border-t border-line bg-canvas lg:hidden"
           >
             <div className="flex flex-col gap-1 px-5 py-4">
               {site.nav.map((item) => (
